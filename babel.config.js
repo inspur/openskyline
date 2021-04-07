@@ -12,7 +12,7 @@ module.exports = {
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-syntax-import-meta",
     "@babel/plugin-proposal-json-strings",
-    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-transform-modules-commonjs"
   ],
   "presets": [
     "@babel/preset-env"
