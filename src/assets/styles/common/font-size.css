@@ -1,0 +1,31 @@
+.text-larger {
+  font-size: 30px;
+}
+
+.text-large {
+  font-size: 24px;
+}
+
+.h1 {
+  font-size: 20px;
+}
+
+.h2 {
+  font-size: 18px;
+}
+
+.h3 {
+  font-size: 16px;
+}
+
+.text-regular {
+  font-size: 14px;
+}
+
+.text-small {
+  font-size: 13px;
+}
+
+.text-smaller {
+  font-size: 12px;
+}

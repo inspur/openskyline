@@ -1,0 +1,19 @@
+.train-state-title {
+  font-size: 15px;
+  font-weight: bolder;
+  text-align: center;
+  min-height: 32px;
+}
+
+.detection {
+  position: relative;
+}
+
+.detection .detect,
+.detection .train {
+  box-sizing: border-box;
+}
+
+/* .detection .detect {}
+
+.detection .train {} */

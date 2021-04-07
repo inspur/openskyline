@@ -1,0 +1,25 @@
+<div style="height:100%;width:100%;">
+  <div class="jump_layout">
+    <div class="jump_logo"></div>
+    <div class="jump_location">
+      <div class="jump_panel">
+      <div class="jump_info">
+        <div class="jump_info_top"></div>
+        <div class="jump_info_center">
+          <p v-if="timeoutFlg" style="padding-top: 18px;">{{$t('base.timeOutPrompt')}}</p>
+          <p v-if="timeoutFlg" class="jump_seconds" >{{time}}<span>s</span></p>
+          <div v-if="timeoutFlg" @click="quickEnter" class="jump_now">{{$t('base.jumpRightNow')}}</div>
+        </div>
+         <div v-if="timeoutFlg" class="jump_info_bottom">
+            <p>{{$t('base.timeOutPrompt1')}}</p>
+            <p> {{$t('base.timeOutPrompt2')}}</p>
+         </div>
+         <p v-if="serFlg" class="jump_title">{{$t('base.timeOutPrompt3')}}</p>
+         <p v-if="serFlg" class="jump_seconds">{{time}}<span>s</span></p>
+         <div v-if="serFlg" @click="quickEnter" class="jump_now">{{$t('base.jumpRightNow')}}</div>
+      </div>
+      </div>
+    </div>    
+  </div>
+</div>
+

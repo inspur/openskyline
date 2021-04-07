@@ -1,0 +1,112 @@
+@charset "utf-8";
+
+html {
+    background: #fff none;
+    color: #333;
+    font: normal 12px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+* + html body {
+   position: relative;
+}
+
+body,
+dd,
+dl,
+form,
+p,
+pre {
+    margin: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+iframe,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    color: #333;
+    font: normal 12px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    padding: 0;
+    margin: 0;
+}
+
+select {
+    vertical-align: middle;
+}
+
+label {
+@include inline-block();
+    cursor: pointer;
+}
+
+input::-ms-clear {
+    display: none;
+}
+
+input[type=button],
+input[type=reset],
+input[type=submit] {
+    -webkit-appearance: button;
+}
+
+@-moz-document url-prefix() {
+    button,
+    input,
+    select,
+    textarea {
+        line-height: normal;
+    }
+
+    button::-moz-focus-inner,
+    input[type=button]::-moz-focus-inner,
+    input[type=reset]::-moz-focus-inner,
+    input[type=submit]::-moz-focus-inner {
+        border: 0 none;
+        padding: 0;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+td,
+th {
+    font-size: 100%;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+ol,
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+em {
+    font-style: normal;
+}
+
+

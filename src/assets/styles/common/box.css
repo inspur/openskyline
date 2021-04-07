@@ -1,0 +1,56 @@
+.margin-tb5 {
+  margin: 5px 0;
+}
+
+.margin-t5 {
+  margin-top: 5px;
+}
+
+.margin-t10 {
+  margin-top: 10px;
+}
+
+.margin-b5 {
+  margin-bottom: 5px;
+}
+
+.margin-b10 {
+  margin-bottom: 10px;
+}
+
+.margin-b15 {
+  margin-bottom: 15px;
+}
+
+.margin-tb10 {
+  margin: 10px 0;
+}
+
+.margin-tb16 {
+  margin: 16px 0;
+}
+
+.margin-tb20 {
+  margin: 20px 0;
+}
+
+.margin-r5 {
+  margin-right: 5px;
+}
+
+.margin-r10 {
+  margin-right: 10px;
+}
+
+.margin-l5 {
+  margin-left: 5px;
+}
+
+.margin-l10 {
+  margin-left: 10px;
+}
+
+.padding-lr20 {
+  padding: 0 20px;
+}
+

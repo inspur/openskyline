@@ -1,0 +1,113 @@
+.layout-header {
+  background-color: #324157;
+}
+.layout-header .skin .light,
+.layout-header .skin .dark,
+.layout-header .skin .blue {
+  display: block;
+  width: 100%;
+  height: 20px;
+  text-decoration: none;
+  position: relative;
+}
+.layout-header .skin .light {
+  background: #0eb5bb;
+  border: 1px solid #b2cacc;
+}
+.layout-header .skin .blue {
+  background: #2390ef;
+  border: 1px solid #8cc6fd;
+}
+.layout-header .skin .dark {
+  background: #333333;
+  border: 1px solid #7389dd;
+}
+.layout-header .layout-logo{
+  position: relative;
+  width: 180px;
+  height: 100%;
+}
+.layout-header .layout-logo img {
+  width: 100%;
+  height: 100%;
+}
+.layout-header .layout-nav{
+  /*margin: 20px auto;*/
+}
+.layout-header .skin.el-menu--transparent {
+  background-color: inherit;
+  z-index: 1;
+  position:relative;
+  top:5px;
+}
+.layout-header .skin.el-menu--transparent .el-menu-item {
+  height: 30px;
+  line-height: 30px;
+}
+
+.layout-header .skin.el-menu--transparent .el-menu-item,
+.layout-header .skin.el-menu--transparent .el-submenu__title {
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+.layout-header .skin.el-menu--transparent.el-menu--horizontal .el-submenu .el-submenu__title  {
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 2px solid transparent;
+}
+
+.layout-header .skin.el-menu--transparent .el-menu-item,
+.skin.el-menu--transparent .el-submenu__title {
+  color: #a9bccc
+}
+
+.layout-header .skin.el-menu--transparent .el-menu-item:hover,
+.layout-header .skin.el-menu--transparent .el-submenu__title:hover {
+  background-color: inherit;
+}
+
+.layout-header .skin.el-menu--transparent .el-submenu .el-menu {
+  /*background-color: inherit;*/
+
+}
+
+.layout-header .skin.el-menu--transparent .el-submenu .el-menu-item {
+  min-width: 100px;
+}
+
+.layout-header .skin.el-menu--transparent .el-submenu .el-menu .el-menu-item:hover {
+  background-color: inherit;
+}
+
+.layout-header .skin.el-menu--transparent .el-menu-item .el-submenu__title {
+  font-size: 12px;
+}
+
+.layout-header .skin.el-menu--transparent.el-menu--horizontal .el-submenu>.el-menu {
+  top: 30px;
+}
+
+.layout-header .skin.el-menu--transparent .el-menu:not(.el-menu--horizontal)  .el-menu-item:hover,
+.layout-header .skin.el-menu--transparent .el-menu:not(.el-menu--horizontal)  .el-menu-item.is-active{
+  border-right: 0px solid #20a0ff
+}
+
+.layout-header .skin.el-menu--transparent .el-submenu [class^=el-icon-],
+.layout-header .skin.el-menu--transparent .el-menu-item [class^=el-icon-] {
+  margin-right: 0;
+}
+
+.layout-header .el-icon-fa-check.active{
+  position: absolute;
+  left: 36%;
+  top: -3px;
+  font-size: 25px;
+  color: #fff;
+}
+
+.layout-header-selects .el-input__inner{
+  background: #00406f;
+  color:white;
+  border: 1px solid #00406f;
+}

@@ -1,0 +1,499 @@
+{
+    "role":{
+        "en":"Role",
+        "zh_cn":"角色",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "user":{
+        "en":"User",
+        "zh_cn":"用户",
+        "flg":"0,2,3",
+        "service":"keystone"
+    },
+    "project":{
+        "en":"Project",
+        "zh_cn":"项目",
+        "flg":"0,2,3",
+        "service":"keystone"
+    },
+    "department":{
+        "en":"Department",
+        "zh_cn":"部门",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "parameterSetting":{
+        "en":"Parameter Setting",
+        "zh_cn":"参数设置",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "group":{
+        "en":"Group",
+        "zh_cn":"组",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "ipSetting":{
+        "en":"IP Setting",
+        "zh_cn":"ip设置",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "serialNumber":{
+        "en":"Serial Number",
+        "zh_cn":"序列号",
+        "flg":"0",
+        "service":"keystone"
+    },
+    "cert":{
+        "en":"Cert",
+        "zh_cn":"证书",
+        "flg":"0,2,3",
+        "service":"barbican"
+    },
+    "operlog":{
+        "en": "Operate Log",
+        "zh_cn":"操作日志",
+        "flg":"0,2",
+        "service":"keystone"
+    },
+    "containerCluster":{
+        "en":"Kubernetes Cluster",
+        "zh_cn":"Kubernetes集群",
+        "flg":"0,2,3",
+        "service":"cetus"
+    },
+    "applicationManage":{
+        "en":"Application Manage",
+        "zh_cn":"应用管理",
+        "flg":"0,2,3",
+        "service":"cetus"
+    },
+    "containerVolume":{
+        "en":"Container Volume",
+        "zh_cn":"容器卷",
+        "flg":"0,2,3",
+        "service":"cetus"
+    },
+    "containerImage":{
+        "en":"Container Image",
+        "zh_cn":"容器镜像",
+        "flg":"0,2,3",
+        "service":"cetus"
+    },
+    "containerInstance":{
+        "en":"Container Instance",
+        "zh_cn":"容器实例",
+        "flg":"0,2,3",
+        "service":"cetus"
+    },
+    "heatTemplate":{
+        "en":"Heat Template",
+        "zh_cn":"编排模板",
+        "flg":"0,2",
+        "service":"heat"
+    },
+    "heatInstance":{
+        "en":"Heat Instance",
+        "zh_cn":"编排实例",
+        "flg":"0,2",
+        "service":"heat"
+    },
+    "networkList":{
+        "en":"Networks",
+        "zh_cn":"网络",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "subnetwork":{
+        "en":"SubNetwork",
+        "zh_cn":"子网",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "port":{
+        "en":"Ports",
+        "zh_cn":"端口",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "reservedAddr":{
+        "en":"Reserved Addr",
+        "zh_cn":"预留地址",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "router":{
+        "en":"Routers",
+        "zh_cn":"路由",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "interface":{
+        "en":"Interfaces",
+        "zh_cn":"接口",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "staticlist":{
+        "en":"Static Router Lists",
+        "zh_cn":"静态路由表",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "firewall":{
+        "en":"Firewalls",
+        "zh_cn":"防火墙",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "firewallStrategy":{
+        "en":"Firewall Policies",
+        "zh_cn":"防火墙策略",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "firewallRule":{
+        "en":"Firewall Rules",
+        "zh_cn":"防火墙规则",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "balance":{
+        "en":"Load Balancers",
+        "zh_cn":"负载均衡",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+  "strategy":{
+    "en":"Network Strategy",
+    "zh_cn":"网络策略模板",
+    "flg":"0,2,3",
+    "service":"neutron"
+  },
+    "floatingIP":{
+        "en":"Floating IP",
+        "zh_cn":"浮动IP",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "securityGroup":{
+        "en":"Security Groups",
+        "zh_cn":"安全组",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "ikeStrategy":{
+        "en":"IKE Policies",
+        "zh_cn":"IKE策略",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "ipsecStrategy":{
+        "en":"IPSec Policies",
+        "zh_cn":"IPSec策略",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "vpnServer":{
+        "en":"vpnServer",
+        "zh_cn":"VPN服务",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "endpointGroup":{
+        "en":"endpointGroups",
+        "zh_cn":"Endpoint组",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "safeList":{
+        "en":"Security",
+        "zh_cn":"安全",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "ipsecStation":{
+        "en":"IPSec Site Connections",
+        "zh_cn":"IPSec站点连接",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "qosList":{
+        "en":"QoS",
+        "zh_cn":"QoS",
+        "flg":"0,2,3",
+        "service":"neutron"
+    },
+    "computeInstance":{
+        "en": "Compute Instance",
+        "zh_cn":"云主机",
+        "flg":"0,2,3",
+        "service":"nova"
+    },
+    "computeInstanceSnapshot":{
+        "en": "Compute Instance Snapshot",
+        "zh_cn":"云主机快照",
+        "flg":"0,2,3",
+        "service":"nova"
+    },
+    "instanceBackup":{
+        "en": "Compute Instance Backup",
+        "zh_cn":"云主机备份",
+        "flg":"0,2,3",
+        "service":"nova"
+    },
+    "computePhysical":{
+        "en": "Compute Physical",
+        "zh_cn":"云物理机",
+        "flg":"0,2,3",
+        "service":"nova&&ironic"
+    },
+    "bareMachine":{
+        "en": "Bare Machine",
+        "zh_cn":"裸机",
+        "flg":"0",
+        "service":"ironic"
+    },
+    "bareMachineImage":{
+        "en": "Bare Machine Image",
+        "zh_cn":"裸机镜像",
+        "flg":"0",
+        "service":"ironic"
+    },
+    "bareMachineSpec":{
+        "en": "Bare Machine Spec",
+        "zh_cn":"裸机规格",
+        "flg":"0",
+        "service":"ironic"
+    },
+    "computeMirror":{
+        "en": "Compute Mirror",
+        "zh_cn":"镜像",
+        "flg":"0,2",
+        "service":"glance"
+    },
+    "computeKeyPair":{
+        "en": "Compute KeyPair",
+        "zh_cn":"密钥对",
+        "flg":"0,2",
+        "service":"nova"
+    },
+    "computeServerGroup":{
+        "en": "Compute Group Affinity Strategy",
+        "zh_cn":"亲和性策略",
+        "flg":"0,2",
+        "service":"nova"
+    },
+    "computeGPU":{
+        "en": "Compute GPU",
+        "zh_cn":"加速器",
+        "flg":"0",
+        "service":"cyborg"
+    },
+    "computeSpec":{
+        "en": "Compute Specification",
+        "zh_cn":"资源规格",
+        "flg":"0,2",
+        "service":"nova"
+    },
+    "storage_volume":{
+        "en": "Volume",
+        "zh_cn":"云硬盘",
+        "flg":"0,2,3",
+        "service":"cinderv3"
+    },
+    "storage_volume_type":{
+        "en": "Volume Type",
+        "zh_cn":"云硬盘类型",
+        "flg":"0,2",
+        "service":"cinderv3"
+    },
+    "storage_volume_backup":{
+        "en": "Volume Backup",
+        "zh_cn":"云硬盘备份",
+        "flg":"0,2",
+        "service":"cinderv3"
+    },
+    "storage_object_storage":{
+        "en": "Object Storage",
+        "zh_cn":"对象存储",
+        "flg":"0,2,3",
+        "service":"swift||S3"
+    },
+    "storage_volume_QoS":{
+        "en": "QoS of Volume Type",
+        "zh_cn":"云硬盘类型QoS",
+        "flg":"0",
+        "service":"cinderv3"
+    },
+    "storage_volume_snapshot":{
+        "en": "Volume Snapshot",
+        "zh_cn":"云硬盘快照",
+        "flg":"0,2,3",
+        "service":"cinderv3"
+    },
+    "hostaggregation":{
+        "en": "Host Aggregation",
+        "zh_cn":"主机聚合",
+        "flg":"0",
+        "service":"nova"
+    },
+    "hostHa":{
+        "en": "Host HA",
+        "zh_cn":"主机HA",
+        "flg":"0",
+        "service":"nova"
+    },
+    "hostmanage":{
+        "en": "Host Manage",
+        "zh_cn":"主机管理",
+        "flg":"0",
+        "service":"nova"
+    },
+    "process_manage":{
+        "en": "Process",
+        "zh_cn":"流程",
+        "flg":"0,2",
+        "service":"leo"
+    },
+    "Fault_manage":{
+        "en": "Fault",
+        "zh_cn":"工单",
+        "flg":"0,2,3",
+        "service":"leo"
+    },
+    "Order":{
+        "en": "Order",
+        "zh_cn":"订单",
+        "flg":"0,2,3",
+        "service":"leo"
+    },
+    "billing_strategy":{
+        "en": "billing",
+        "zh_cn":"计费策略",
+        "flg":"0",
+        "service":"cloudkitty"
+    },
+    "Report":{
+        "en": "Report",
+        "zh_cn":"报表",
+        "flg":"0,2",
+        "service":"leo"
+    },
+    "workflowtasklog":{
+        "en": "Task Log",
+        "zh_cn":"任务日志",
+        "service":"mistral"
+    },
+    "workflowtriggertask":{
+        "en": "Cloud Child Task ",
+        "zh_cn":"云计划任务下的任务",
+        "flg":"0,2",
+        "service":"mistral"
+    },
+    "workflowtask":{
+        "en": "Cloud Task ",
+        "zh_cn":"云计划任务",
+        "flg":"0,2",
+        "service":"mistral"
+    },
+    "ScalingService":{
+        "en": "ScalingService",
+        "zh_cn":"伸缩服务",
+        "flg":"0,2,3",
+        "service":"senlin"
+    },
+    "storage_share":{
+        "en": "share",
+        "zh_cn":"文件存储",
+        "flg":"0,2,3",
+        "service":"manila"
+    },
+    "storage_share_snapshot":{
+        "en": "File Storage Snapshot",
+        "zh_cn":"文件存储快照",
+        "flg":"0,2,3",
+        "service":"manila"
+    },
+    "storage_share_type": {
+        "en": "File Storage Type",
+        "zh_cn": "文件存储类型",
+        "flg": "0,2,3",
+        "service": "manila"
+    },
+    "storage_share_CIFS": {
+        "en": "File Storage CIFS User",
+        "zh_cn": "文件存储CIFS用户",
+        "flg": "0,2,3",
+        "service": "manila"
+    },
+    "databaseService":{
+        "en": "Database Service",
+        "zh_cn":"数据库服务",
+        "flg":"0,2",
+        "service":"trove"
+    },
+    "monitor":{
+        "en": "Monitor",
+        "zh_cn":"智能监控",
+        "flg":"0,2",
+        "service":"pluto"
+    },
+    "resourceMonitor":{
+        "en": "Resource Monitor",
+        "zh_cn":"资源监控",
+        "flg":"0",
+        "service":"pluto"
+    },
+    "eventMonitor":{
+        "en": "Event Monitor",
+        "zh_cn":"事件监控",
+        "flg":"0",
+        "service":"pluto"
+    },
+    "operationAnalysis": {
+        "en": "Operation Analysis",
+        "zh_cn":"运维分析",
+        "flg":"0",
+        "service":"venus"
+    },
+    "netUsb": {
+        "en": "Net USB Device",
+        "zh_cn":"网络USB设备",
+        "flg":"0",
+        "service":"nova"
+    },
+    "sahara": {
+        "en": "Cloud Disk",
+        "zh_cn":"云数",
+        "flg":"0",
+        "service":"sahara" 
+    },
+    "saharaCluster": {
+        "en": "Cluster",
+        "zh_cn":"集群",
+        "flg":"0",
+        "service":"sahara" 
+    },
+    "saharaNodeGroup": {
+        "en": "Node Group Template",
+        "zh_cn":"节点组模板",
+        "flg":"0",
+        "service":"sahara" 
+    },
+    "saharaTemplate": {
+        "en": "Cluster Template",
+        "zh_cn":"集群模板",
+        "flg":"0",
+        "service":"sahara" 
+    },
+    "saharaImage": {
+        "en": "Cluster Image",
+        "zh_cn":"镜像",
+        "flg":"0",
+        "service":"sahara" 
+    }
+}

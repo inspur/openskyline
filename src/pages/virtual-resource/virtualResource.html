@@ -1,0 +1,31 @@
+<div class="screen_virtual_bg">
+  <div style="width:100%;height:100%;padding:8px 10px;">
+	<el-row style="height:100%;" :gutter="10">
+		<el-col :span="18" style="height:100%;">
+			<div class="virtual-l">
+				<div class="virtual-l-t">
+					<resource-statistics></resource-statistics>
+				</div>
+				<div class="virtual-l-b">
+					<topo-view></topo-view>
+				</div>
+			</div>
+		</el-col>
+		<el-col :span="6" style="height:100%;">
+			<div class="virtual-parts" id="vmstateId">
+				<vm-state></vm-state>
+			</div>
+			<div class="virtual-parts-m">
+			</div>
+			<div class="virtual-parts" id="networkipId">
+				<network-ip></network-ip>
+			</div>
+			<div class="virtual-parts-m">
+			</div>
+			<div class="virtual-parts" id="vmappId">
+				<vm-app></vm-app>
+			</div>
+		</el-col>
+	  </el-row>
+  </div>
+</div>

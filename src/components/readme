@@ -1,0 +1,4 @@
+components/文件夹
+放置封装好的全局Vue components. 比如ztree组件，吸顶组件
+与modules文件夹不同的是,
+componenets里面是系统级别的公共组件, 原则上和业务关系不大，是脱离于业务抽象出来的组件

@@ -1,0 +1,7 @@
+[
+  "HTTP",
+  "HTTPS",
+  "TCP",
+  "UDP",
+  "TERMINATED_HTTPS"
+]

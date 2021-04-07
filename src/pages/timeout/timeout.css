@@ -1,0 +1,110 @@
+@charset "utf-8";
+/* CSS Document */
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.jump_layout{
+  height: 100%;
+  background: url(../../assets/img/jump_bg2.jpg);
+  background-position: top center;
+  background-size: cover;
+  text-align: center;
+  padding-top: 0px;
+  color: #333333;
+  position: relative;   
+}
+.jump_logo{
+  width: 196px;
+  height: 44px;
+  background: url(../../assets/img/logo-big.png);
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.jump_location{
+  width: 862px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.jump_panel{
+  width: 100%;
+  background-color: #ffffff;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+}
+.jump_info{
+  padding: 50px;
+}
+.jump_info_top{
+  width: 357px;
+  height: 274px;
+  margin: 0 auto;
+  background: url(../../assets/img/jump_pic.png);
+  background-size: cover;
+}
+.jump_info_center p:nth-child(1), .jump_title{
+  font-size: 18px;
+  font-weight: 600;
+  padding-top: 10px;
+}
+.jump_seconds{
+  font-size: 24px;
+  font-weight: 600;
+}
+.jump_seconds span{
+  font-weight: 500;
+  font-size: 16px;
+}
+.jump_info p{
+  text-align: center;
+}
+.jump_now{
+  height: 36px;
+  width: 256px;
+  margin: 0 auto;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 36px;
+  background-color: #0087ed;
+  border-radius: 4px;
+  box-shadow: 0 12px 10px -10px rgba(0, 98, 172, 0.6);
+  cursor: pointer;
+}
+.jump_now:hover{
+  background-color: #289ffa;
+}
+.jump_now:active{
+  background-color: #0071c7;
+}
+.jump_info_bottom{
+  display: inline-block;
+  text-align: center;  
+}
+.jump_info_bottom p{
+  text-align: left;
+}
+.jump_info_bottom p:nth-child(1){
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  padding-top: 32px;
+}
+.jump_info_bottom p:nth-child(2){
+  margin-top: 10px;
+  color: #666;
+  font-size: 14px;
+}
+@media only screen and (min-width: 1920px){
+  .jump_location{
+      width: 50%;
+  }
+}

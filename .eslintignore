@@ -1,0 +1,4 @@
+build/*.js
+config/*.js
+src/components/element2/**/*.js
+src/common/*.js

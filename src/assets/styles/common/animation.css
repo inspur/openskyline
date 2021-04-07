@@ -1,0 +1,120 @@
+/***********************fade************************/
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s
+}
+.fade-enter-active {
+  transition-delay: .3s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+/***********************slide-right start************************/
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: transform 1s;
+}
+.slide-right-enter, .slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+/***********************slide-right end************************/
+
+/***********************slide-fade************************/
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .5s ease;
+}
+/*.slide-fade-enter .slide-fade-enter-active{
+  transition-delay: 1s;
+}*/
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-active {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+/***********************bounce************************/
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: opacity 1s, transform 1s;
+}
+.slide-left-enter, .slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-20%);
+}
+
+/***********************bounce************************/
+
+.bounce-enter-active {
+  -webkit-animation: bounce-in .5s;
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  -webkit-animation: bounce-in .5s reverse;
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes bounce-in {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to
+/* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.flip-list-move {
+  transition: transform 1s;
+}
+
+.list-complete-item-move {
+  transition: transform 1s;
+}
+
+.list-complete-item {
+  transition: all 1s;
+  /*display: inline-block;*/
+  /*margin-right: 10px;*/
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-leave-active {
+  position: absolute;
+}

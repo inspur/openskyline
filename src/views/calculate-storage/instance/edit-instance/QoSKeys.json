@@ -1,0 +1,5 @@
+[
+    { "key": "cpu_shares", "label": "calcStorLang.EDIT_INSTANCE_QOS_CPU_SHARES", "unit": "" },
+    { "key": "cpu_quota", "label": "calcStorLang.EDIT_INSTANCE_QOS_CPU_PERIOD", "unit": "MHz" },
+    { "key": "soft_limit", "label": "calcStorLang.EDIT_INSTANCE_QOS_SOFT_LIMIT", "unit": "KB" }
+]

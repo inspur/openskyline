@@ -1,0 +1,22 @@
+@import url('./ztree/zTreeStyle/ztreeIcon.css');
+@import url('./ztree/zTreeStyle/zTreeStyle_light.css');
+@import url('./expandableCell/expandableCell-light.css');
+
+/* 新版创建云主机向导使用色 */
+.ng-create-instance {
+    width: 1200px;
+}
+.ng-create-instance .el-dialog__body {
+    padding: 0;
+}
+.ng-create-instance-detail {
+    background: #e8ecf0;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.ng-create-instance-footer {
+    background: #e8ecf0;
+}

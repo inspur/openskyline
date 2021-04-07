@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+.ztree li span.button.org_ico_open{background:url(../images/ico/org.png)}
+.ztree li span.button.org_ico_close{background:url(../images/ico/org.png)}
+.ztree li span.button.org_ico_docu{background:url(../images/ico/org.png)}
+
+.ztree li span.button.project_ico_open{background:url(../images/ico/project.png)}
+.ztree li span.button.project_ico_close{background:url(../images/ico/project.png)}
+.ztree li span.button.project_ico_docu{background:url(../images/ico/project.png)}
+
+/*.ztree li span.button.department_ico_open{background:url(../images/ico/department.png)}
+.ztree li span.button.department_ico_close{background:url(../images/ico/department.png)}
+.ztree li span.button.department_ico_docu{background:url(../images/ico/department.png)}*/

@@ -1,0 +1,144 @@
+[
+  {
+    "name": "api",
+    "class": "api",
+    "mapping": "/api",
+    "upstream": "api-proxy"
+  },
+  {
+    "name": "customApi",
+    "class": "customApi",
+    "mapping": "/custom-api"
+  },
+  {
+    "name": "s3Api",
+    "class": "s3Api",
+    "mapping": "/s3-api"
+  },
+  {
+    "name": "root",
+    "mapping": "/",
+    "scan": "./controllers"
+  },
+  {
+    "name": "skin",
+    "class": "skin",
+    "mapping": "/static/css"
+  },
+  {
+    "name": "static",
+    "class": "static",
+    "mapping": "/"
+  },
+  {
+    "name": "login",
+    "class": "login/login",
+    "mapping": "/node-api/keystone/login"
+  },
+  {
+    "name": "getVerifyCodeConfig",
+    "class": "login/getVerifyCodeConfig",
+    "mapping": "/node-api/keystone/getVerifyCodeConfig"
+  },
+  {
+    "name": "getVerifyCode",
+    "class": "login/getVerifyCode",
+    "mapping": "/node-api/keystone/getVerifyCode"
+  },
+  {
+    "name": "saveLoginInfo",
+    "class": "login/saveLoginInfo",
+    "mapping": "/node-api/login"
+  },
+  {
+    "name": "logout",
+    "class": "login/logout",
+    "mapping": "/node-api/logout"
+  },
+  {
+    "name": "resetPassword",
+    "class": "login/resetPassword",
+    "mapping": "/node-api/keystone/resetPassword"
+  },
+  {
+    "name": "projectToken",
+    "class": "project/pToken",
+    "mapping": "/node-api/keystone/project-token"
+  },
+  {
+    "name": "uploadTemplate",
+    "class": "upload/uploadTemplate",
+    "mapping": "/node-api/uploadTemplate"
+  },
+  {
+    "name": "checkUrlExists",
+    "class": "upload/checkUrlExists",
+    "mapping": "/node-api/checkUrlExists"
+  },
+  {
+    "name": "uploadObjStorDoc",
+    "class": "upload/uploadObjStorDoc",
+    "mapping": "/node-api/uploadObjStorDoc"
+  },
+  {
+    "name": "recordLog",
+    "class": "log/recordLog",
+    "mapping": "/node-api/keystone/recordLog"
+  },
+  {
+    "name": "downloadObject",
+    "class": "download/downloadObject",
+    "mapping": "/node-api/keystone/downloadObject"
+  },
+  {
+    "name": "serialNumber",
+    "class": "serialNumber",
+    "mapping": "/node-api/keystone/serialNumber"
+  },
+  {
+    "name": "getToken",
+    "class": "login/getToken",
+    "mapping": "/node-api/getToken"
+  },
+  {
+    "name": "checkPassword",
+    "class": "login/checkPassword",
+    "mapping": "/node-api/checkPassword"
+  },
+  {
+    "name": "downloadReport",
+    "class": "download/downloadReport",
+    "mapping": "/node-api/downloadReport"
+  },
+  {
+    "name": "keystonePassword",
+    "class": "keystonePassword",
+    "mapping": "/node-api/keystone/password"
+  },
+  {
+    "name": "configBeforeAuth",
+    "class": "configBeforeAuth",
+    "mapping": "/node-api/keystone/config-before-auth"
+  },
+  { 
+    "name": "fake-s3",
+    "class": "fake-s3/route",
+    "mapping": "/node-api/fake-s3"
+  },
+  {
+    "name": "storageApi",
+    "class": "storageApi",
+    "mapping": "/storage-api"
+  },
+  {
+    "name": "webSocket",
+    "class": "webSocket",
+    "mapping": "/webSocket",
+    "upstream": "webSocket-proxy"
+  },
+  {
+    "name": "pim",
+    "class": "node-api/pim",
+    "mapping": "/node-api/pim"
+  }
+]

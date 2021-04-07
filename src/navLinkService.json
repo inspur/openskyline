@@ -1,0 +1,15 @@
+{
+    "m.calculate.fileStorage":"manila",
+    "m.calculate.objectStorage":"swift||S3",
+    "m.calculate.physical":"ironic",
+    "m.calculate.baremetal":"ironic",
+    "m.safety":"pisces",
+    "m.database":"trove",
+    "m.docker_server":"cetus",
+    "m.heat":"heat",
+    "m.senlin":"senlin",
+    "m.operationmanage.pricesetting":"cloudkitty",
+    "m.operationmanage.cost":"cloudkitty",
+    "m.workflow":"mistral",
+    "m.monitor":"pluto"
+}

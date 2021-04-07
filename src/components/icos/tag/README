@@ -1,0 +1,13 @@
+使用方式和element-UI的<el-tag><el-tag>一致
+写法一： <icos-tag :type="tag.type" @close="onTagClose(tag)" closable>
+            {{renderContent(tag.name, tag.value)}}
+        </icos-tag>
+写法二： <icos-tag :text="renderContent(tag.name, tag.value)" :type="type" @click="onTagClick(tag)" closable>
+        </icos-tag>
+1、新增size属性，支持字符串large，medium，small，和传入数字。
+2、新增text方法为标签内容，可被覆盖。
+3、closable 是否可关闭标签。
+4、:type 标签类型，primary info fatal error等
+5、@click新增click方法
+6、title 支持原生title属性传入
+。。。。。

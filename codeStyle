@@ -1,0 +1,14 @@
+项目代码风格：
+1. 根据eslint的错误提示修改
+2. 命名
+  文件夹命名： 多个单词构成的文件名，各个单词全部小写，单词直接通过“-”连接。比如云监控文件夹 cloud-monitor
+  文件命名： vue后缀的文件采用大驼峰法命名，即每个单词的首字母大写。比如CloudMonitor.vue
+            其他后缀的文件采用小驼峰法，即第一个单词首字母小写，后面其他单词首字母大写。
+            注：封装的类文件建议用大驼峰法命名
+3. 静态资源添加,包括styles和img
+  位置： src/assets
+  图片位置：src/assets/img/
+  styles位置: src/assets/styles
+    公共类资源位置：src/assets/styles/common
+    组件类资源位置：src/assets/styles/components
+  警告：由于本项目多皮肤的实现方案的原因，styles禁止写入单个vue文件,否则多皮肤将不生效

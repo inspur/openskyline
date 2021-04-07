@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="bookmark" href="./favicon.ico" type="image/x-icon"/>
+    <title>{{ title }}</title>
+    <script type="text/javascript">
+      var csrfToken = '{{ csrfToken }}';
+      var service = {{services | dump | safe}};
+      var regionList = {{regions | dump | safe}};
+      var language = "{{language}}";
+      var userId = "{{userId}}";
+      var userName = "{{userName}}";
+      var roleType = "{{roleType}}";
+      var roleId = "{{roleId}}";
+      var sdsipaddress = "{{sdsipaddress}}";
+      var arch = '{{ arch }}';
+      var oemSwitch = '{{ oemSwitch }}';
+      var oemProductLogo = '{{ oemProductLogo }}';
+      var oemBrandLogo = '{{ oemBrandLogo }}';
+      var oemProductName = '{{ oemProductName }}';
+      var oemVersion = '{{ oemVersion }}';
+      var oemEmail = '{{ oemEmail }}';
+      var oemAddress = '{{ oemAddress }}';
+      var oemCopyright = '{{ oemCopyright }}';
+    </script>
+  </head>
+  <body>
+  <div id="digitalVisualizationScreen">
+  </div>
+  </body>
+</html>

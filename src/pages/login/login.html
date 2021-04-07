@@ -1,0 +1,108 @@
+<div class="login" v-show="show">
+  <vue-progress-bar></vue-progress-bar>
+  <div class="content">
+
+    <div class="header">
+      <div class="logo" :style="{ 'backgroundImage': `url(${brandLogoImage})` }"></div>
+      <div class="language">
+        <span id="zh_cn" @click="changeLanguage('zh_cn')">中文</span><span class="separator">|</span>
+        <span id="en" @click="changeLanguage('en')">English</span>
+      </div>
+    </div>
+
+
+    <div class="body">
+      <div class="left" ref="animationContent">
+        <img ref="ring" class="ring" src="../../assets/img/login/ring0.png">
+        <div ref="ball0" class="ball0"></div>
+        <div ref="ball1" class="ball1"></div>
+        <div ref="ball2" class="ball2"></div>
+        <div ref="ball3" class="ball3"></div>
+        <div ref="ball4" class="ball4"></div>
+        <div ref="ball5" class="ball5"></div>
+        <div ref="ball6" class="ball6"></div>
+        <div ref="ball7" class="ball7"></div>
+        <img ref="core" class="core" src="../../assets/img/login/main.png">
+        <img ref="cloud" class="cloud" src="../../assets/img/login/cloud.png">
+      </div>
+
+      <div class="right">
+        <div class="logo2">
+          <img :src="productLogoImage">
+        </div>
+
+        <div v-loading="loading" :element-loading-text="$t('base.logining')" class="right-content">
+          <el-form class="form-signin" ref="form" :model="formInline" :rules="ruleInline" label-width="0"
+            v-if="loginFormVisible">
+            <el-form-item label="" prop="user">
+              <i class="icon el-icon-fa-user"></i>
+              <el-input auto-complete="off" v-model="formInline.user" :placeholder="$t('base.userName')"
+                :autofocus="true" @keyup.enter.native="handleSubmit">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="" prop="password">
+              <i class="icon el-icon-fa-lock"></i>
+              <el-input auto-complete="off" type="password" v-model="formInline.password"
+                :placeholder="$t('base.password')" @keyup.enter.native="handleSubmit">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="" prop="verifyCode" v-if="showVerifycode" class="verify-code">
+              <i class="icon el-icon-fa-get-pocket"></i>
+              <el-input auto-complete="off" v-model="formInline.verifyCode" :placeholder="$t('base.verifyCode')"
+                class="verify-code-input" @keyup.enter.native="handleSubmit">
+              </el-input>
+              <img :src="verifyCodeSrc" @click="reloadVerifyCode" class="verify-code-img">
+            </el-form-item>
+            <el-form-item class="form-login-button">
+              <el-button class="btn-long btn-login" type="submit" @click="handleSubmit">{{$t('base.login')}}</el-button>
+            </el-form-item>
+          </el-form>
+
+          <el-form class="form-signin reset-password" ref="resetPasswordForm" :model="resetPasswordFormData" :rules="resetPasswordRules" v-if="resetPasswordFormVisible">
+            {{ $t('base.LOGIN_PASSWORD_EXPIRED_TIPS') }}
+            <el-form-item prop="oriPassword">
+              <i class="icon el-icon-fa-lock"></i>
+              <el-input auto-complete="off" type="password" v-model="resetPasswordFormData.oriPassword"
+                :placeholder="$t('base.orignPassword')" @keyup.enter.native="handleResetPassword">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <i class="icon el-icon-fa-lock"></i>
+              <el-input auto-complete="off" type="password" v-model="resetPasswordFormData.password"
+                :placeholder="$t('base.newPassword')" @keyup.enter.native="handleResetPassword">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="confirmPassword">
+              <i class="icon el-icon-fa-lock"></i>
+              <el-input auto-complete="off" type="password" v-model="resetPasswordFormData.confirmPassword"
+                :placeholder="$t('base.newPasswordConfirm')" @keyup.enter.native="handleResetPassword">
+              </el-input>
+            </el-form-item>
+            <el-form-item class="form-login-button">
+              <el-button class="btn-long btn-login" type="submit" @click="handleResetPassword">
+                {{ $t('base.LOGIN_PASSWORD_EXPIRED_CHANGE_PASSWORD') }}</el-button>
+            </el-form-item>
+          </el-form>
+
+          <el-form class="form-signin" ref="smsForm" :model="smsForm" :rules="smsFormRules" v-if="smsFormVisible">
+            <el-form-item key="smsFormPhoneNumber">
+              {{ $t('base.LOGIN_SMS_SEND_TO') }} {{ smsForm.phoneNumber }}
+            </el-form-item>
+            <el-form-item key="smsFormValidCode" prop="validCode">
+              <i class="icon el-icon-fa-signal"></i>
+              <el-input v-model="smsForm.validCode" :placeholder="$t('base.LOGIN_SMS_VALID_CODE')" :autofocus="true" class="sms-valid-input">
+                <template slot="append" style="border-radius: 0px;">
+                  <span v-if="smsForm.countDown !== 0">{{ smsForm.countDown }}s</span>
+                  <span v-else @click="handleSendSmsValidCodeAgain" style="cursor: pointer;">{{ $t('base.LOGIN_SMS_SEND_AGAIN') }}</span>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="form-login-button">
+              <el-button class="btn-long btn-login" type="submit" @click="handleLoginWithSmsValidCode">{{$t('base.login')}}</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

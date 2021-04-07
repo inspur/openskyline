@@ -1,0 +1,7 @@
+.vertical .item {
+  display:block;
+  padding: 0 0 5px 0;
+}
+.vertical .el-checkbox+.el-checkbox {
+  margin-left: 0;
+}

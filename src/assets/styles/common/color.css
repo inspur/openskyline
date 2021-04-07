@@ -1,0 +1,30 @@
+.el-button--serousWarning {
+  background-color: #970202;
+}
+.el-button--unsupervised {
+  background-color: #999999;
+}
+
+.info {
+  color: #50bfff;
+}
+
+.success {
+  color: #13ce66;
+}
+
+.warning {
+  color: #f7ba2a;
+}
+
+.danger {
+  color: #ff4949;
+}
+
+.serousWarning {
+  color: #970202;
+}
+.unsupervised {
+  color: #999999;
+}
+

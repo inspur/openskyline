@@ -1,0 +1,408 @@
+*{
+    box-sizing: border-box;
+}
+html,body{
+    width:100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.body_bg{
+    background: url(../../assets/img/bigScreen/physical_bg.jpg) no-repeat;
+    width:100%;
+    height: 100%;
+}
+.body_bg>div{
+    height: 25%;
+    padding: 8px;
+}
+.screen_a{
+    border: 1px solid #3645da;
+    height: 100%;
+    width:100%;
+}
+.screen_a_part{
+    width:25%;
+    display: inline-block;
+    float:left;
+    padding-bottom: 26px;
+    position: relative;
+    height: 100%;
+}
+.screen_part_img{
+    background: url(../../assets/img/bigScreen/physical_statistical_bg.png) center center no-repeat;
+    width:100%;
+    height: 100%;
+    background-size: contain;
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.screen_a_desc{
+    position: absolute;
+    bottom: 0px;
+    height: 26px;
+    width:100%;
+    text-align: center;
+    line-height: 26px;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 400;
+}
+.screen_a_mes{
+    z-index: 9999;
+    color: #00fcff;
+    font-size: 32px;
+    font-weight: 600;
+}
+.screen_a_desc_num{
+    color: #00ff6c;
+    font-weight: 600;
+}
+.screen_a_split{
+    position: absolute;
+    right: -1px;
+    background: url(../../assets/img/bigScreen/vertical-1.png) center center no-repeat;
+    height: 100%;
+    width: 3px;
+    top: 0px;
+}
+
+.screen_b,.screen_b_part{
+    width:100%;
+    height:100%;
+    position: relative;
+}
+.screen_b_part_title{
+    height:30px;
+    line-height: 30px;
+    position: absolute;
+    left: 0px;
+    top:0px;
+}
+.screen_b_part_c{
+    height:100%;
+    padding-top: 30px;
+    width: 100%;
+    /*background: url(../../assets/img/bigScreen/topo_panel_bg.png) repeat-x;*/
+}
+.screen_b_part_title div{
+    height: 100%;
+    width:160px;
+    margin-left:66px;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    background: url(../../assets/img/bigScreen/screen_title_bg.png) no-repeat;
+}
+.screen_b_part_t{
+    height: 12px;
+    width:100%;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_top_line.png) repeat-x;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.screen_b_part_b{
+    height: 12px;
+    width:100%;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_bottom_line.png) repeat-x;
+    position: absolute;
+    bottom:0;
+    left: 0;
+}
+.screen_b_part_l{
+    width: 12px;
+    height: 100%;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_left_line.png) repeat-y;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.screen_b_part_r{
+    width: 12px;
+    height: 100%;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_right_line.png) repeat-y;
+    position: absolute;
+    right:0;
+    top: 0;
+}
+.screen_b_part_lt{
+    width: 32px;
+    height: 32px;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_radius_topleft.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    left:0px;
+    top: 0px;
+}
+.screen_b_part_lb{
+    width: 32px;
+    height: 32px;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_radius_bottomleft.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    left:0px;
+    bottom: 0px;
+}
+.screen_b_part_rt{
+    width: 32px;
+    height: 32px;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_radius_topright.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    right:0px;
+    top: 0px;
+}
+.screen_b_part_rb{
+    width: 32px;
+    height: 32px;
+    background: url(../../assets/img/bigScreen/screen_panel_bg_radius_bottomright.png) no-repeat;
+    background-size: contain;
+    position: absolute;
+    right:0px;
+    bottom: 0px;
+}
+.screen_b_server_state{
+    width: 70%;
+    margin: auto;
+    height: 70%;
+    background: url(../../assets/img/bigScreen/service_ico.png) no-repeat;
+    background-size: 90%;
+    background-position: bottom center;
+}
+.screen_b_computer_state{
+    width: 70%;
+    margin: auto;
+    height: 70%;
+    background: url(../../assets/img/bigScreen/calculate_ico.png) no-repeat;
+    background-size: 90%;
+    background-position: bottom center;
+}
+.screen_b_text{
+    height:30%;
+    width: 100%;
+    text-align:center;
+    color:#fff;
+}
+.screen_b_part_table{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 34px 6px 5px 6px;
+}
+.screen_b_part_table>div{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    color:white;
+}
+/*.screen_b_part_table table{
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background-color: rgba(68, 59, 59, 0.5);
+}*/
+.table-head{
+    position: absolute;
+    height: 28px;
+    left: 0px;
+    top:0px;
+    z-index: 999;
+    width:100%;
+}
+.table-head th{
+    height: 28px;
+    text-align: center;
+}
+.table-body-c{
+    height: 100%;
+    position: relative;
+    padding-top:28px;
+}
+.table-body-c>div{
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
+.ul-c{
+    width:100%;
+}
+.ul-c li {
+    height:30px;
+    line-height: 30px;
+}
+.ul-c li div{
+    display: inline-block;
+    text-align: center;
+    width: 25%;
+    float: left;
+    text-overflow: ellipsis;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.computer-node{
+    width:35px;
+    height: 35px;
+    display: inline-block;
+    float: left;
+    border: 1px solid black;
+}
+.vm-node{
+    width:10px;
+    height: 10px;
+    display: inline-block;
+    float: left;
+    border: 1px solid black;
+}
+.screen_virtual_bg{
+    background: url(../../assets/img/bigScreen/virtual_bg.jpg) no-repeat;
+    width:100%;
+    height: 100%;
+}
+.virtual-l{
+    height: 100%;
+    width:100%;
+    position: relative;
+}
+.virtual-l-t{
+    position: absolute;
+    top:0px;
+    left:0px;
+    height:100px;
+    width: 100%;
+}
+.virtual-l-b{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding-top:110px;
+}
+.virtual-l-b>div{
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+.vir-part{
+    height: 100%;
+    width:100%;
+    border:0px solid #0094eb;
+    background: url(../../assets/img/bigScreen/top_banner_bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+.vir-part-t{
+    height: 70px;
+    width: 100%;
+    text-align: center;
+    line-height: 70px;
+    font-size: 32px;
+    color: #00fcfa;
+    font-weight: 400;
+}
+.vir-part-b{
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    line-height: 23px;
+    font-size: 18px;
+    color: #00fe67;
+    font-weight: 400;
+}
+.virtual-parts{
+    height:32%;
+    width: 100%;
+    position: relative;
+}
+.virtual-parts-m{
+    height: 2%;
+    width: 100%;
+}
+.virtual-halfparts{
+    height:49%;
+    width: 100%;
+    position: relative;
+}
+.screen-circle{
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    margin-right: 8px;
+}
+.network-used{
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    background-color:#ff8a00;
+    margin-right: 8px;
+}
+.network-notused{
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    background-color:#4cc127;
+    margin-right: 8px;
+}
+.screen-right-c{
+    height: 100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    color: #fff;
+    overflow:hidden;
+}
+.screen-right-c-scroll{
+    height: 100%;
+    width:100%;
+    color: #fff;
+    overflow:hidden;
+}
+.screen-right-c>div{
+    margin:8px 0px;
+}
+.top-view-iamge{
+    position: absolute;
+    top:50px;
+    left: 20px;
+}
+.top-view-iamge>div{
+    margin-top:6px;
+}
+.top-view-iamge-project{
+    background: url(../../assets/img/bigScreen/project.png) no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.top-view-iamge-vmnormal{
+    background: url(../../assets/img/bigScreen/vmnormal.png) no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.top-view-iamge-vmexception{
+    background: url(../../assets/img/bigScreen/vmexception.png) no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.top-view-iamge-ironic{
+    background: url(../../assets/img/bigScreen/ironic.png) no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.top-view-iamge-title{
+    top: -5px;
+    position: relative;
+    color: #fff;
+    margin-left: 10px;
+}

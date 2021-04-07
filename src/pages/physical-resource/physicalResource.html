@@ -1,0 +1,206 @@
+<div class="body_bg">
+	<div>
+		<div class="screen_a">
+			<div class="screen_a_part" v-if="service.pluto">
+				<div class="screen_part_img">
+					<span class="screen_a_mes">{{clusterNum}}</span>
+				</div>
+				<div class="screen_a_desc">{{$t('base.clusterSize')}}：<span class="screen_a_desc_num">{{clusterNum}}</span>{{$t('base.physicalMac')}}</div>
+				<div class="screen_a_split"></div>
+			</div>
+			<div class="screen_a_part" v-if="service.pluto">
+				<div class="screen_b_part_title">
+					<div style="margin-left:10px;width:110px;">{{$t('base.allocate')}}</div>
+				</div>
+				<div class="screen_part_img">
+					<span class="screen_a_mes">{{cpuPer}}</span>
+				</div>
+				<div class="screen_a_desc">CPU{{$t('base.totalNumber')}}：<span class="screen_a_desc_num">{{cpuNum}}</span>{{$t('base.core')}}</div>
+				<div class="screen_a_split"></div>
+			</div>
+			<div class="screen_a_part" v-if="service.pluto">
+				<div class="screen_b_part_title">
+					<div style="margin-left:10px;width:110px;">{{$t('base.allocate')}}</div>
+				</div>
+				<div class="screen_part_img">
+					<span class="screen_a_mes">{{memPer}}</span>
+				</div>
+				<div class="screen_a_desc">{{$t('base.totalMemory')}}：<span class="screen_a_desc_num">{{memNum}}</span>G</div>
+				<div class="screen_a_split"></div>
+			</div>
+			<div class="screen_a_part" v-if="service.pluto">
+				<div class="screen_b_part_title">
+					<div style="margin-left:10px;width:110px;">{{$t('base.allocate')}}</div>
+				</div>
+				<div class="screen_part_img">
+					<span class="screen_a_mes">{{storagePer}}</span>
+				</div>
+				<div class="screen_a_desc">{{$t('base.totalstorage')}}：<span class="screen_a_desc_num">{{storageNum}}</span>G</div>
+			</div>
+			<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+				{{$t('base.plutoWarn')}}
+			</div>
+		</div>
+	</div>
+	<div>
+		<div class="screen_b">
+			<el-row style="height:100%;" :gutter="10">
+				<el-col :span="6" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<div class="screen_b_part_title">
+							<div>{{$t('base.cpuUsHisCur')}}</div>
+						</div>
+						<div class="screen_b_part_c">
+							<IEcharts ref="" :option="option1" style="height:100%;" v-if="service.pluto"></IEcharts>
+							<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+								{{$t('base.plutoWarn')}}
+							</div>
+						</div>
+					</div>
+				</el-col>
+				<el-col :span="6" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<div class="screen_b_part_title">
+							<div>{{$t('base.memUsHisCur')}}</div>
+						</div>
+						<div class="screen_b_part_c">
+							<IEcharts ref="" :option="option2" style="height:100%;" v-if="service.pluto"></IEcharts>
+							<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+								{{$t('base.plutoWarn')}}
+							</div>
+						</div>
+					</div>
+				</el-col>
+				<el-col :span="6" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<div class="screen_b_part_title">
+							<div>{{$t('base.diskUsHisCur')}}</div>
+						</div>
+						<div class="screen_b_part_c">
+							<IEcharts ref="" :option="option3" style="height:100%;" v-if="service.pluto"></IEcharts>
+							<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+								{{$t('base.plutoWarn')}}
+							</div>
+						</div>
+					</div>
+				</el-col>
+				<el-col :span="6" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<div class="screen_b_part_title">
+							<div>{{$t('base.networkIOHisCur')}}</div>
+						</div>
+						<div class="screen_b_part_c">
+							<IEcharts ref="" :option="option4" style="height:100%;" v-if="service.pluto"></IEcharts>
+							<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+								{{$t('base.plutoWarn')}}
+							</div>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
+	<div>
+		<div class="screen_b">
+			<el-row style="height:100%;" :gutter="10">
+				<el-col :span="12" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<el-row style="height:100%;">
+							<el-col :span="4" style="height:100%;">
+								<div class="screen_b_computer_state"></div>
+								<div class="screen_b_text">{{$t('base.calNodeSta')}}</div>
+							</el-col>
+							<el-col :span="20" style="height:100%;">
+								<computer-nodes></computer-nodes>
+							</el-col>
+						</el-row>
+					</div>
+				</el-col>
+				<el-col :span="12" style="height:100%;">
+					<div class="screen_b_part">
+						<div class="screen_b_part_t"></div>
+						<div class="screen_b_part_b"></div>
+						<div class="screen_b_part_l"></div>
+						<div class="screen_b_part_r"></div>
+						<div class="screen_b_part_lt"></div>
+						<div class="screen_b_part_lb"></div>
+						<div class="screen_b_part_rt"></div>
+						<div class="screen_b_part_rb"></div>
+						<div class="screen_b_part_title">
+							<div>{{$t('base.alarmInformation')}}</div>
+						</div>
+						<div class="screen_b_part_table">
+							<div>
+								<alert-message v-if="service.pluto"></alert-message>
+								<div v-if="!service.pluto" style="height: 100%;width: 100%;color: #fff;text-align: center;line-height: 120px;">
+									{{$t('base.plutoWarn')}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
+	<div>
+		<div class="screen_a">
+			<div class="screen_b_part_t"></div>
+			<div class="screen_b_part_b"></div>
+			<div class="screen_b_part_l"></div>
+			<div class="screen_b_part_r"></div>
+			<div class="screen_b_part_lt"></div>
+			<div class="screen_b_part_lb"></div>
+			<div class="screen_b_part_rt"></div>
+			<div class="screen_b_part_rb"></div>
+			<el-row style="height:100%;">
+				<el-col :span="2" style="height:100%;">
+					<div class="screen_b_server_state"></div>
+					<div class="screen_b_text">{{$t('base.cloudHostState')}}</div>
+				</el-col>
+				<el-col :span="22" style="height:100%;">
+					<vm-state></vm-state>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
+</div>

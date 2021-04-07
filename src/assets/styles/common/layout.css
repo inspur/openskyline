@@ -1,0 +1,116 @@
+.layout{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #d7dde4;
+  background: #f5f7f9;
+  overflow: hidden;
+}
+.layout-header {
+  position: absolute;
+  width: 100%;
+  height: 42px;
+}
+.layout-header-image{
+  float:left;
+  height:100%;
+  width:160px;
+  margin-left: 8px;
+}
+.layout-header-menus{
+  float:right;
+  height:100%;
+  width:auto;
+  margin-right:20px;
+}
+.layout-header-selects{
+  float:right;
+  height:100%;
+  margin-right:20px;
+  line-height: 44px;
+  color:white !important;
+}
+.layout-content{
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  /* height: 100%; */
+  /* padding-top: 60px; */
+  background: #fff;
+  /*border-radius: 4px;*/
+}
+.layout-content .layout-content-inner{
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+.layout-content .layout-sidebar {
+  transition: all .28s ease-out;
+  position: absolute;
+  left: 0;
+  /*background-color: #fff;*/
+  border-right: 1px solid #d7dde4;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 199px;
+}
+.layout-content .layout-sidebar.layout-hide-text {
+  /*width: 59px;*/
+  width: 64px;
+  overflow: inherit;
+ /*  -webkit-transform: translate(-140px, 0);
+  -ms-transform: translate(-140px, 0);
+  transform: translate(-140px, 0);
+    transition-duration: 300ms;*/
+}
+.layout-content .layout-sidebar.layout-hide-text .layout-text{
+  /*display: none;*/
+}
+.layout-content .layout-sidebar.layout-hide-text .el-submenu__icon-arrow {
+  display: none;
+}
+.layout-content .layout-content-main {
+  left: 200px;
+  /*margin: 0 -1px;*/
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  /* padding: 10px; */
+  /*transition: left .2s ease-in-out;*/
+  transition: all .28s ease-out;
+}
+
+.layout-content .layout-sidebar .transition{
+  transform:scale(1.5);
+}
+.layout-content .layout-content-main.layout-hide-text {
+  left: 65px;
+}
+.layout-content .layout-content-main .layout-content-header {
+  /*padding: 10px 0 0 10px;*/
+  border-bottom: 1px solid #f7ecec;
+}
+
+.layout-content .layout-content-main .layout-content-header .active{
+    transform:rotate(-90deg);
+}
+
+.layout-content .layout-content-main .layout-content-workspace {
+  /* padding: 10px 0px; */
+  min-height: 600px;
+}
+.layout-content .layout-content-main .layout-content-breadcrumb {
+    display: inline-block;
+}
+
+.layout-content .layout-content-main .layout-copy {
+  text-align: center;
+  padding: 10px 0 20px;
+  color: #9ea7b4;
+}

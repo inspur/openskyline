@@ -1,0 +1,214 @@
+.panel {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: column;
+  flex-flow: column;
+  border: 1px solid #d1dbe5;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+  margin-bottom: 10px;
+}
+.panel-default {
+  border-color: #dcdfeb;
+}
+.panel-default > .panel-heading {
+  color: #333;
+  background-color: #ebeff3;
+  border-color: transparent;
+}
+.panel-body {
+  flex:1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 6px;
+  text-align:center;
+}
+.panel-heading {
+  padding: 5px 10px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+h3.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+  color: #333333;
+}
+h4.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: #333333;
+}
+h5.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #333333;
+}
+h6.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 12px;
+  color: #333333;
+}
+.panel_t{
+  text-align:center;
+  }
+.panel_b{
+  text-align:center;
+  }
+.panel-body h4 {
+  font-size:16px;
+  font-weight: normal;
+  line-height:1.2;
+}
+.panel-body h4 span{
+  padding:0 10px;
+}
+.panel_info_2 {
+  font-size:14px;
+  font-weight: normal;
+  line-height:1.2;
+  color:#999999;
+}
+.panel_info_2 span{
+  padding:0 10px;
+}
+.moduleinfo{
+  margin:0 auto;
+  text-align:center;
+  margin-top:50px;
+  padding:6px 0px;
+  }
+.in-icon{
+  margin-right:2px;
+    vertical-align: middle;
+  }
+.in-number{
+  font-size:36px;
+  font-weight: normal;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:center;
+  color:#7EBA28;
+    vertical-align: middle;
+  }
+.in-number small{
+  font-size:18px;
+  font-weight: normal;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:center;
+  color:#7FC8F5;
+  margin-left:6px;
+  }
+.in-chart{
+  padding:6px 0px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin:0 auto;
+  text-align:center;
+  }
+.panel_t{
+  text-align:center;
+  }
+.panel_b{
+  text-align:center;
+  }
+.panel-body h4 {
+  font-size:16px;
+  font-weight: normal;
+  line-height:1.2;
+}
+.panel-body h4 span{
+  padding:0 10px;
+}
+.panel_info_2 {
+  font-size:14px;
+  font-weight: normal;
+  line-height:1.2;
+  color:#DCDCDC;
+}
+.panel_info_2 span{
+  padding:0 10px;
+}
+.panel-info {
+  border-color: #d3d3d3;
+}
+.panel-info > .panel-heading {
+  color: #333;
+  background-color: #ebeff3;
+  border-color: #c9cbd6;
+}
+.panel-info > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: #bce8f1;
+}
+.panel-info > .panel-heading .badge {
+  color: #d9edf7;
+  background-color: #31708f;
+}
+.panel-info > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: #bce8f1;
+}
+.panel-footer {
+  padding: 10px 15px;
+  background-color: #f6f6f6;
+  border-top: 1px solid #dedede;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+/*标题栏*/
+.panel_tit{
+  padding: 2px 2px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.panel_name{
+  padding:0;
+  margin:0;
+  font-size:16px;
+  font-weight:normal;
+  display:inline;
+  color: #222222;
+    font-family: "微软雅黑","Tahoma","Arial","宋体";
+  /*background:url(../../images/light/smp/paneltitbg.png) no-repeat scroll 0 9px;*/
+  padding-left:12px;
+  }
+.warming-example{
+  display:inline-block;
+  float:right;
+  color:#E9E3E4;
+  }
+.warming-example ul{
+  background-image:none;
+  padding:0;
+  margin:0;
+  }
+.warming-example ul li{
+  color:#999999;
+  font-size:12px;
+  }
+.warming-example ul li img{
+  width:12px;
+  height:12px;
+  vertical-align:middle;
+  }
+.list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+}
+.list-inline > li {
+  display: inline-block;
+  padding-right: 5px;
+  padding-left: 5px;
+}

@@ -1,0 +1,252 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.login {
+  width: 100%;
+  height: 100%;
+  background-color: #0853bb;
+}
+
+.login .content {
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/login/login-background.png);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.login .content .header {
+  display: flex;
+  justify-content: space-between;
+
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  margin: 30px 40px;
+  width: calc(100% - 40px * 2);
+  height: 50px;
+  z-index: 2;
+}
+
+.login .content .header .logo {
+  flex: 0 0 150px;
+  /* background-image: url(../../assets/img/login/logo-inspur.png); */
+  background-position: left center;
+  background-size: contain;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+}
+
+.login .content .header .language {
+  flex: 1 1 auto;
+  text-align: right;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  font-size: 14px;
+}
+
+.login .content .header .language span {
+  cursor: pointer;
+}
+
+.login .content .header .language .separator {
+  margin: 0 10px;
+}
+
+
+.login .content .body {
+  display: flex;
+  justify-content: space-around;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.login .content .body .left {
+  flex: 1 1 auto;
+  min-width: 999px;
+
+  background-image: url(../../assets/img/login/wangge.png);
+  background-size: cover;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.login .content .body .left .ball0,
+.login .content .body .left .ball1,
+.login .content .body .left .ball2,
+.login .content .body .left .ball3,
+.login .content .body .left .ball4,
+.login .content .body .left .ball5,
+.login .content .body .left .ball6,
+.login .content .body .left .ball7,
+.login .content .body .left img.ring,
+.login .content .body .left img.core,
+.login .content .body .left img.cloud {
+  position: absolute;
+  height: auto;
+}
+
+.login .content .body .left .ball0,
+.login .content .body .left .ball1,
+.login .content .body .left .ball2,
+.login .content .body .left .ball3,
+.login .content .body .left .ball4,
+.login .content .body .left .ball5,
+.login .content .body .left .ball6,
+.login .content .body .left .ball7 {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00fffd;
+  filter: blur(1px);
+  left: -100px;
+}
+
+.login .content .body .left img.ring {
+  left: calc(50% - 55% / 2);
+}
+
+.login .content .body .left img.core {
+  left: calc(50% - 55% / 2 - 25px);
+}
+
+/* .login .content .body .left img.cloud {
+  animation: cloudAnimatio 2s ease-in-out 0s infinite alternate backwards running;
+}
+
+@keyframes cloudAnimatio {
+  0% {
+    top: calc(30% - 100px);
+  }
+
+  100% {
+    top: 30%;
+  }
+} */
+
+.login .content .body .right {
+  flex: 0 0 35%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 350px;
+  max-width: 600px;
+}
+
+.login .content .body .right .logo2 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login .content .body .right .logo2 img {
+  width: 70%;
+  height: auto;
+}
+
+.login .content .body .right .logo2,
+.login .content .body .right .right-content {
+  width: 70%;
+}
+
+.login .content .body .right .right-content {
+  background-color: white;
+  padding: 50px 40px;
+  margin-bottom: 100px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 30px 0 rgba(9, 52, 84, 0.4);
+}
+
+.login .content .body .right .right-content,
+.login .content .body .right .right-content .el-loading-mask {
+  border-radius: 8px;
+}
+
+.login .content .body .right .right-content .form-login-button .el-button {
+  width: 100%;
+  color: white;
+  background-color: #0077e8;
+  border: 1px solid #0077e8;
+  border-radius: 4px;
+}
+
+.login .content .body .right .right-content .el-form-item:not(:last-child) {
+  margin-bottom: 35px;
+}
+
+.login .content .body .right .right-content .el-form-item__content {
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+}
+
+.login .content .body .right .right-content .el-form-item__content .icon {
+  margin: auto;
+}
+
+.login .content .body .right .right-content .el-form-item__content .el-form-item__error {
+  left: 20px;
+}
+
+.login .content .body .right .right-content .verify-code .el-form-item__content .verify-code-input {
+  margin-right: 22px;
+}
+
+.login .content .body .right .right-content .verify-code .el-form-item__content .verify-code-img {
+  height: 30px;
+}
+
+.login .content .body .right .right-content .form-login-button .el-button:focus,
+.login .content .body .right .right-content .form-login-button .el-button:hover {
+  color: white;
+  background-color: #2798f5;
+  border: 1px solid #2798f5;
+}
+
+.login .content input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+}
+
+.login .content input:-internal-autofill-selected,
+.login .content input:-internal-autofill-previewed {
+  background-color: transparent !important;
+  color: -internal-light-dark-color(transparent, white) !important;
+}
+
+.login .content .body .right .right-content .el-input__inner,
+.login .content .body .right .right-content .el-input__inner:focus,
+.login .content .body .right .right-content .el-input__inner:hover {
+  border: none;
+  background-color: transparent !important;
+}
+
+@media all and (max-width:1200px) {
+  .login .content .body .left {
+    display: none;
+  }
+
+  .login .content .body .right .logo2,
+  .login .content .body .right .right-content {
+    width: 100%;
+  }
+}
