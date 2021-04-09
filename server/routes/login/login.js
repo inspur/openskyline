@@ -62,33 +62,7 @@ module.exports = function (options, context) {
   }
 
   async function setIPContinuousWrongNumber(ip, success) {
-    try {
-      const connection = await mysql.createConnection({
-        host: serviceAddr.mysql.host,
-        port: serviceAddr.mysql.port,
-        user: serviceAddr.mysql.user,
-        password: serviceAddr.mysql.password,
-        database: serviceAddr.mysql.database
-      });
-      let existingResults = await connection.query(`SELECT * FROM login_ip_logs WHERE ip = ?`, [ip]);
-      if (existingResults.length > 0) {
-        if (success) {
-          await connection.query(`UPDATE login_ip_logs SET continuous_wrong_numbers = ? WHERE id = ?`, [0, existingResults[0].id]);
-        } else {
-          await connection.query(`UPDATE login_ip_logs SET continuous_wrong_numbers = continuous_wrong_numbers + 1 WHERE id = ?`, [existingResults[0].id]);
-        }
-      } else {
-        if (success) {
-          await connection.query(`INSERT INTO login_ip_logs (ip, continuous_wrong_numbers, update_time) VALUES (?, ?, ?)`, [ip, 0, new Date()]);
-        } else {
-          await connection.query(`INSERT INTO login_ip_logs (ip, continuous_wrong_numbers, update_time) VALUES (?, ?, ?)`, [ip, 1, new Date()]);
-        }
-      }
-      await connection.end();
-      return true;
-    } catch (e) {
-      throw e;
-    }
+    return true;
   }
 
   function getSessionCount(req) {

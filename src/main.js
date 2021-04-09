@@ -65,7 +65,6 @@ ElementUI.Select.props.placeholder.default = Vue.t('base.pleaseSelect');
 ElementUI.Cascader.props.placeholder.default = Vue.t('base.pleaseSelect');
 
 //绑定logTarget
-console.log(logTarget);
 Vue.logTarget = logTarget;
 
 // 4. 创建和挂载根实例。
