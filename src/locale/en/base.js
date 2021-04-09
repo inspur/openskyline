@@ -1,7 +1,7 @@
 export default {
   base: {
-    mainTitle: "Skyline",
-    mainTitleAK: 'Skyline',
+    mainTitle: "skyline",
+    mainTitleAK: 'skyline',
     companyAddress: "",
     logining: "Logging in.Please wait a moment...",
     loadingPage: "Loading page.Please wait ...",
