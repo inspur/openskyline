@@ -1,5 +1,6 @@
 import rules from "./rules";
-const Schema = require('async-validator');
+import Schema from 'async-validator';
+
 export default {
   init() {
     for (let item of rules) {
