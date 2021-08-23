@@ -34,7 +34,7 @@ module.exports = function() {
       self.$sequence({
         type: 'post',
         data: body,
-        url: 'api/nova/v2.1/servers-inspur/{id}/action',
+        url: 'api/nova/v2.1/servers/{id}/action',
         params: selectRows,
         confirmMsg: Vue.t('calcStorLang.openInstConfirm'),
         log: {
@@ -77,7 +77,7 @@ module.exports = function() {
       self.$sequence({
         type: 'post',
         data: body,
-        url: 'api/nova/v2.1/servers-inspur/{id}/action',
+        url: 'api/nova/v2.1/servers/{id}/action',
         params: selectRows,
         confirmMsg: Vue.t('calcStorLang.closeInstConfirm'),
         log: {

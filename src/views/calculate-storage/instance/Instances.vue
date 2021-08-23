@@ -1743,7 +1743,7 @@ export default {
       if ($this.refreshTimeout !== null) {
         clearTimeout($this.refreshTimeout);
       }
-      let url = `api/nova/v2.1/servers-inspur/detail`;
+      let url = `api/nova/v2.1/servers/detail`;
       let roleType = Vue.roleType + '';
       let queryString = Object.keys(params).map(key => {
         return `${key}=${params[key]}`
