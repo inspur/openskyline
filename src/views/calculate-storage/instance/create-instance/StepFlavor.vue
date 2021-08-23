@@ -114,7 +114,7 @@ export default {
     async loadFlavors() {
       const $this = this;
       const res = await $this.$ajax({
-        url: `api/nova/v2.1/flavors-inspur/detail?project_id=${$this.incomingData.projectId}`,
+        url: `api/nova/v2.1/flavors/detail?project_id=${$this.incomingData.projectId}`,
         method: 'get'
       });
       let flavors = res.flavors;

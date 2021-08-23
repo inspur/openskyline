@@ -474,7 +474,6 @@ export default {
         projectId: '',
         instanceId: ''
       },
-      OSSupportsHotPlug: [],
       modifyPasswordDialog: {
         visible: false,
         instanceId: ''
@@ -691,7 +690,6 @@ export default {
     let $this = this;
     let roleType = String(Vue.roleType);
     $this.$nextTick(async () => {
-      await $this.loadInspurConfigs();
       if (roleType === '0') {
         $this.loadFilteredUsers('');
         $this.loadHostList();
@@ -1629,17 +1627,6 @@ export default {
     onRefresh() {
       const $this = this;
       $this.loadData($this.currentPage, true);
-    },
-    async loadInspurConfigs() {
-      const $this = this
-      const res = await $this.$ajax({
-        type: 'get',
-        url: `api/nova/v2.1/inspur-configs`
-      });
-      $this.OSSupportsHotPlug = [];
-      for (let key in res) {
-        $this.OSSupportsHotPlug.push(key);
-      }
     },
     async loadHostList() {
       const $this = this;
