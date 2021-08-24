@@ -565,8 +565,8 @@ export default {
       var baseUrl = "api/glance/v2/images?limit=99999";
       var baseType = "get";
       if (roleType != "0") {
-        baseUrl = "api/glance/v2/images/list?limit=99999";
-        baseType = "post";
+        baseUrl = "api/glance/v2/images"; //"?limit=99999";
+        baseType = "get";
       }
       let projectId = this.$cookie.get('pid');
       var url = "";
@@ -590,8 +590,9 @@ export default {
       }
       let ret = await this.$ajax({
         type: baseType,
-        url: url,
-        data: roleType == "0"?null:JSON.stringify({})
+        url: url
+        // ,
+        // data: roleType == "0"?null:JSON.stringify({})
       });
       let images = ret.images;
       for (var i = 0; i < images.length; i++) {
