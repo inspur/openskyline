@@ -42,7 +42,7 @@
             <span>{{ scope.row.memory_mb * 1024 * 1024 | fileSize }}</span>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           v-if="columnsChecked.indexOf('cpu_usage') >= 0"
           prop="cpu_usage"
           :label="$t('monitor.CPU_USAGE')"
@@ -69,7 +69,7 @@
               :class="scope.row.mem_usage.class"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div style="margin: 10px 0; position: relative">
       <el-row>
@@ -152,16 +152,16 @@ export default {
         prop: "memory",
         label: Vue.t('calcStorLang.memory') + Vue.t('calcStorLang.usedTotal')
       }, {
-        prop: "real_memory",
+        prop: "real_cpu",
         label: Vue.t('calcStorLang.REAL_RAM')
-      }, {
-        prop: 'cpu_usage',
-        label: Vue.t('monitor.CPU_USAGE')
-      }, {
-        prop: 'mem_usage',
-        label: Vue.t('monitor.MEM_USAGE')
+      // }, {
+      //   prop: 'cpu_usage',
+      //   label: Vue.t('monitor.CPU_USAGE')
+      // }, {
+      //   prop: 'mem_usage',
+      //   label: Vue.t('monitor.MEM_USAGE')
       }],
-      columnsChecked: ['name', 'host_ip', 'type', 'status', 'cpu', 'memory', 'cpu_usage', 'mem_usage'],
+      columnsChecked: ['name', 'host_ip', 'type', 'status', 'cpu', 'memory', 'real_cpu', 'real_cpu'],
       tableData: [],
       selectedRow:[],
       hostname: "",
@@ -417,7 +417,7 @@ export default {
       try {
         let result = await self.$ajax({
           type: 'get',
-          url: 'api/nova/v2.1/os-hypervisors-inspur/detail'
+          url: 'api/nova/v2.1/os-hypervisors/detail'
         });
         self.loading = false;
         var dataResult = result['hypervisors'];
@@ -557,7 +557,7 @@ export default {
         try {
           let result = await self.$ajax({
             type: 'get',
-            url: 'api/nova/v2.1/os-hypervisors-inspur/' + row.hypervisor_hostname + '/set_hosts_maintenance',
+            url: 'api/nova/v2.1/os-hypervisors/' + row.hypervisor_hostname + '/set_hosts_maintenance',
             params: row,
             showErrMsg: true,
             successFun: function() {
@@ -585,7 +585,7 @@ export default {
         try {
           let result = await self.$ajax({
             type: 'get',
-            url: 'api/nova/v2.1/os-hypervisors-inspur/' + row.hypervisor_hostname + '/unset_hosts_maintenance',
+            url: 'api/nova/v2.1/os-hypervisors/' + row.hypervisor_hostname + '/unset_hosts_maintenance',
             params: row,
             showErrMsg: true,
             successFun: function() {
@@ -614,10 +614,10 @@ export default {
       return flag;
     },
     cpuRender(row) {
-      return `${row['vcpus_used']}/${row['vcpus']*row['cpu_allocation_ratio']}`;
+      return `${row['vcpus_used']}/${row['vcpus']*(row['cpu_allocation_ratio'] || 1)}`;
     },
     memRender(row) {
-      return `${this.formatFileSize(row['memory_mb_used'], 'MB')}/${this.formatFileSize(row['memory_mb']*row['ram_allocation_ratio'], 'MB')}`;
+      return `${this.formatFileSize(row['memory_mb_used'], 'MB')}/${this.formatFileSize(row['memory_mb']*(row['ram_allocation_ratio'] || 1), 'MB')}`;
     },
     getCurrentData(param) {
       this.tableData = param;
