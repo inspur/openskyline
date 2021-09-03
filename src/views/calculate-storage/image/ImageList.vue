@@ -30,7 +30,7 @@
           type="selection"
           width="55" align="center"
           :selectable="function(row, index) { return !['pending_delete'].includes(row['status']) }">
-        </el-table-column> 
+        </el-table-column>
         <el-table-column
           v-if="columnsChecked.indexOf('name') >= 0"
           :label="$t('lang.name')"
@@ -219,7 +219,7 @@
                 <el-button type="text" icon="fa-arrow-right" @click="onBack">{{$t('lang.back')}}</el-button>
               </div>
               <div>
-                <image-detail :imageInfo="imageInfo" :ownerName="detailOwnerName" @refresh="onRefresh"></image-detail> 
+                <image-detail :imageInfo="imageInfo" :ownerName="detailOwnerName" @refresh="onRefresh"></image-detail>
               </div>
             </panel>
           </div>
@@ -250,7 +250,7 @@
       <refresh-metadata ref="refreshMetadata" v-if="refreshMetadataFlg" @handleMetaDataShow="handleMetaDataShow">
       </refresh-metadata>
       <metadata-list v-if="metadataList.visible" @close="metadataList.visible = false" :imageId="metadataList.imageId" @onRefresh="onRefresh" />
-      <image-tags v-if="imageTags.visible" @close="imageTags.visible = false" :imageId="imageTags.imageId" @refresh="onRefresh" />     
+      <image-tags v-if="imageTags.visible" @close="imageTags.visible = false" :imageId="imageTags.imageId" @refresh="onRefresh" />
     </icos-page>
   </div>
 </template>
@@ -583,7 +583,7 @@ export default {
           }
         }
       }).join('&');
-      if ("" != query) {
+      if (query !== '') {
         url = baseUrl + "&" + query;
       } else {
         url = baseUrl;
@@ -591,8 +591,6 @@ export default {
       let ret = await this.$ajax({
         type: baseType,
         url: url
-        // ,
-        // data: roleType == "0"?null:JSON.stringify({})
       });
       let images = ret.images;
       for (var i = 0; i < images.length; i++) {

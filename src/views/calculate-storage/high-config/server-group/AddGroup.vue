@@ -78,12 +78,12 @@ export default {
           this.saving = true;
           let name = this.keyPair.name;
           let type = this.keyPair.option;
-          let url = `api/nova/v2.1/os-inspur-server-groups`;
+          let url = `api/nova/v2.1/os-server-groups`;
           let body = {
             server_group: {
               name: name,
-              policy: this.keyPair.option,
-              project_id: this.roleType === '0' ? this.keyPair.projectId : this.$cookie.get('pid')
+              policy: this.keyPair.option
+              // project_id: this.roleType === '0' ? this.keyPair.projectId : this.$cookie.get('pid')
             }
           };
           try {
