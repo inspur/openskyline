@@ -11,7 +11,7 @@
         </el-select>
       </el-form-item>
       <!--用户-->
-      <el-form-item :label="$t('storage.user')" prop="project" class="is-required" v-if="roleType=='0'">
+      <el-form-item :label="$t('storage.user')" prop="project" class="is-required">
          <el-select v-model="newVolume.userId" v-bind:style="widthStyle" filterable>
           <el-option v-for="item in userList" :key="item.id" :label="getSelectOptionName(item.name)" :value="item.id" :title="item.name.length > 80?item.name:''">
           </el-option>
@@ -130,7 +130,7 @@
     </el-form>
      <!-- </el-col>
    <el-col :span="12">
-     
+
     </el-col> -->
     <div slot="footer" class="dialog-footer">
       <el-button @click="hide" :disabled="isDisabled">{{$t('lang.cancel')}}</el-button>
@@ -645,7 +645,7 @@ export default {
     async syncQuota() {
       let self = this;
       let projectId = self.newVolume.project;
-      let url = "api/cinderv3/v3/" + self.$cookie.get("pid") + "/inspur-volumes/" + projectId + "/syncquota"
+      let url = "api/cinderv3/v3/" + self.$cookie.get("pid") + "/volumes/" + projectId + "/syncquota"
       try {
         let ret = await this.$ajax({
           type: 'POST',
@@ -688,7 +688,7 @@ export default {
       if ( !self.newVolume.project ) {
         return false;
       }
-      let url = 'api/keystone/v3/inspur/assignments/projects/' + projectId + '/users';
+      let url = 'api/keystone/v3/users';
       try {
         let result = await self.$ajax({
           type: 'get',
@@ -696,10 +696,11 @@ export default {
           showErrMsg: false
         });
         let users = result['users'];
+        console.log(users);
         let loginUser = "";
         if (users != null) {
           for (let u = 0; u < users.length; u++) {
-            let userObj = users[u].user;
+            let userObj = users[u];
             self.userList.push(userObj);
             //判断一下，查询出来用户列表是否包含当前登录账号
             //如果包含，则默认展示i当前登陆用户
@@ -936,7 +937,7 @@ export default {
       let self = this;
       self.loading = true;
       let projectId = this.$cookie.get('pid');
-      let url = "api/cinderv3/v3/" + projectId + "/inspur-types";
+      let url = "api/cinderv3/v3/" + projectId + "/types";
       //存储后端类型和项目和权限不挂钩
       try {
         let result = await self.$ajax({
@@ -984,7 +985,7 @@ export default {
           let description = this.newVolume.description;
           let vType = this.newVolume.type;
           let selectProjectId = this.newVolume.project;
-          let url = "api/cinderv3/v3/" + projectId + "/inspur-volumes";
+          let url = "api/cinderv3/v3/" + projectId + "/volumes";
           let type = "post";
           let msg = this.$t('storage.createVolSuccess');
           let body = {"volume": {"name": name, "size": size, "description": description, "multiattach": isShared, "volume_type": vType, "availability_zone": zone}};
@@ -1009,7 +1010,7 @@ export default {
               return;
           }
           if ("0" == roleType) {
-            url = "api/cinderv3/v3/" + projectId + "/inspur-volumes";
+            url = "api/cinderv3/v3/" + projectId + "/volumes";
             body = {"volume": {"name": name, "size": size, "description": description, "multiattach": isShared, "volume_type": vType, "project_id": selectProjectId, "user_id": userId, "availability_zone": zone}};
           }
           if (!this.totalInfinite) {

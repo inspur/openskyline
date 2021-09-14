@@ -156,7 +156,7 @@ export default {
       }
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?" + $.param(param)
+        url: "api/keystone/v3/users?" + $.param(param)
       })
       this.tableData = ret.users;
       this.total = ret.total;

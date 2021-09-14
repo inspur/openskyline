@@ -649,7 +649,7 @@ export default {
          data["user_id"] = Vue.userId;
       }
       data['soft_deleted'] = "False";
-      let url = "api/cinderv3/v3/" + projectId + "/inspur-volumes/detail?metadata={'store_image_data':'False'}&" + $.param(data);
+      let url = "api/cinderv3/v3/" + projectId + "/volumes/detail";
       try {
         let result = await self.$ajax({
           type: "get",
@@ -805,7 +805,7 @@ export default {
         self.projectlist = projectlist;
         return false;
       }
-      let url = "api/keystone/v3/inspur/projects?domain_id=default";
+      let url = "api/keystone/v3/projects?domain_id=default";
       try {
         let result = await self.$ajax({
           type: "get",
@@ -831,11 +831,11 @@ export default {
       let roleType = Vue.roleType + "";
       let url = "";
       if ("2" == roleType || "3" == roleType) {
-        url = "api/keystone/v3/inspur/users?project_id=" + self.$cookie.get("pid");
+        url = "api/keystone/v3/users?project_id=" + self.$cookie.get("pid");
       } else {
-        url = "api/keystone/v3/inspur/users?domain_id=default";
+        url = "api/keystone/v3/users?domain_id=default";
         if (projectId) {
-          url = "api/keystone/v3/inspur/users?domain_id=default&project_id=" + projectId;
+          url = "api/keystone/v3/users?domain_id=default&project_id=" + projectId;
         }
       }
       try {

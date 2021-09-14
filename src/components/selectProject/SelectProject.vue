@@ -147,7 +147,7 @@ export default {
       this.tableLoading = true;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/projects?" + $.param(params)
+        url: "api/keystone/v3/projects?" + $.param(params)
       });
       this.tableData = ret.projects;
       this.total = ret.total;
