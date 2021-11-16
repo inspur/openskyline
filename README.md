@@ -1,4 +1,4 @@
-[![](https://gitee.com/winlinvip/srs-wiki/raw/master/images/mulan-incubating.svg)](http://mulanos.cn)
+[![](./Mulan-incubationg-blue.svg)](http://mulanos.cn)
 # skyline
 
 ![image](./skyline-logo.png?raw=true)
