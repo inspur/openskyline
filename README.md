@@ -1,4 +1,4 @@
-[![image](https://lbworks-oss.oss-cn-qingdao.aliyuncs.com/Mulan-incubating-blue.svg)](http://mulanos.cn)
+[![svg](https://lbworks-oss.oss-cn-qingdao.aliyuncs.com/Mulan-incubating-blue-small.png)](http://mulanos.cn)
 
 # skyline
 
