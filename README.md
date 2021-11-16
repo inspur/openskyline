@@ -1,8 +1,9 @@
-[![image](./Mulan-incubating-blue.svg)](http://mulanos.cn)
+[![image](https://lbworks-oss.oss-cn-qingdao.aliyuncs.com/Mulan-incubating-blue.svg)](http://mulanos.cn)
 
 # skyline
 
-![image](./skyline-logo.png?raw=true)
+![](https://lbworks-oss.oss-cn-qingdao.aliyuncs.com/skyline-logo-90x90.png
+)
 
 > Skyline是最好的OpenStack控制台，对标OpenStack社区Horizon项目，在易用性、页面性能等方面进行深度优化，提供简单、易用、高效的OpenStack控制台。
 > 基于REST API进行业务功能设计，功能模块化设计符合高内聚、低耦合，可方便进行功能开发、扩展。
