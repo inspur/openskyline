@@ -276,7 +276,7 @@ export default {
         try {
           const res = await $this.$ajax({
             type: 'get',
-            url: `api/nova/v2.1/inspur-availability-zone/detail`
+            url: `api/nova/v2.1/os-availability-zone/detail`
           });
           let availableZone = res.availabilityZoneInfo.find(item => item.zoneName === zoneName);
           let hosts = Object.keys(availableZone.hosts);

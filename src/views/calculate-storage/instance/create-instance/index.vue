@@ -389,8 +389,8 @@ export default {
       const $this = this;
       let body = {
         server: {
-          projectId: $this.formData.projectId,
-          userId: $this.formData.userId,
+          // projectId: $this.formData.projectId,
+          // userId: $this.formData.userId,
           name: $this.formData.name,
           description: $this.formData.description,
           min_count: 1,
@@ -404,15 +404,15 @@ export default {
           }
         }
       };
-      if ($this.formData.inspurDiskBus !== '') {
-        body.server.metadata.inspur_disk_bus = $this.formData.inspurDiskBus;
-      }
-      if ($this.formData.cpuMode !== '') {
-        body.server.metadata.cpu_mode = $this.formData.cpuMode;
-      }
-      if ($this.formData.cpuMode === 'custom') {
-        body.server.metadata.cpu_model = $this.formData.cpuModel;
-      }
+      // if ($this.formData.inspurDiskBus !== '') {
+      //   body.server.metadata.inspur_disk_bus = $this.formData.inspurDiskBus;
+      // }
+      // if ($this.formData.cpuMode !== '') {
+      //   body.server.metadata.cpu_mode = $this.formData.cpuMode;
+      // }
+      // if ($this.formData.cpuMode === 'custom') {
+      //   body.server.metadata.cpu_model = $this.formData.cpuModel;
+      // }
       // 来源及云硬盘
       let deviceName = 'vda';
       if ($this.formData.inspurDiskBus === 'scsi') {
@@ -492,9 +492,9 @@ export default {
         };
       }
       // 加速器
-      if ($this.formData.gpuProfileName !== '') {
-        body.server['dp_name'] = $this.formData.gpuProfileName;
-      }
+      // if ($this.formData.gpuProfileName !== '') {
+      //   body.server['dp_name'] = $this.formData.gpuProfileName;
+      // }
       // 网络
       if ($this.formData.networkType === 'network') {
         let networks = [];
@@ -550,22 +550,22 @@ export default {
         body.server.security_groups = [];
       }
       // VNC密码
-      if ($this.formData.vncPassword !== '') {
-        body.server.metadata.vncpasswd = $this.formData.vncPassword;
-      }
+      // if ($this.formData.vncPassword !== '') {
+      //   body.server.metadata.vncpasswd = $this.formData.vncPassword;
+      // }
       // 用户脚本
-      if ($this.formData.userData !== '') {
-        body.server.user_data = btoa($this.formData.userData);
-      }
+      // if ($this.formData.userData !== '') {
+      //   body.server.user_data = btoa($this.formData.userData);
+      // }
       // QoS
-      if ($this.formData.qos.length !== 0) {
-        $this.formData.qos.forEach(item => {
-          body.server.metadata[item.key] = item.value;
-        });
-        if ($this.formData.qos.find(item => item.key === 'cpu_quota')) {
-          body.server.metadata['cpu_quota_max'] = '2200';
-        }
-      }
+      // if ($this.formData.qos.length !== 0) {
+      //   $this.formData.qos.forEach(item => {
+      //     body.server.metadata[item.key] = item.value;
+      //   });
+      //   if ($this.formData.qos.find(item => item.key === 'cpu_quota')) {
+      //     body.server.metadata['cpu_quota_max'] = '2200';
+      //   }
+      // }
       // 亲和性策略（服务器组）
       if ($this.formData.serverGroup !== '') {
         body['os:scheduler_hints'] = {
@@ -587,7 +587,7 @@ export default {
           }
           const res = await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur`,
+            url: `api/nova/v2.1/servers`,
             data: JSON.stringify(body),
             headers: {
               'X-OpenStack-Nova-API-Version': 2.67

@@ -290,7 +290,7 @@ export default {
       try {
         const res = await $this.$ajax({
           type: 'get',
-          url: `api/keystone/v3/inspur/assignments/projects/${$this.formData.projectId}/users`
+          url: `api/keystone/v3/role_assignments?scope.project.id=${$this.formData.projectId}`
         });
         $this.users = res.users.map(item => item.user);
         if ($this.users.findIndex(item => item.id === $this.formData.userId) === -1) {

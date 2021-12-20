@@ -146,7 +146,7 @@ export default {
             var self = this;
             self.$sequence({
               type: 'delete',
-              url: 'api/nova/v2.1/flavors-inspur/{id}',
+              url: 'api/nova/v2.1/flavors/{id}',
               params: selectRows,
               confirmMsg: Vue.t('calcStorLang.deleteConfirmComm') + Vue.t('calcStorLang.resourceSpec') + "？",
               successMsg: Vue.t('calcStorLang.deleteSuccess'),

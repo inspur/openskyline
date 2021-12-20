@@ -63,7 +63,7 @@ export default {
       return new Promise((resolve, reject) => {
         $this.$ajax({
           type: 'delete',
-          url: `api/nova/v2.1/servers-inspur/${instance.id}`,
+          url: `api/nova/v2.1/servers/${instance.id}`,
           log: {
             description: {
               en: `Delete Instance(Instance ID: ${instance.id}, Instance Name: ${instance.name})`,

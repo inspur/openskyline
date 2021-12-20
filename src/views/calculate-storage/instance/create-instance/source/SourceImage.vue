@@ -50,7 +50,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <el-row type="flex" justify="space-between" align="middle">
       <icos-column-selector @refresh="loadImages" @column-checked="handleColumnChecked" :selected-length="selectedImageId === '' ? 0 : 1" :columns="[{
         prop: 'name',
@@ -185,12 +185,8 @@ export default {
         $this.loading = true;
         try {
           const res = await $this.$ajax({
-            type: 'post',
-            url: `api/glance/v2/images/list?limit=99999&status=active`,
-            data: JSON.stringify({
-              project_id: $this.projectId,
-              user_id: $this.userId
-            })
+            type: 'get',
+            url: `api/glance/v2/images?limit=99999`
           });
           $this.loading = false;
           let images = res.images;

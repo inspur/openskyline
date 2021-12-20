@@ -128,7 +128,7 @@ export default {
       try {
         const res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/inspur-availability-zone/detail`
+          url: `api/nova/v2.1/os-availability-zone/detail`
         });
         let availableZones = res.availabilityZoneInfo;
         availableZones = availableZones.filter(item => item.zoneName !== 'ironic' && item.zoneName !== 'internal' && item.zoneState.available === true);

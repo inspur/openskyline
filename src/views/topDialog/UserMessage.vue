@@ -80,7 +80,7 @@ export default {
       }
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+$.param({id:Vue.userId})
+        url: "api/keystone/v3/users?"+$.param({id:Vue.userId})
       });
       this.userMsg = Object.assign({}, this.userMsg, ret.users[0]);
       if (this.userMsg.alias !== null) {
@@ -124,7 +124,7 @@ export default {
         try {
           let ret = await this.$ajax({
             type: 'patch',
-            url: "api/keystone/v3/inspur/users/self",
+            url: "api/keystone/v3/users/self",
             data:JSON.stringify({
               user:{
                 "description": this.userMsg.description,
