@@ -16,7 +16,5 @@ sessions/
 npm-debug.log
 selenium-debug.log
 server/resources/default/serviceAddr.json
-.i18n.checker.json
-package-lock.json
 test/unit/coverage
 test/e2e/reports
