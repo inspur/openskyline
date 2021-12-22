@@ -19,13 +19,6 @@ module.exports = function() {
       iconType: "el-icon-fa-newspaper-o",
       name: 'base.projectManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.departmentmanage"],
-      //flg:true,
-      key: "departmentManage",
-      path: "departmentManage",
-      iconType: "el-icon-fa-sitemap",
-      name: 'base.deptManagement'
-    }, {
       flg: Vue.AuthList["m.systemmanage.groupmanage"],
       key: "org",
       path: "org",
