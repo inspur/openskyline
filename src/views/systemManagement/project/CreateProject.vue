@@ -1956,7 +1956,7 @@ export default {
       if (this.status=="1") { //如果是编辑状态，查询右侧已在项目中的人员
         let mret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/assignments/projects/"+this.projectModel.id+"/users"
+          url: "api/keystone/v3/users?protocol_id="+this.projectModel.id
         })
         //遍历数据将角色数据合并到人员下面
         let users = mret.users;
@@ -1984,7 +1984,7 @@ export default {
       }
       let uret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+ $.param(param)
+        url: "api/keystone/v3/users?"+ $.param(param)
       })
       this.projectUsers = [...this.filterUserData(uret.users)];
       this.total = uret.total;
