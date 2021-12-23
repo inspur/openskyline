@@ -232,12 +232,12 @@
     </el-dialog>
     <el-dialog :title="$t('base.roleSetting')" :visible.sync="roleSettingFlg">
       <el-form ref="roleSetForm" label-width="120px" label-position="left" :model="roleSet" :rules="roleSetRule">
-        <el-form-item :label="$t('base.roleType')">
+        <!-- <el-form-item :label="$t('base.roleType')">
           <el-select v-model="roleSet.roleType" style="width:500px;" @change="roleTypeChange" placeholder="">
             <el-option :label="$t('base.projectAdmin')" :value="2"></el-option>
             <el-option :label="$t('base.projectUser')" :value="3"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="$t('base.role')" v-if="roleSet.roleType==2" prop="roleValue1">
           <el-select v-model="roleSet.roleValue1" multiple style="width:500px;" size="small" placeholder="">
             <el-option v-for="item in roleList" :key="item.role_id" :value="item.role_id" :label="item.role_name"></el-option>
@@ -342,7 +342,7 @@ export default {
       operateId:"",
       searchKey:"",
       roleSet:{
-        roleType:"2",
+        roleType:"3",
         roleValue1:[],
         roleValue2:[]
       },
@@ -1796,7 +1796,7 @@ export default {
             "role_ids":(function(roles) {
               let arr = [];
               roles.forEach((item) => {
-                arr.push(item.role_id);
+                arr.push({"roleId": item.role_id});
               });
               return arr
             })(item.roles)
@@ -1807,7 +1807,7 @@ export default {
             "role_ids":(function(roles) {
               let arr = [];
               roles.forEach((item) => {
-                arr.push(item.role_id);
+                arr.push({"roleId": item.role_id});
               });
               return arr
             })(item.roles)
@@ -1818,39 +1818,18 @@ export default {
             "role_ids":(function(roles) {
               let arr = [];
               roles.forEach((item) => {
-                arr.push(item.role_id);
+                arr.push({"roleId": item.role_id});
               });
               return arr
             })(item.roles)
           })
         }
-      }
-      let option = {
-        type: 'post',
-        url: "api/keystone/v3/inspur/assignments/projects/"+id,
-        data: JSON.stringify({
-          project_roles:{
-            "users":users
-          }
-        })
-      }
-      if (flag) {
-        option.log = {
-          description:{
-            en:"project("+this.projectModel.name+") update members",
-            zh_cn:"项目("+this.projectModel.name+")修改成员"
-          },
-          target:Vue.logTarget.project
-        }
-      }
-      let ret = await this.$ajax(option)
-      let rret = await this.$ajax({
-        type: 'delete',
-        url: "api/keystone/v3/inspur/assignments/projects/"+id,
-        data: JSON.stringify({
-          project_roles:{
-            "users":removeUsers
-          }
+      };
+      users.forEach(item => {
+        this.$sequence({
+          type: 'put',
+          url: `api/keystone/v3/projects/${id}/users/${item.user_id}/roles/{roleId}`,
+          params: item.role_ids
         })
       })
     },
@@ -2102,8 +2081,8 @@ export default {
       }
       if (add.roles.length==0) { //如果没有角色，默认一个内置的项目成员的角色
         add.roles.push({
-          role_id:"ProjectUser",
-          role_name:Vue.t('base.projectUser'),
+          role_id:"2237edc845b0451a842e92a0c9e81bbd",
+          role_name:Vue.t('base.member'),
           role_type:3
         })
       }
@@ -2360,7 +2339,7 @@ export default {
         list.push({
           role_id:roles[k].id,
           role_name:roles[k].name,
-          role_type:roles[k].type
+          role_type:3
         });
       }
       this.roleList = this.$convertRoleLanguage(list, "role_name");
@@ -2372,7 +2351,7 @@ export default {
         arr.push({
           role_id:roles[k].id,
           role_name:roles[k].name,
-          role_type:roles[k].type
+          role_type:3
         });
       }
       this.roleList = this.$convertRoleLanguage(arr, "role_name");
@@ -2393,14 +2372,14 @@ export default {
     async powerFun() {
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/roles?"+ $.param({type:this.roleSet.roleType})
+        url: "api/keystone/v3/roles?"+ $.param({type:this.roleSet.roleType})
       });
       return ret.roles;
     },
     async powerFun1() {
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/roles?"+ $.param({type:this.roleSet1.roleType})
+        url: "api/keystone/v3/roles?"+ $.param({type:this.roleSet1.roleType})
       });
       return ret.roles;
     },
