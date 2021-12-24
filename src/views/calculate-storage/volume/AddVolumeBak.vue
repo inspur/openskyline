@@ -23,15 +23,6 @@
                 <i class="el-icon-fa-question-circle"></i>
               </el-tooltip>
             </el-form-item>
-            <el-form-item :label="$t('storage.host')" prop="host" class="is-required">
-              <el-select class="col-20" v-model="volumeBak.target_host" :disabled="increHostFlag">
-                <el-option v-for="item in hostOptions" :key="item.host" :label="item.host" :value="item.host"></el-option>
-              </el-select>
-              <el-tooltip placement="top" trigger="hover">
-                <div slot="content">{{$t('storage.hostDescriptionFst')}}<br/>{{$t('storage.hostDescriptionSnd')}}</div>
-               <i class="el-icon-fa-question-circle"></i>
-             </el-tooltip>
-            </el-form-item>
             <el-form-item :label="$t('lang.desc')" prop="description">
               <el-input class="col-20" v-model="volumeBak.description" @keydown.native="noEnter($event)" auto-complete="off" type="textarea"></el-input>
             </el-form-item>
@@ -183,9 +174,9 @@ export default {
         var roleType = Vue.roleType + "";
         var url = "";
         if ("2" === roleType || "3" === roleType) {
-          url = "api/cinderv3/v3/" + projectId + "/inspur-backups/detail?volume_id=" + volumeId + "&with_count=True&metadata=" +metadata+"&limit=1";
+          url = "api/cinderv3/v3/" + projectId + "/backups/detail?volume_id=" + volumeId + "&with_count=True&metadata=" +metadata+"&limit=1";
         } else {
-          url = "api/cinderv3/v3/" + projectId + "/inspur-backups/detail?all_tenants=True&volume_id=" + volumeId + "&with_count=True&metadata=" +metadata+"&limit=1";
+          url = "api/cinderv3/v3/" + projectId + "/backups/detail?all_tenants=True&volume_id=" + volumeId + "&with_count=True&metadata=" +metadata+"&limit=1";
         }
         try {
           let ret = await this.$ajax({
@@ -360,7 +351,7 @@ export default {
           let name = this.volumeBak.name;
           let description = this.volumeBak.description;
           var pUuid = this.$cookie.get("pid");
-          let url = "api/cinderv3/v3/" + pUuid + "/inspur-backups";
+          let url = "api/cinderv3/v3/" + pUuid + "/backups";
           let type = "post";
           let msg = this.$t('storage.sendCreateVolBakSuccess');
           var logVolName = "";
@@ -408,8 +399,7 @@ export default {
                       "description": description,
                       "volume_id": self.volumeId,
                       "force": true,
-                      "incremental": increment,
-                      "target_host": self.volumeBak.target_host
+                      "incremental": increment
                     }
                   };
                   body = JSON.stringify(body);
@@ -448,8 +438,7 @@ export default {
                     "name": name,
                     "description": description,
                     "volume_id": self.volumeId,
-                    "incremental": increment,
-                    "target_host": self.volumeBak.target_host
+                    "incremental": increment
                   }
                 };
                 body = JSON.stringify(body);
@@ -575,7 +564,7 @@ export default {
       let name = this.volumeBak.name;
       let description = this.volumeBak.description;
       var pUuid = this.$cookie.get("pid");
-      let url = "api/cinderv3/v3/" + pUuid + "/inspur-backups";
+      let url = "api/cinderv3/v3/" + pUuid + "/backups";
       let type = "post";
       let msg = this.$t('storage.sendCreateVolBakSuccess');
       var logVolName = "";
