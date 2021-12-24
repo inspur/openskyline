@@ -466,7 +466,7 @@ module.exports = function() {
             operateMore: true,
             enable(rowData) {
                 let roleType = Vue.roleType + "";
-                return ((rowData["status"] == "available" || rowData["status"] == "in-use") && roleType != "3") && rowData["migration_status"] + "" != "migrating" && rowData['bootable'] === "true" && !rowData['encrypted'] && !rowData['multiattach'];
+                return ((rowData["status"] == "available") && roleType != "3") && rowData["migration_status"] + "" != "migrating" && rowData['bootable'] === "true" && !rowData['encrypted'] && !rowData['multiattach'];
             },
             handler: function (selectRows) {
                 let me = this;
