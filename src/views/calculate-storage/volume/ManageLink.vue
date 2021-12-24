@@ -305,7 +305,7 @@ export default {
           try {
             let result = await self.$ajax({
               type: 'post',
-              url: "api/nova/v2.1/servers-inspur/" + item + "/os-inspur-volume_attachments",
+              url: "api/nova/v2.1/servers/" + item + "/os-volume_attachments",
               data: body,
               headers:{
                 "Openstack-Api-Version":"compute 2.65"
@@ -346,7 +346,7 @@ export default {
           let info = row.attachmentInfo;
           let resultLock = await self.$ajax({
             type: 'get',
-            url: "api/nova/v2.1/servers-inspur/" + info.server_id,
+            url: "api/nova/v2.1/servers/" + info.server_id,
             complete: function(XMLHttpRequest, textStatus) {},
             headers: {
               'X-OpenStack-Nova-API-Version': 2.41
@@ -356,7 +356,7 @@ export default {
             self.$message.warning(Vue.t('storage.unmountInstanceTip'));
             return;
           }
-          let volList = resultLock['server']['os-extended-volumes-inspur:volumes_attached'];
+          let volList = resultLock['server']['os-extended-volumes:volumes_attached'];
           let isroot = false;
           for (let i=0; i<volList.length; i++) {
             if (volList[i].id == info.volume_id) {
