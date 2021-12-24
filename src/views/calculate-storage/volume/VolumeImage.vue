@@ -143,12 +143,11 @@ export default {
               imgVisible = "public";
             }
             var reqdata = {
-              "os-volume_upload_image_inspur": {
+              "os-volume_upload_image": {
                 "container_format": "bare",
                 "force": true,
                 "image_name": this.volumeImageForm.imageName,
                 "disk_format": this.volumeImageForm.diskType,
-                "os_distro": this.volumeImageForm.operSystem[1].system,
                 "visibility": imgVisible
               }
             };
