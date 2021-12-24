@@ -207,31 +207,6 @@ export default {
     } else {
       self.havehostrouter = false;
     }
-    // if (self.addResSpecForm.ipversion === "4") {
-    //   self.rules.netaddress = [{type: 'required'}, {type: 'cidr'}];
-    //   if (self.disableGateway===false) {
-    //     self.rules.gatewayip = [];
-    //   } else {
-    //     self.rules.gatewayip = [{type: 'ipv4'}];
-    //   }
-    //   self.rules.startAddr = [{type: 'ipv4'}];
-    //   self.rules.endAddr = [{type: 'ipv4'}];
-    //   self.rules.dnsAddr = [{type: 'ipv4'}];
-    //   self.rules.startHost = [{type: 'cidr'}];
-    //   self.rules.endHost = [{type: 'ipv4'}];
-    // } else {
-    //   self.rules.netaddress = [{type: 'required'}, {type: 'cidripv6'}];
-    //   if (self.disableGateway===false) {
-    //     self.rules.gatewayip = [];
-    //   } else {
-    //     self.rules.gatewayip = [{type: 'ipv6'}];
-    //   }
-    //   self.rules.startAddr = [{type: 'ipv6'}];
-    //   self.rules.endAddr = [{type: 'ipv6'}];
-    //   self.rules.dnsAddr = [{type: 'ipv6'}];
-    //   self.rules.startHost = [{type: 'cidripv6'}];
-    //   self.rules.endHost = [{type: 'ipv6'}];
-    // }
   },
   methods: {
     initDialog() {
@@ -298,7 +273,6 @@ export default {
       let reg6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
       if (this.addResSpecForm.ipversion == "4") {
         if (reg4.test(this.addResSpecForm.netaddress)) {
-          this.genernateaddrpool(this.addResSpecForm.netaddress);
         } else {
           this.addResSpecForm.startAddr = "";
           this.addResSpecForm.endAddr = "";
@@ -309,7 +283,6 @@ export default {
           let subNet = fields[1];
           let ipv6 = fields[0];
           if ((reg6.test(ipv6) || ipv6 === "::") && Number(subNet)>=1 && Number(subNet)<=128 ) {
-            this.genernateaddrpool(this.addResSpecForm.netaddress);
           } else {
             this.addResSpecForm.startAddr = "";
             this.addResSpecForm.endAddr = "";
@@ -319,16 +292,6 @@ export default {
           this.addResSpecForm.endAddr = "";
         }
       }
-    },
-    async genernateaddrpool(cidr) {
-      let reqdata = {"cidr": cidr};
-      let result = await this.$ajax({
-        type: 'post',
-        url: "api/neutron/v2.0/inspur/networkextension/query_cidr_addressscope",
-        data: JSON.stringify(reqdata)
-      });
-      this.addResSpecForm.startAddr = result["firstIp"];
-      this.addResSpecForm.endAddr = result["endIp"];
     },
     addNewPool() {
       let self = this;
@@ -443,65 +406,38 @@ export default {
       }
       self.$refs.addResSpecForm.validate(async(valid) => {
         if (valid) {
-          Promise.all([self.validateNextJump(endIP)]).then(function(result) {
-            if (!result[0]) {
-              self.$notify({
-                message: Vue.t('network.networkNote11'),
-                type: "warning"
-              });
-              return;
+          let regCIDR = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2}((\/[1-9])|(\/[12][0-9])|(\/3[012])))|(2[0-4][0-9])((\/[1-9])|(\/[12][0-9])|(\/3[012]))|(25[0-5])((\/[1-9])|(\/[12][0-9])|(\/3[012])))$/;
+          let regIP = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/;
+          let regIPv6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
+          if (self.addResSpecForm.ipversion === "4") {
+            if (startIP!='' && endIP!="" && regCIDR.test(startIP) && regIP.test(endIP)) {
+              startIP = self.removeZerofromCidr(startIP);
+              endIP = self.removeZerofromip(endIP);
+              self.hostroutertext.push(Vue.t('network.targetCidr')+":"+startIP+','+Vue.t('network.nextJump')+':'+endIP);
+              self.hostrouter.push({'destination': startIP, 'nexthop': endIP});
+              self.addResSpecForm.startHost = '';
+              self.addResSpecForm.endHost = '';
             }
-            let regCIDR = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2}((\/[1-9])|(\/[12][0-9])|(\/3[012])))|(2[0-4][0-9])((\/[1-9])|(\/[12][0-9])|(\/3[012]))|(25[0-5])((\/[1-9])|(\/[12][0-9])|(\/3[012])))$/;
-            let regIP = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/;
-            let regIPv6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
-            if (self.addResSpecForm.ipversion === "4") {
-              if (startIP!='' && endIP!="" && regCIDR.test(startIP) && regIP.test(endIP)) {
-                startIP = self.removeZerofromCidr(startIP);
-                endIP = self.removeZerofromip(endIP);
-                self.hostroutertext.push(Vue.t('network.targetCidr')+":"+startIP+','+Vue.t('network.nextJump')+':'+endIP);
-                self.hostrouter.push({'destination': startIP, 'nexthop': endIP});
-                self.addResSpecForm.startHost = '';
-                self.addResSpecForm.endHost = '';
-              }
-            } else {
-              if (startIP!='' && endIP!="" && regIPv6.test(endIP)) {
-                endIP = self.removeZerofromipv6(endIP);
-                let fields = startIP.split("/");
-                if (fields.length === 2) {
-                  let subNet = fields[1];
-                  let ipv6 = fields[0];
-                  ipv6 = self.removeZerofromipv6(ipv6);
-                  startIP = ipv6 + "/" + subNet;
-                  if (regIPv6.test(ipv6) && Number(subNet)>=1 && Number(subNet)<=128 ) {
-                    self.hostroutertext.push(Vue.t('network.targetCidr')+":"+startIP+','+Vue.t('network.nextJump')+':'+endIP);
-                    self.hostrouter.push({'destination': startIP, 'nexthop': endIP});
-                    self.addResSpecForm.startHost = '';
-                    self.addResSpecForm.endHost = '';
-                  }
+          } else {
+            if (startIP!='' && endIP!="" && regIPv6.test(endIP)) {
+              endIP = self.removeZerofromipv6(endIP);
+              let fields = startIP.split("/");
+              if (fields.length === 2) {
+                let subNet = fields[1];
+                let ipv6 = fields[0];
+                ipv6 = self.removeZerofromipv6(ipv6);
+                startIP = ipv6 + "/" + subNet;
+                if (regIPv6.test(ipv6) && Number(subNet)>=1 && Number(subNet)<=128 ) {
+                  self.hostroutertext.push(Vue.t('network.targetCidr')+":"+startIP+','+Vue.t('network.nextJump')+':'+endIP);
+                  self.hostrouter.push({'destination': startIP, 'nexthop': endIP});
+                  self.addResSpecForm.startHost = '';
+                  self.addResSpecForm.endHost = '';
                 }
               }
             }
-          });
+          }
         }
       });
-    },
-    async validateNextJump(endIP) {
-      let self = this;
-      let cidr = this.addResSpecForm.netaddress;
-      let data = {"ip":endIP, "cidr":cidr};
-      self.loading = true;
-      let re = await self.$ajax({
-        data: JSON.stringify(data),
-        type: 'post',
-        url: "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-        successFun:function() {
-          self.loading = false;
-        },
-        errFun:function() {
-          self.loading = false;
-        }
-      });
-      return re;
     },
     handleHostClose(tag) {
       let self = this;
@@ -718,54 +654,33 @@ export default {
                   }
                 });
               } else {
-              let gatewayObj = {
-                ip:gatewayip,
-                cidr:netaddress
-              };
-              self.$ajax({
-                type: "POST",
-                url: "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-                data: JSON.stringify(gatewayObj),
-                showErrMsg:false,
-                success: function(resultcheck) {
-                  if (resultcheck == true) {
-                    self.loading = true;
-                    self.isDisabled = true;
-                    self.$ajax({
-                      type: "POST",
-                      url: "api/neutron/v2.0/subnets",
-                      data: JSON.stringify(reqdata),
-                      // successMsg: "保存成功",
-                      success: function(result) {
-                        self.$notify({
-                          message: Vue.t("network.createSuccess"),
-                          type: "success"
-                        });
-                        self.loading = false;
-                        self.isDisabled = false;
-                        self.$emit("handleAddSubnetShow", {});
-                      },
-                      errFun() {
-                        self.loading = false;
-                        self.isDisabled = false;
-                      },
-                      errorKey: "NeutronError",
-                      log:{
-                        description:{
-                          en:"Create Subnet:" + self.addResSpecForm.subnetname,
-                          zh_cn:"创建子网:" + self.addResSpecForm.subnetname
-                        },
-                        target:Vue.logTarget.subnetwork
-                      }
+                self.loading = true;
+                self.isDisabled = true;
+                self.$ajax({
+                  type: "POST",
+                  url: "api/neutron/v2.0/subnets",
+                  data: JSON.stringify(reqdata),
+                  // successMsg: "保存成功",
+                  success: function(result) {
+                    self.$notify({
+                      message: Vue.t("network.createSuccess"),
+                      type: "success"
                     });
-                    } else {
-                      self.$notify({
-                        message: Vue.t("network.networkNote12"),
-                        type: "error"
-                      });
-                      self.isDisabled = false;
-                      self.loading = false;
-                    }
+                    self.loading = false;
+                    self.isDisabled = false;
+                    self.$emit("handleAddSubnetShow", {});
+                  },
+                  errFun() {
+                    self.loading = false;
+                    self.isDisabled = false;
+                  },
+                  errorKey: "NeutronError",
+                  log:{
+                    description:{
+                      en:"Create Subnet:" + self.addResSpecForm.subnetname,
+                      zh_cn:"创建子网:" + self.addResSpecForm.subnetname
+                    },
+                    target:Vue.logTarget.subnetwork
                   }
                 });
               }
