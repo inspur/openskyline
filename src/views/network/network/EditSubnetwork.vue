@@ -155,7 +155,6 @@ export default {
     }
   },
   mounted() {
-    this.$parent.$parent.active = "network";
     this.initDialog();
   },
   updated() {
@@ -175,19 +174,6 @@ export default {
     } else {
       self.havehostrouter = false;
     }
-    // if (self.editipversion === 4) {
-    //   if (self.disableGateway === false) {
-    //     self.rules.gatewayip = [];
-    //   } else {
-    //     self.rules.gatewayip = [{type: 'ipv4'}];
-    //   }
-    // } else {
-    //   if (self.disableGateway === false) {
-    //     self.rules.gatewayip = [];
-    //   } else {
-    //     self.rules.gatewayip = [{type: 'required'}, {type: 'ipv6'}];
-    //   }
-    // }
   },
   methods: {
     initDialog() {
@@ -330,22 +316,7 @@ export default {
       }
     },
     async validateNextJump(endIP) {
-      let self = this;
-      let cidr = this.addResSpecForm.netaddress;
-      let data = {"ip":endIP, "cidr":cidr};
-      self.loading = true;
-      let re = await self.$ajax({
-        data: JSON.stringify(data),
-        type: 'post',
-        url: "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-        successFun:function() {
-          self.loading = false;
-        },
-        errFun:function() {
-          self.loading = false;
-        }
-      });
-      return re;
+      return endIP;
     },
     handlePoolClose(tag) {
       let self = this;
@@ -425,13 +396,6 @@ export default {
       self.$refs.addResSpecForm.validate(async(valid) => {
         if (valid) {
           Promise.all([self.validateNextJump(endIP)]).then(function(result) {
-            if (!result[0]) {
-              self.$notify({
-                message: Vue.t('network.networkNote11'),
-                type: "warning"
-              });
-              return;
-            }
             let regCIDR = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2}((\/[1-9])|(\/[12][0-9])|(\/3[012])))|(2[0-4][0-9])((\/[1-9])|(\/[12][0-9])|(\/3[012]))|(25[0-5])((\/[1-9])|(\/[12][0-9])|(\/3[012])))$/;
             let regIP = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/;
             let regIPv6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
@@ -640,54 +604,33 @@ export default {
               }
             });
           } else {
-            let gatewayObj = {
-              ip:gatewayip,
-              cidr:netaddress
-            };
-            self.$ajax({
-              type: "POST",
-              url: "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-              data: JSON.stringify(gatewayObj),
-              showErrMsg:false,
-              success: function(resultcheck) {
-                if (resultcheck == true) {
-                  self.disabled = true;
-                  self.loading = true;
-                  let result = self.$ajax({
-                    type: "PUT",
-                    url: "api/neutron/v2.0/subnets/"+self.editSubid,
-                    data: JSON.stringify(reqdata),
-                    // successMsg: "保存成功",
-                    success: function(result) {
-                      self.$notify({
-                        message: Vue.t("network.updateSuccess"),
-                        type: "success"
-                      });
-                      self.loading = false;
-                      self.disabled = false;
-                      self.$emit("handleEditSubnetShow", {});
-                    },
-                    errFun() {
-                      self.loading = false;
-                      self.disabled = false;
-                    },
-                    errorKey: "NeutronError",
-                    log:{
-                      description:{
-                        en:"Before edit subnet name:" + self.editSubmame + ", After modify subnet name:" + self.addResSpecForm.subnetname,
-                        zh_cn:"子网名称修改前:" + self.editSubmame + ",子网名称修改后:" + self.addResSpecForm.subnetname
-                      },
-                      target:Vue.logTarget.subnetwork
-                    }
-                  });
-                } else {
-                  self.$notify({
-                    message: Vue.t("network.networkNote12"),
-                    type: "error"
-                  });
-                  self.isDisabled = false;
-                  self.loading = false;
-                }
+            self.disabled = true;
+            self.loading = true;
+            let result = self.$ajax({
+              type: "PUT",
+              url: "api/neutron/v2.0/subnets/"+self.editSubid,
+              data: JSON.stringify(reqdata),
+              // successMsg: "保存成功",
+              success: function(result) {
+                self.$notify({
+                  message: Vue.t("network.updateSuccess"),
+                  type: "success"
+                });
+                self.loading = false;
+                self.disabled = false;
+                self.$emit("handleEditSubnetShow", {});
+              },
+              errFun() {
+                self.loading = false;
+                self.disabled = false;
+              },
+              errorKey: "NeutronError",
+              log:{
+                description:{
+                  en:"Before edit subnet name:" + self.editSubmame + ", After modify subnet name:" + self.addResSpecForm.subnetname,
+                  zh_cn:"子网名称修改前:" + self.editSubmame + ",子网名称修改后:" + self.addResSpecForm.subnetname
+                },
+                target:Vue.logTarget.subnetwork
               }
             });
           }
