@@ -278,7 +278,7 @@ module.exports = function() {
             icon: "fa-recycle",
             name: this.$t("calcStorLang.SOFT_DELETE"), //软删除
             multi: true,
-            showflg: this.isUser(),
+            showflg: false,
             enable(rowData) {
                 return rowData["status"] == "available";
             },

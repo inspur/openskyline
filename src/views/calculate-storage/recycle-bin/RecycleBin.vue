@@ -3,7 +3,7 @@
     <icos-page-header :title="$t('calcStorLang.RECYCLE_BIN')" :show-bottom-border="false" />
     <el-tabs :value="activeName" @tab-click="onTabClick" class="tab-pane-no-padding" type="border-card">
       <el-tab-pane name="hostRecycleBin" :label="$t('base.cloudHost')" />
-      <el-tab-pane name="volumeRecycleBin" :label="$t('base.cloudDisk')" />
+      <el-tab-pane name="volumeRecycleBin" :label="$t('base.cloudDisk')" v-if="showVolTab"/>
     </el-tabs>
     <icos-page>
       <router-view />
@@ -15,7 +15,8 @@ export default {
   name: "RecycleBin",
   data () {
     return {
-      activeName: this.$route.matched[2].name
+      activeName: this.$route.matched[2].name,
+      showVolTab: false
     }
   },
   watch: {
