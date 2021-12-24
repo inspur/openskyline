@@ -309,14 +309,7 @@ export default {
   },
   updated() {
     let self = this;
-    if (self.addResSpecForm.provider_network_type === "local" || "") {
-      // self.rules.provider_segmentation_id = [];
-      // self.rules.provider_physical_network = [];
-    } else if (self.addResSpecForm.provider_network_type === "flat") {
-      // self.rules.provider_physical_network = [{type: "required"}];
-      // self.rules.provider_segmentation_id = [];
-    } else if (self.addResSpecForm.provider_network_type === "vxlan") {
-      // self.rules.provider_physical_network = [];
+    if (self.addResSpecForm.provider_network_type === "vxlan") {
       self.rules.provider_segmentation_id = [
         { type: "requiredNet" },
         { type: "integer" },
@@ -324,7 +317,6 @@ export default {
         { type: "max", value: 16777215 }
       ];
     } else if (self.addResSpecForm.provider_network_type === "vlan") {
-      // self.rules.provider_physical_network = [{type: 'required'}];
       self.rules.provider_segmentation_id = [
         { type: "requiredNet" },
         { type: "integer" },
@@ -367,15 +359,6 @@ export default {
         });
         self.loading = false;
         var list = result["availability_zones"];
-        // var zones = [];
-        // if (list != null) {
-        //   for (var z = 0; z < list.length; z++) {
-        //     var zone = list[z];
-        //     if (zone['zoneName'] != "internal") {
-        //       zones.push(zone);
-        //     }
-        //   }
-        // }
         self.zoneOptions = list;
       } catch (res) {
         self.loading = false;
@@ -503,17 +486,6 @@ export default {
         }
       }
     },
-    // async genernateaddrpool(cidr) {
-    //   let reqdata = { cidr: cidr };
-    //   console.log("cidr:" + cidr);
-    //   let result = await this.$ajax({
-    //     type: "post",
-    //     url: "api/neutron/v2.0/inspur/networkextension/query_cidr_addressscope",
-    //     data: JSON.stringify(reqdata)
-    //   });
-    //   this.subnetForm.startAddr = result["firstIp"];
-    //   this.subnetForm.endAddr = result["endIp"];
-    // },
     addNewPool() {
       let self = this;
       let startIP = self.subnetForm.startAddr;
@@ -651,96 +623,65 @@ export default {
         });
         return;
       }
-      // self.$refs.subnetForm.validate(async valid => {
-      //   if (valid) {
-      //     Promise.all([self.validateNextJump(endIP)]).then(function(result) {
-      //       if (!result[0]) {
-      //         self.$notify({
-      //           message: Vue.t("network.networkNote11"),
-      //           type: "warning"
-      //         });
-      //         return;
-      //       }
-      //       let regCIDR = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2}((\/[1-9])|(\/[12][0-9])|(\/3[012])))|(2[0-4][0-9])((\/[1-9])|(\/[12][0-9])|(\/3[012]))|(25[0-5])((\/[1-9])|(\/[12][0-9])|(\/3[012])))$/;
-      //       let regIP = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/;
-      //       let regIPv6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
-      //       if (self.subnetForm.ipversion === "4") {
-      //         if (
-      //           startIP != "" &&
-      //           endIP != "" &&
-      //           regCIDR.test(startIP) &&
-      //           regIP.test(endIP)
-      //         ) {
-      //           startIP = self.removeZerofromCidr(startIP);
-      //           endIP = self.removeZerofromip(endIP);
-      //           self.hostroutertext.push(
-      //             Vue.t("network.targetCidr") +
-      //               ":" +
-      //               startIP +
-      //               "," +
-      //               Vue.t("network.nextJump") +
-      //               ":" +
-      //               endIP
-      //           );
-      //           self.hostrouter.push({ destination: startIP, nexthop: endIP });
-      //           self.subnetForm.startHost = "";
-      //           self.subnetForm.endHost = "";
-      //         }
-      //       } else {
-      //         if (startIP != "" && endIP != "" && regIPv6.test(endIP)) {
-      //           endIP = self.removeZerofromipv6(endIP);
-      //           let fields = startIP.split("/");
-      //           if (fields.length === 2) {
-      //             let subNet = fields[1];
-      //             let ipv6 = fields[0];
-      //             ipv6 = self.removeZerofromipv6(ipv6);
-      //             startIP = ipv6 + "/" + subNet;
-      //             if (
-      //               regIPv6.test(ipv6) &&
-      //               Number(subNet) >= 1 &&
-      //               Number(subNet) <= 128
-      //             ) {
-      //               self.hostroutertext.push(
-      //                 Vue.t("network.targetCidr") +
-      //                   ":" +
-      //                   startIP +
-      //                   "," +
-      //                   Vue.t("network.nextJump") +
-      //                   ":" +
-      //                   endIP
-      //               );
-      //               self.hostrouter.push({
-      //                 destination: startIP,
-      //                 nexthop: endIP
-      //               });
-      //               self.subnetForm.startHost = "";
-      //               self.subnetForm.endHost = "";
-      //             }
-      //           }
-      //         }
-      //       }
-      //     });
-      //   }
-      // });
+      let regCIDR = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2}((\/[1-9])|(\/[12][0-9])|(\/3[012])))|(2[0-4][0-9])((\/[1-9])|(\/[12][0-9])|(\/3[012]))|(25[0-5])((\/[1-9])|(\/[12][0-9])|(\/3[012])))$/;
+      let regIP = /^((([01]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))[.]){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))$/;
+      let regIPv6 = /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/;
+      if (self.subnetForm.ipversion === "4") {
+        if (
+          startIP != "" &&
+          endIP != "" &&
+          regCIDR.test(startIP) &&
+          regIP.test(endIP)
+        ) {
+          startIP = self.removeZerofromCidr(startIP);
+          endIP = self.removeZerofromip(endIP);
+          self.hostroutertext.push(
+            Vue.t("network.targetCidr") +
+              ":" +
+              startIP +
+              "," +
+              Vue.t("network.nextJump") +
+              ":" +
+              endIP
+          );
+          self.hostrouter.push({ destination: startIP, nexthop: endIP });
+          self.subnetForm.startHost = "";
+          self.subnetForm.endHost = "";
+        }
+      } else {
+        if (startIP != "" && endIP != "" && regIPv6.test(endIP)) {
+          endIP = self.removeZerofromipv6(endIP);
+          let fields = startIP.split("/");
+          if (fields.length === 2) {
+            let subNet = fields[1];
+            let ipv6 = fields[0];
+            ipv6 = self.removeZerofromipv6(ipv6);
+            startIP = ipv6 + "/" + subNet;
+            if (
+              regIPv6.test(ipv6) &&
+              Number(subNet) >= 1 &&
+              Number(subNet) <= 128
+            ) {
+              self.hostroutertext.push(
+                Vue.t("network.targetCidr") +
+                  ":" +
+                  startIP +
+                  "," +
+                  Vue.t("network.nextJump") +
+                  ":" +
+                  endIP
+              );
+              self.hostrouter.push({
+                destination: startIP,
+                nexthop: endIP
+              });
+              self.subnetForm.startHost = "";
+              self.subnetForm.endHost = "";
+            }
+          }
+        }
+      }
     },
-    // async validateNextJump(endIP) {
-    //   let self = this;
-    //   let cidr = this.subnetForm.netaddress;
-    //   let data = { ip: endIP, cidr: cidr };
-    //   self.loading = true;
-    //   let re = await self.$ajax({
-    //     data: JSON.stringify(data),
-    //     type: "post",
-    //     url: "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-    //     successFun: function() {
-    //       self.loading = false;
-    //     },
-    //     errFun: function() {
-    //       self.loading = false;
-    //     }
-    //   });
-    //   return re;
-    // },
     handleHostClose(tag) {
       let self = this;
       let tagarray = tag.split(",");
@@ -1012,60 +953,32 @@ export default {
                 }
               }
               if (gatewayip != "") {
-                // let gatewayObj = {
-                //   ip: gatewayip,
-                //   cidr: netaddress
-                // };
-                // self.$ajax({
-                //   type: "POST",
-                //   url:
-                //     "api/neutron/v2.0/inspur/networkextension/validate_ip_in_cidr",
-                //   data: JSON.stringify(gatewayObj),
-                //   showErrMsg: false,
-                //   success: function(resultcheck) {
-                //     if (resultcheck == true) {
-                //       self.$ajax({
-                //         type: "POST",
-                //         url: "api/neutron/v2.0/subnets",
-                //         data: JSON.stringify(reqdata),
-                //         success: function(result) {
-                //           self.$notify({
-                //             message:
-                //               network["name"] + Vue.t("network.createSuccess"),
-                //             type: "success"
-                //           });
-                //           self.isDisabled = false;
-                //           self.loading = false;
-                //           self.$emit("handleAddShow", {});
-                //         },
-                //         errFun() {
-                //           self.$ajax({
-                //             type: "DELETE",
-                //             url: "api/neutron/v2.0/networks/" + networkId,
-                //             showErrMsg: false,
-                //             data: {}
-                //           });
-                //           self.isDisabled = false;
-                //           self.loading = false;
-                //         },
-                //         errorKey: "NeutronError"
-                //       });
-                //     } else {
-                //       self.$notify({
-                //         message: Vue.t("network.networkNote12"),
-                //         type: "error"
-                //       });
-                //       self.$ajax({
-                //         type: "DELETE",
-                //         url: "api/neutron/v2.0/networks/" + networkId,
-                //         showErrMsg: false,
-                //         data: {}
-                //       });
-                //       self.isDisabled = false;
-                //       self.loading = false;
-                //     }
-                //   }
-                // });
+                self.$ajax({
+                  type: "POST",
+                  url: "api/neutron/v2.0/subnets",
+                  data: JSON.stringify(reqdata),
+                  success: function(result) {
+                    self.$notify({
+                      message:
+                        network["name"] + Vue.t("network.createSuccess"),
+                      type: "success"
+                    });
+                    self.isDisabled = false;
+                    self.loading = false;
+                    self.$emit("handleAddShow", {});
+                  },
+                  errFun() {
+                    self.$ajax({
+                      type: "DELETE",
+                      url: "api/neutron/v2.0/networks/" + networkId,
+                      showErrMsg: false,
+                      data: {}
+                    });
+                    self.isDisabled = false;
+                    self.loading = false;
+                  },
+                  errorKey: "NeutronError"
+                });
               } else {
                 self.$ajax({
                   type: "POST",
