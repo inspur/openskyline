@@ -121,7 +121,7 @@ export default {
       let bootable = self.editVolumeForm.bootable;
       let url = "api/cinderv3/v3/" + Pid+ "/volumes/"+self.volumeTempId+"/action";
         let body = {
-          "os-set_bootable_inspur": {
+          "os-set_bootable": {
             "bootable": bootable
           }
         };
