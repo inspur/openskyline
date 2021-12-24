@@ -185,7 +185,7 @@ export default {
       if (!snapshotName) {
         snapshotName = self.multipleSelection[0].id;
       }
-      let url = `api/cinder/v3/${this.$cookie.get('pid')}/inspur-volumes/${self.volume.id}/action`;
+      let url = `api/cinder/v3/${this.$cookie.get('pid')}/volumes/${self.volume.id}/action`;
       let body = {
         "revert": {
             "snapshot_id" : this.multipleSelection[0].id
@@ -222,7 +222,7 @@ export default {
     async querServer() {
       let self = this;
       this.noContinue = false;
-      let link = `api/nova/v2.1/servers-inspur/detail?project_id=${this.volume['os-vol-tenant-attr:tenant_id']}`;
+      let link = `api/nova/v2.1/servers/detail?project_id=${this.volume['os-vol-tenant-attr:tenant_id']}`;
       if (Vue.roleType == '0') {
         link = link + `&all_tenants=1`;
       }
@@ -245,7 +245,7 @@ export default {
     async loadUserList() {
       var self = this;
       var roleType = Vue.roleType + "";
-      var url = "api/keystone/v3/inspur/users?domain_id=default";
+      var url = "api/keystone/v3/users?domain_id=default";
       try {
         let result = await self.$ajax({
           type: "get",
