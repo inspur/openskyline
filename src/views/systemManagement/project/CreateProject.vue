@@ -1932,41 +1932,39 @@ export default {
     },
     //加载人员数据
     async loadProjectMember() {
-      if (this.status=="1") { //如果是编辑状态，查询右侧已在项目中的人员
+      let users;
+      if (this.status=="1") { //首先查出所有的成员
         let mret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/users?protocol_id="+this.projectModel.id
+          url: "api/keystone/v3/users"
         })
-        //遍历数据将角色数据合并到人员下面
-        let users = mret.users;
+        //遍历成员数据，查询角色数据
+        users = mret.users;
         let arr = [];
         for (let i=0; i<users.length; i++) {
-          users[i].user.roles = this.$convertRoleLanguage(users[i].roles, "role_name");
-          users[i].user.isDefault = true;
-          users[i].user.show = true;
-          arr.push(users[i].user);
+           let uret = await this.$ajax({
+              type: 'get',
+              url: `api/keystone/v3/projects/${this.projectModel.id}/users/${users[i].id}/roles`
+            })
+            if (uret&&uret.roles&&uret.roles.length>0) {
+              let newRoles = uret.roles.map(item => ({...item, role_name: item.name, role_id: item.id}));
+              users[i].roles = newRoles;
+              users[i].isDefault = false;
+              users[i].show = true;
+              arr.push(users[i]);
+            }
         }
-        this.projectMembers = arr;
+        this.projectMembers = arr;  //获取右侧项目成员
       } else {
         this.projectMembers = [];
+        users = [];
       }
-      this.getLeftProjectMember(); //查询左侧不在项目中的人员
+      this.getLeftProjectMember(users); //查询左侧不在项目中的人员
       this.projectMemFlg = true;
     },
-    async getLeftProjectMember() {
-      let param = {remove_project_id:this.projectModel.id, domain_id:"default", limit:50, page:this.currentPage};
-      if (this.selValue1=="1"&&this.input1!="") {
-        param.name = this.input1;
-      }
-      if (this.selValue1==0&&this.input1!='') {
-        param.department = this.input1id;
-      }
-      let uret = await this.$ajax({
-        type: 'get',
-        url: "api/keystone/v3/users?"+ $.param(param)
-      })
-      this.projectUsers = [...this.filterUserData(uret.users)];
-      this.total = uret.total;
+    async getLeftProjectMember(users) {
+      this.projectUsers = [...this.filterUserData(users)];
+      this.total = this.projectMembers.length;
     },
     //处理左侧获取到的人员数据，第一：和右侧isDefault!=true的人员对比，剔除右侧已添加过的人员；
     //第二：获取第一页人员的时候，添加因为删除右侧isDefault=true的人员
@@ -2022,7 +2020,7 @@ export default {
         }
         let mret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/assignments/projects/groups?"+$.param(param)
+          url: "api/keystone/v3/groups?"+$.param(param)
         })
         //遍历数据将角色数据合并到人员下面
         let groups = mret.groups;
@@ -2038,7 +2036,7 @@ export default {
       }
       let uret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/assignments/projects/groups?"+ $.param({except_project_id:this.projectModel.id})
+        url: "api/keystone/v3/groups?"+ $.param({except_project_id:this.projectModel.id})
       })
       this.groups = this.proGroupSearch2(function(arr) {
         let list = [];
@@ -2324,14 +2322,14 @@ export default {
         return value.id == id;
       })
       let croles = arr[index].roles;
-      this.roleSet.roleType = parseInt(croles[0].role_type);
+      this.roleSet.roleType = "3"; //现在只有用户角色
       //获取角色名称
       let roles = await this.powerFun();
       for (var i=0; i<croles.length; i++) {
         if (this.roleSet.roleType==2) {
-          this.roleSet.roleValue1.push(croles[i].role_id);
+          this.roleSet.roleValue1.push(croles[i].id);
         } else {
-          this.roleSet.roleValue2.push(croles[i].role_id);
+          this.roleSet.roleValue2.push(croles[i].id);
         }
       }
       let list = [];
