@@ -231,7 +231,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$t('base.roleSetting')" :visible.sync="roleSettingFlg">
-      <el-form ref="roleSetForm" label-width="120px" label-position="left" :model="roleSet" :rules="roleSetRule">
+      <el-form ref="roleSetForm" label-width="120px" label-position="left" :model="roleSet" :rules="roleSetRule" v-loading="loadingR">
         <!-- <el-form-item :label="$t('base.roleType')">
           <el-select v-model="roleSet.roleType" style="width:500px;" @change="roleTypeChange" placeholder="">
             <el-option :label="$t('base.projectAdmin')" :value="2"></el-option>
@@ -323,6 +323,7 @@ export default {
       roleSettingFlg1:false,
       getDeptFlg:false,
       loading:false,
+      loadingR:false,
       projectInfoFlg:false,
       projectMemFlg:false,
       projectGroupFlg:false,
@@ -1787,11 +1788,12 @@ export default {
     },
     async updateMember(id, flag=true) {
       let users = [];
-      let removeUsers = [];
+      // let removeUsers = [];
       for (let i=0; i<this.projectMembers.length; i++) {
         var item = this.projectMembers[i];
         if (item.flg=="add") {
           users.push({
+            "type": 'PUT',
             "user_id": item.id,
             "role_ids":(function(roles) {
               let arr = [];
@@ -1802,7 +1804,8 @@ export default {
             })(item.roles)
           })
         } else if (item.flg=="remove") {
-          removeUsers.push({
+          users.push({
+            "type": 'delete',
             "user_id": item.id,
             "role_ids":(function(roles) {
               let arr = [];
@@ -1813,21 +1816,36 @@ export default {
             })(item.roles)
           })
         } else if (item.editFlg) {
-          users.push({
-            "user_id": item.id,
-            "role_ids":(function(roles) {
-              let arr = [];
-              roles.forEach((item) => {
-                arr.push({"roleId": item.role_id});
-              });
-              return arr
-            })(item.roles)
-          })
+          if (item.addFlg) {
+            users.push({
+              "type": 'PUT',
+              "user_id": item.id,
+              "role_ids":(function(roles) {
+                let arr = [];
+                roles.forEach((item) => {
+                  arr.push({"roleId": item.role_id});
+                });
+                return arr
+              })(item.addRoles)
+            })
+          } else {
+            users.push({
+              "type": 'delete',
+              "user_id": item.id,
+              "role_ids":(function(roles) {
+                let arr = [];
+                roles.forEach((item) => {
+                  arr.push({"roleId": item.role_id});
+                });
+                return arr
+              })(item.deleteRoles)
+            })
+          }
         }
       };
       users.forEach(item => {
         this.$sequence({
-          type: 'put',
+          type: item.type,
           url: `api/keystone/v3/projects/${id}/users/${item.user_id}/roles/{roleId}`,
           params: item.role_ids
         })
@@ -1934,6 +1952,7 @@ export default {
     async loadProjectMember() {
       let users;
       if (this.status=="1") { //首先查出所有的成员
+        this.loading = true;
         let mret = await this.$ajax({
           type: 'get',
           url: "api/keystone/v3/users"
@@ -1954,6 +1973,7 @@ export default {
               arr.push(users[i]);
             }
         }
+        this.loading = false;
         this.projectMembers = arr;  //获取右侧项目成员
       } else {
         this.projectMembers = [];
@@ -2080,7 +2100,7 @@ export default {
       if (add.roles.length==0) { //如果没有角色，默认一个内置的项目成员的角色
         add.roles.push({
           role_id:"2237edc845b0451a842e92a0c9e81bbd",
-          role_name:Vue.t('base.member'),
+          role_name:"member",
           role_type:3
         })
       }
@@ -2156,9 +2176,13 @@ export default {
       })
       let remove = Object.assign({}, this.projectMembers[index]);
       if (!remove.isDefault) { //如果是新增过来的数据
-        this.projectMembers.splice(index, 1); //删除右侧数据
+        // this.projectMembers.splice(index, 1); //删除右侧数据
         remove.show = true;
         remove.flg = "";
+        let lremove = Object.assign({}, remove);
+        lremove.show = false;
+        lremove.flg = "remove";
+        Vue.set(this.projectMembers, index, lremove);
         let lindex = this.projectUsers.findIndex(function(value, index, arr) {
           return value.id == id;
         })
@@ -2327,9 +2351,9 @@ export default {
       let roles = await this.powerFun();
       for (var i=0; i<croles.length; i++) {
         if (this.roleSet.roleType==2) {
-          this.roleSet.roleValue1.push(croles[i].id);
+          this.roleSet.roleValue1.push(croles[i].role_id);
         } else {
-          this.roleSet.roleValue2.push(croles[i].id);
+          this.roleSet.roleValue2.push(croles[i].role_id);
         }
       }
       let list = [];
@@ -2368,10 +2392,12 @@ export default {
       this.roleList1 = this.$convertRoleLanguage(arr, "role_name");
     },
     async powerFun() {
+      this.loadingR = true;
       let ret = await this.$ajax({
         type: 'get',
         url: "api/keystone/v3/roles?"+ $.param({type:this.roleSet.roleType})
       });
+      this.loadingR = false;
       return ret.roles;
     },
     async powerFun1() {
@@ -2408,7 +2434,33 @@ export default {
       if (this.operateType=="user") {
         let index = this.projectMembers.findIndex(function(value, index, arr) {
           return value.id == me.operateId;
-        })
+        });
+        let deleteRoles = [];
+        let addRoles = [];
+        if (croles.length > this.projectMembers[index].roles.length) { //说明是增加角色，只获取增加的角色
+          for (var j=0; j<croles.length; j++) {
+            let cindex = this.projectMembers[index].roles.findIndex(function(value) {
+              return value.role_id == croles[j].role_id
+            })
+            if (cindex == -1) {
+              addRoles.push(croles[j])
+            }
+          }
+          this.projectMembers[index].addRoles = addRoles;
+          this.projectMembers[index].addFlg = true;
+        } else {  //说明是删除角色，只获取删除的角色
+          let that = this;
+          for (var k=0; k<that.projectMembers[index].roles.length; k++) {
+            let cindex = croles.findIndex(function(value) {
+              return value.role_id == that.projectMembers[index].roles[k].role_id
+            })
+            if (cindex == -1) {
+              deleteRoles.push(that.projectMembers[index].roles[k])
+            }
+          }
+          this.projectMembers[index].deleteRoles = deleteRoles;
+          this.projectMembers[index].deleteFlg = true;
+        };
         this.projectMembers[index].roles = croles;
         this.projectMembers[index].editFlg = true;
       } else {
