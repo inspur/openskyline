@@ -121,7 +121,7 @@
                         <div :style="style3" :title="item.name"><i v-if="item.roles[0].role_type==2" class="el-icon-fa-user" style="margin-right: 5px;"></i>{{item.name}}</div>
                       </el-tooltip>
                       <el-button type="primary" :uid="item.id" icon="minus" size="small" style="position:absolute;right:0px;top:2px;" @click="groupMinusFun"></el-button>
-                      <el-button type="primary" :uid="item.id" icon="setting" @click="groupSetRole1" :title="$t('base.roleSetting')" size="small" style="position:absolute;right:40px;top:2px;"></el-button>
+                      <el-button type="primary" :uid="item.id" icon="setting" @click="groupSetRole" :title="$t('base.roleSetting')" size="small" style="position:absolute;right:40px;top:2px;"></el-button>
                     </div>
                   </template>
                 </div>
@@ -1858,65 +1858,61 @@ export default {
         var item = this.projectGroups[i];
         if (item.flg=="add") {
           groups.push({
+            "type": 'PUT',
             "group_id": item.id,
             "role_ids":(function(roles) {
               let arr = [];
               roles.forEach((item) => {
-                arr.push(item.role_id);
+                arr.push({"roleId":item.role_id});
               });
               return arr
             })(item.roles)
           })
         } else if (item.flg=="remove") {
-          removeGroups.push({
+          groups.push({
+            "type": 'DELETE',
             "group_id": item.id,
             "role_ids":(function(roles) {
               let arr = [];
               roles.forEach((item) => {
-                arr.push(item.role_id);
+                arr.push({"roleId":item.role_id});
               });
               return arr
             })(item.roles)
           })
         } else if (item.editFlg) {
-          groups.push({
-            "group_id": item.id,
-            "role_ids":(function(roles) {
-              let arr = [];
-              roles.forEach((item) => {
-                arr.push(item.role_id);
-              });
-              return arr
-            })(item.roles)
-          })
-        }
-      }
-      let option = {
-        type: 'post',
-        url: "api/keystone/v3/inspur/assignments/projects/"+id+"/groups",
-        data: JSON.stringify({
-          project_roles:{
-            "groups":groups
+          if (item.addFlg) {
+            groups.push({
+              "type": 'PUT',
+              "group_id": item.id,
+              "role_ids":(function(roles) {
+                let arr = [];
+                roles.forEach((item) => {
+                  arr.push({"roleId": item.role_id});
+                });
+                return arr
+              })(item.addRoles)
+            })
+          } else {
+            groups.push({
+              "type": 'delete',
+              "group_id": item.id,
+              "role_ids":(function(roles) {
+                let arr = [];
+                roles.forEach((item) => {
+                  arr.push({"roleId": item.role_id});
+                });
+                return arr
+              })(item.deleteRoles)
+            })
           }
-        })
-      }
-      if (flag) {
-        option.log = {
-          description:{
-            en:"project("+this.projectModel.name+")modify group",
-            zh_cn:"项目("+this.projectModel.name+")修改组"
-          },
-          target:Vue.logTarget.project
         }
-      }
-      let ret = await this.$ajax(option)
-      let rret = await this.$ajax({
-        type: 'delete',
-        url: "api/keystone/v3/inspur/assignments/projects/"+id+"/groups",
-        data: JSON.stringify({
-          project_roles:{
-            "groups":removeGroups
-          }
+      };
+      groups.forEach(item => {
+        this.$sequence({
+          type: item.type,
+          url: `api/keystone/v3/projects/${id}/groups/${item.group_id}/roles/{roleId}`,
+          params: item.role_ids
         })
       })
     },
@@ -2034,38 +2030,54 @@ export default {
       this.getLeftProjectMember();
     },
     async loadProjectGroup() {
+      this.loading = true;
+      let mret = await this.$ajax({
+        type: 'get',
+        url: "api/keystone/v3/groups"
+      })
+      //遍历数据将角色数据合并到人员下面
+      let groups = mret.groups;
       if (this.status=="1") {
-        let param = {
-          project_id:this.projectModel.id
-        }
-        let mret = await this.$ajax({
-          type: 'get',
-          url: "api/keystone/v3/groups?"+$.param(param)
-        })
-        //遍历数据将角色数据合并到人员下面
-        let groups = mret.groups;
         let arr = [];
         for (let i=0; i<groups.length; i++) {
-          groups[i].group.roles = this.$convertRoleLanguage(groups[i].roles, "role_name");
-          groups[i].group.show = true;
-          arr.push(groups[i].group);
+          //遍历组获取角色数据
+          let gret = await this.$ajax({
+            type: 'get',
+            url: `api/keystone/v3/projects/${this.projectModel.id}/groups/${groups[i].id}/roles`
+          })
+          if (gret&&gret.roles&&gret.roles.length>0) {
+            let newRoles = gret.roles.map(item => ({...item, role_name: item.name, role_id: item.id}));
+            groups[i].roles = newRoles;
+            groups[i].isDefault = false;
+            groups[i].show = true;
+            arr.push(groups[i]);
+          } else {
+            groups[i].show = true;
+          }
         }
-        this.projectGroups = arr;
+        this.projectGroups = arr;//获取右侧组
       } else {
         this.projectGroups = [];
       }
-      let uret = await this.$ajax({
-        type: 'get',
-        url: "api/keystone/v3/groups?"+ $.param({except_project_id:this.projectModel.id})
-      })
-      this.groups = this.proGroupSearch2(function(arr) {
-        let list = [];
-        arr.forEach((item, index) => {
-          list.push(item.group);
+      this.loading=false;
+      //查询左侧不在项目中的组
+      for (var i=groups.length-1; i>=0; i--) {
+        let index = this.projectGroups.findIndex((group) => {
+          return !group.isDefault&&group.id==groups[i].id;
         })
-        return list;
-      }(uret.groups));
+        if (index>-1) { //重复，需要剔除
+          groups.splice(i, 1);
+        }
+      };
+      this.groups = groups;
       this.projectGroupFlg = true;
+      // this.groups = this.proGroupSearch2(function(arr) {
+      //   let list = [];
+      //   arr.forEach((item, index) => {
+      //     list.push(item);
+      //   })
+      //   return list;
+      // }(uret.groups));
     },
     lproMemSearch() {
       //this.projectUsers = this.proMemSearch1(this.projectUsers);
@@ -2139,8 +2151,8 @@ export default {
       }
       if (add.roles.length==0) { //如果没有角色，默认一个内置的项目成员的角色
         add.roles.push({
-          role_id:"ProjectUser",
-          role_name:Vue.t('base.projectUser'),
+          role_id:"2237edc845b0451a842e92a0c9e81bbd",
+          role_name:"member",
           role_type:3
         })
       }
@@ -2466,7 +2478,33 @@ export default {
       } else {
         let index = this.projectGroups.findIndex(function(value, index, arr) {
           return value.id == me.operateId;
-        })
+        });
+        let deleteRoles = [];
+        let addRoles = [];
+        if (croles.length > this.projectGroups[index].roles.length) { //说明是增加角色，只获取增加的角色
+          for (var m=0; m<croles.length; m++) {
+            let cindex = this.projectGroups[index].roles.findIndex(function(value) {
+              return value.role_id == croles[m].role_id
+            })
+            if (cindex == -1) {
+              addRoles.push(croles[m])
+            }
+          }
+          this.projectGroups[index].addRoles = addRoles;
+          this.projectGroups[index].addFlg = true;
+        } else {
+          let that = this;
+          for (var n=0; n<that.projectGroups[index].roles.length; n++) {
+            let cindex = croles.findIndex(function(value) {
+              return value.role_id == that.projectGroups[index].roles[n].role_id
+            })
+            if (cindex == -1) {
+              deleteRoles.push(that.projectGroups[index].roles[n])
+            }
+          }
+          this.projectGroups[index].deleteRoles = deleteRoles;
+          this.projectGroups[index].deleteFlg = true;
+        }
         this.projectGroups[index].roles = croles;
         this.projectGroups[index].editFlg = true;
       }
