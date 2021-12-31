@@ -1946,15 +1946,15 @@ export default {
     },
     //加载人员数据
     async loadProjectMember() {
+      this.loading = true;
       let users;
+      let mret = await this.$ajax({
+        type: 'get',
+        url: "api/keystone/v3/users"
+      })
+      //遍历成员数据，查询角色数据
+      users = mret.users;
       if (this.status=="1") { //首先查出所有的成员
-        this.loading = true;
-        let mret = await this.$ajax({
-          type: 'get',
-          url: "api/keystone/v3/users"
-        })
-        //遍历成员数据，查询角色数据
-        users = mret.users;
         let arr = [];
         for (let i=0; i<users.length; i++) {
            let uret = await this.$ajax({
@@ -1972,8 +1972,9 @@ export default {
         this.loading = false;
         this.projectMembers = arr;  //获取右侧项目成员
       } else {
+        this.loading = false;
         this.projectMembers = [];
-        users = [];
+        // users = [];
       }
       this.getLeftProjectMember(users); //查询左侧不在项目中的人员
       this.projectMemFlg = true;
@@ -2058,6 +2059,7 @@ export default {
         this.projectGroups = arr;//获取右侧组
       } else {
         this.projectGroups = [];
+        this.groups = groups;
       }
       this.loading=false;
       //查询左侧不在项目中的组
