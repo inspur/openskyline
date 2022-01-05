@@ -318,6 +318,7 @@ export default {
       userId:Vue.userId,
       visible:false,
       status: "0", //代表新增
+      initRoleId: "",
       treeData:[],
       roleSettingFlg:false,
       roleSettingFlg1:false,
@@ -770,8 +771,17 @@ export default {
       quotaStatus:0
     }
   },
-  mounted() {
-    console.log(Vue.service)
+  async mounted() {
+    let ret = await this.$ajax({
+      type: 'get',
+      url: "api/keystone/v3/roles?type=3"
+    });
+    if (ret && ret.roles && ret.roles.length>0) {
+     let initRole = ret.roles.find(role => {
+        return role.name == 'member'
+      });
+      this.initRoleId = initRole.id
+    }
   },
   methods:{
     show(obj, activeName) {
@@ -2059,7 +2069,9 @@ export default {
         this.projectGroups = arr;//获取右侧组
       } else {
         this.projectGroups = [];
-        this.groups = groups;
+        groups.forEach(item => {
+          item.show=true
+        })
       }
       this.loading=false;
       //查询左侧不在项目中的组
@@ -2113,7 +2125,7 @@ export default {
       }
       if (add.roles.length==0) { //如果没有角色，默认一个内置的项目成员的角色
         add.roles.push({
-          role_id:"2237edc845b0451a842e92a0c9e81bbd",
+          role_id: this.initRoleId,
           role_name:"member",
           role_type:3
         })
@@ -2153,7 +2165,7 @@ export default {
       }
       if (add.roles.length==0) { //如果没有角色，默认一个内置的项目成员的角色
         add.roles.push({
-          role_id:"2237edc845b0451a842e92a0c9e81bbd",
+          role_id: this.initRoleId,
           role_name:"member",
           role_type:3
         })
