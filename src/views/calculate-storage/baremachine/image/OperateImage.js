@@ -11,7 +11,7 @@ module.exports = function() {
   }, {
     icon: "fa-cloud-upload",
     name: Vue.t('calcStorLang.IMAGE_RESUME_BUTTON'),
-    showflg: Vue.uploadImageUseFakeS3 === true,
+    showflg: true,
     multi: false,
     enable(rowData) {
       return (rowData['status'] + "" === "queued");

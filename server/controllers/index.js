@@ -89,13 +89,10 @@ exports.middlewares = function (router) {
     async function (req, res, next) {
       const session = req.session;
 
-      session.poc = !!serviceAddr.poc;
       session.objectStorageType = serviceAddr.objectStorageType || 'S3';
       session.S3SuperUser = serviceAddr.S3SuperUser || {};
       session.showSafeDelete = serviceAddr.showSafeDelete || false;
       session.showManageConnect = serviceAddr.showManageConnect || false;
-      session.uploadImageUseFakeS3 = 'uploadImageUseFakeS3' in serviceAddr ? serviceAddr.uploadImageUseFakeS3 : true;
-      session.sdsipaddress = serviceAddr.sdsipaddress || '';
       session.forceCheckCurrentUser = 'forceCheckCurrentUser' in serviceAddr ? serviceAddr.forceCheckCurrentUser : false;
       session.forceVNCPassword = 'forceVNCPassword' in serviceAddr ? serviceAddr.forceVNCPassword : false;
       session.arch = serviceAddr.arch || 'x86';

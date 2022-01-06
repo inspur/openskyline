@@ -137,7 +137,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.vmaz')}}</div>
             <IEcharts :option="optionPieVMAZ"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row2.vmAZ"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -147,7 +147,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.vmproject')}}</div>
             <IEcharts :option="optionPieVMProject"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row2.vmProject"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -157,7 +157,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">CPU{{$t('container.byProject')}}</div>
             <IEcharts :option="optionPieCPU"
-                      :resizable="true"  
+                      :resizable="true"
                       :loading="loading.row2.cpu"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -166,8 +166,8 @@
         <el-col :span="4">
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('base.memory')+$t('container.byProject')}}</div>
-            <IEcharts :option="optionPieMem" 
-                      :resizable="true" 
+            <IEcharts :option="optionPieMem"
+                      :resizable="true"
                       :loading="loading.row2.mem"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -176,8 +176,8 @@
         <el-col :span="4">
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.blockStorage')+$t('container.byProject')}}</div>
-            <IEcharts :option="optionPieStorage" 
-                      :resizable="true" 
+            <IEcharts :option="optionPieStorage"
+                      :resizable="true"
                       :loading="loading.row2.storage"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -187,7 +187,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('base.network')+$t('container.byProject')}}</div>
             <IEcharts :option="optionPieNetIp"
-                      :resizable="true"  
+                      :resizable="true"
                       :loading="loading.row2.net"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -325,7 +325,7 @@
         <el-col :span="8">
           <div class="start-page-one-percent4" :class="theme" :style="'height:'+chartHeight+'px;'">
             <IEcharts :option="optionCpuHistory"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row4.cpu">
             </IEcharts>
           </div>
@@ -333,7 +333,7 @@
         <el-col :span="8">
           <div class="start-page-one-percent4" :class="theme" :style="'height:'+chartHeight+'px;'">
             <IEcharts :option="optionMemHistory"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row4.mem">
             </IEcharts>
           </div>
@@ -343,7 +343,7 @@
             <div :class="'start-page-one-toleft' + theme2" style="margin-bottom:0px;">
               <span>{{$t('container.blockStorageUsage')}}</span>
             </div>
-          <dashboard 
+          <dashboard
           class="left"
           :option="{percent:storageUsage,content:{text: this.$t('container.realstoragetotal')}, progressBar: {backgroundInnerColor:'#2fc25b'}}"/>
           </div>
@@ -1529,33 +1529,6 @@ export default {
     // 对象存储总量，已使用
     async getObjectStorage() {
       let vm = this;
-      let sdsipaddress = Vue.sdsipaddress;
-      if (sdsipaddress) {
-        await vm.$ajax({
-          type: 'POST',
-          url: "storage-api/"+sdsipaddress+"/rest/security/token",
-          data: JSON.stringify({
-            name:Vue.t('container.blockName'),
-            password:Vue.t('container.blockPs')
-          }),
-          successFun(data) {
-            if (data.code == "0" && data.data.token!="") {
-              vm.$ajax({
-                type: 'get',
-                headers:{
-                  'X-Target-Device-Auth-Token': data.data.token
-                },
-                url: "storage-api/"+sdsipaddress+"/rest/block/pool/capacityUsage",
-                successFun(resule) {
-                  if (resule.code == "0") {
-                    vm.objectStorageUsed = (resule.data.data_pool_info.poolUsage || 0);
-                  }
-                }
-              });
-            }
-          }
-        });
-      }
     },
     // 网络外网IP使用情况
     async getNetworkIps() {

@@ -14,14 +14,6 @@
           </template>
         </profile>
       </el-collapse-item>
-      <el-collapse-item
-        :title="$t('monitor.diskDevice')"
-        name="2"
-        style="text-align: left;"
-        v-if="poc"
-      >
-        <disk-list :vmId="vmId" :centerId="centerId"></disk-list>
-      </el-collapse-item>
       <el-collapse-item :title="$t('monitor.alarmList')" name="3" style="text-align: left;">
         <warn-list :hostName="hostName" :centerId="centerId" :resourceId="resourceId"></warn-list>
       </el-collapse-item>
@@ -51,7 +43,6 @@ export default {
       hostName: this.$route.params.hostName,
       resourceId: this.$route.params.resourceID,
       pResId: this.$route.params.pResId,
-      poc: Vue.poc,
       profileData: [// 主机ip，G2存储名，存储总量（GB），已用容量（GB）
         //初始化先赋予这些值，是为了让vue先渲染出来一些内容，要不然等接口返回数据再渲染，就会出现元素在一开始的时候没有高度，影响用户体验
         // { name: isCN ? '主机ip' : 'host ip', value: "" },

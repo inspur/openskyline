@@ -107,7 +107,6 @@
         orderFlag:Vue.AuthList["m.operationmanage.orderapprove"] && Vue.service['leo'],
         faultFlag:Vue.AuthList["m.operationmanage.fault"] && Vue.service['leo'],
         roleType:Vue.roleType,
-        poc:Vue.poc,
         loading:false,
         activeName: '',
         activeOpeneds: ['project'],
@@ -274,9 +273,6 @@
     },
     async mounted () {
       this.getLdapConfig();
-      // if (this.poc&&this.roleType==0) {
-      //   this.getInteligentData(); //监控数据
-      // }
       if (Vue.roleType == "0" || Vue.roleType == "2") {
         this.getOrderNum();
       };
