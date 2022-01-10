@@ -237,7 +237,7 @@ export default {
       }
       let ret = await this.$ajax({
         type: "get",
-        url: "api/keystone/v3/inspur/roles?" + $.param(obj)
+        url: "api/keystone/v3/roles?" + $.param(obj)
       });
       this.$convertRoleLanguage(ret.roles, "description");
       this.allData = this.$convertRoleLanguage(ret.roles);
