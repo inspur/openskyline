@@ -6,26 +6,6 @@
         <el-form-item :label="$t('base.name')" class="is-required" prop="name">
           <el-input auto-complete="off" style="width:500px;" v-model="roleData.name"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('base.roleType')">
-          <el-radio-group v-model="roleData.type" @change="typeChange">
-            <el-radio class="radio" :label="0">{{$t('base.superAdmin')}}</el-radio>
-            <el-radio class="radio" :label="2">{{$t('base.projectAdmin')}}</el-radio>
-            <el-radio class="radio" :label="3">{{$t('base.projectUser')}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('base.jurisdiction')" class="is-required" style="width:500px;">
-          <el-card>
-            <ztree
-              ref="deZtree"
-              :data="treeData"
-              :setting="setting"
-              style="position: relative; max-height: 300px;"
-              v-loading="loading"
-              :element-loading-text="$t('base.loadingData')"
-              ></ztree>
-            <h2 style="text-align: center; max-height: 300px;" v-if="!treeData || treeData.length<0">{{emptyText}}</h2>
-          </el-card>
-        </el-form-item>
         <el-form-item :label="$t('base.desc')" prop="description">
           <el-input auto-complete="off" type="textarea" v-model="roleData.description" style="width:500px;"></el-input>
         </el-form-item>
@@ -76,14 +56,14 @@ export default {
     }
   },
   mounted() {
-    this.getTreeData();
+    // this.getTreeData();
   },
   methods:{
     async getTreeData() {
       this.loading = true;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/menus/"+this.roleData.type
+        url: "api/keystone/v3/menus/"+this.roleData.type
       })
       var arr = ret.menus;
       let language = this.$cookie.get('defaultLanguage');
@@ -150,30 +130,13 @@ export default {
     },
     async addRole() {
       let me = this;
-      let menuArr = [];
-      let cheNodes = this.$refs.deZtree.action("getCheckedNodes");
-      if (cheNodes.length==0) {
-        this.$message({
-          message:Vue.t('base.selectPermission'),
-          type:'warning'
-        });
-        return;
-      }
-      cheNodes.forEach((item, index) => {
-        if (item.id!="all_role") {
-          menuArr.push(item.id);
-        }
-      });
       let ret = await this.$ajax({
         type: 'post',
-        url: "api/keystone/v3/inspur/roles",
+        url: "api/keystone/v3/roles",
         data: JSON.stringify({
           role:{
             name:this.roleData.name,
-            description:this.roleData.description,
-            type:this.roleData.type,
-            is_default:false,
-            rolemenu:menuArr
+            description:this.roleData.description
           }
         }),
         log:{
