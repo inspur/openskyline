@@ -187,7 +187,7 @@ export default {
             let me = this;
             let ret = await this.$sequence({
               type: "DELETE",
-              url: "api/keystone/v3/inspur/roles/{id}",
+              url: "api/keystone/v3/roles/{id}",
               params: selectedRows,
               confirmMsg: Vue.t("base.deleteDataWarn"),
               log: {

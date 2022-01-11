@@ -57,7 +57,7 @@ export default {
     }
   },
   async mounted() {
-    let {ret : role} = await this.$ajax({
+    let {role} = await this.$ajax({
       type: 'get',
       url: "api/keystone/v3/roles/"+ this.$route.params.id
     });
