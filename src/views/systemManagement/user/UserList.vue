@@ -2,51 +2,14 @@
   <div>
     <icos-page-header :title="$t('base.userManagement')" />
     <icos-page>
-      <el-row :gutter="10">
-        <el-col :span="5" v-show="!isLdap">
-            <el-card>
-            <ztree
-              ref="deZtree"
-              :data="treeData"
-              :setting="setting"
-              style="position: relative; min-height: 500px;max-height: 800px;"
-              v-loading="treeLoading"
-              :element-loading-text="$t('base.loadingData')"
-              ></ztree>
-            <h2 style="text-align: center; min-height: 600px;" v-if="!treeData || treeData.length<0">{{emptyText}}</h2>
-          </el-card>
-          </el-col>
-          
+      <el-row :gutter="10">          
           <el-col :span="isLdap?24:19" :offset="0">
             <el-form :inline="true" :model="formInline" class="form-inline">
-              <el-form-item :label="$t('base.roleType')">
-                <el-select v-model="formInline.role_type" style="width:120px;" @change="roleChange">
-                  <el-option :label="$t('base.all')" value=""></el-option>
-                  <el-option :label="$t('base.superAdmin')" value="0"></el-option>
-                  <el-option :label="$t('base.projectAdmin')" value="2"></el-option>
-                  <el-option :label="$t('base.projectUser')" value="3"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('base.project')" v-if="formInline.role_type==2||formInline.role_type==3">
-                <!-- <el-select v-model="formInline.project_id" style="width:120px;" @change="proChange" filterable>
-                  <el-option v-for="item in proList" :key="item.id" :value="item.id" :label="item.name"></el-option>
-                </el-select> -->
-                <el-input auto-complete="off" style="width:120px;" :icon="close" :on-icon-click="onIconClick" :readonly="true" @focus="selectProject" v-model="formInline.projectName"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('base.department')" v-if="isLdap">
-                <el-input v-model="formInline.deptName" @blur="blurFun('deptName')"></el-input>
-              </el-form-item>
               <el-form-item :label="$t('base.accountNumber')">
                 <el-input v-model="formInline.name" @blur="blurFun('name')"></el-input>
               </el-form-item>
-              <el-form-item :label="$t('base.fullName')">
-                <el-input v-model="formInline.alias" @blur="blurFun('alias')"></el-input>
-              </el-form-item>
               <el-form-item :label="$t('base.email')" v-if="!infoEncrypt">
                 <el-input v-model="formInline.email" @blur="blurFun('email')"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('base.telephone')" v-if="!infoEncrypt">
-                <el-input v-model="formInline.phone" @blur="blurFun('phone')"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" icon='fa-search' size="small" @click="onQuery">{{$t('base.query')}}</el-button>
@@ -91,16 +54,6 @@
                   <span>{{scope.row.enabled==1?$t('base.enable'):$t('base.disable')}}</span>
                 </template>
               </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('dept') >= 0"
-                prop="department_name"
-                :label="$t('base.department')"
-                min-width="100">
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('alias') >= 0"
-                prop="alias"
-                :label="$t('base.fullName')"
-                min-width="100">
-              </el-table-column>
               <el-table-column v-if="columnsChecked.indexOf('locked') >= 0"
                 prop="lock"
                 align="left"
@@ -114,12 +67,7 @@
                 prop="email"
                 :label="$t('base.email')"
                 min-width="100">
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('phone') >= 0"
-                prop="phone"
-                :label="$t('base.telephone')"
-                min-width="100">
-              </el-table-column>
+              </el-table-column>S
               <el-table-column v-if="columnsChecked.indexOf('desc') >= 0"
                 prop="description"
                 :label="$t('base.desc')"
@@ -292,10 +240,8 @@ export default {
           return !this.isLdap;
         }.bind(this),
         handler: function() {
-          let selNodes = this.$refs.deZtree.action('getSelectedNodes');
-          let id = selNodes[0].id;
           this.$router.push({
-            path: '/systemManagement/user/addUser/'+id+'/'+selNodes[0].name
+            path: '/systemManagement/user/addUser'
           });
         }.bind(this)
       }, {
@@ -366,7 +312,7 @@ export default {
           let me = this;
           let ret = this.$ajax({
             type: 'patch',
-            url: "api/keystone/v3/inspur/users/"+selectedRows[0].id,
+            url: "api/keystone/v3/users/"+selectedRows[0].id,
             data:JSON.stringify({
               user:{
                 "enabled": true
@@ -402,7 +348,7 @@ export default {
           }).then(() => {
             let ret = this.$ajax({
               type: 'patch',
-              url: "api/keystone/v3/inspur/users/"+selectedRows[0].id,
+              url: "api/keystone/v3/users/"+selectedRows[0].id,
               data:JSON.stringify({
                 user:{
                   "enabled": false
@@ -434,7 +380,7 @@ export default {
           let me = this;
           let ret = this.$ajax({
             type: 'patch',
-            url: "api/keystone/v3/inspur/users/"+selectedRows[0].id,
+            url: "api/keystone/v3/users/"+selectedRows[0].id,
             data:JSON.stringify({
               user:{
                 "name": selectedRows[0].name
@@ -483,15 +429,15 @@ export default {
   },
   mounted() {
     this.setLdapConfig();
-    this.getTreeData();
-    this.loadPasswordConf();
+    // this.getTreeData();
+    // this.loadPasswordConf();
   },
   methods: {
     async getTreeData(id) {
       this.treeLoading = true;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/departments"
+        url: "api/keystone/v3/departments"
       })
       var arr = ret.departments;
       arr.forEach(function(item, key) {
@@ -546,16 +492,6 @@ export default {
     async getTableData(flg=true) {
       this.tableLoading = true;
       var param = {dir:this.order, field:this.field, limit:this.pageSize, page:this.currentPage, domain_id:"default"};
-      if (!this.isLdap) {
-        let selNodes = this.$refs.deZtree.action('getSelectedNodes');
-        let pid = selNodes.length>0?selNodes[0].id:"default";
-        if (pid!="default") {
-          param.department = pid;
-        }
-      }
-      if (this.isLdap && this.formInline.deptName) {
-        param.department = this.formInline.deptName;
-      }
       if (this.formInline.role_type) {
         param.role_type = this.formInline.role_type;
       }
@@ -576,7 +512,7 @@ export default {
       }
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+ $.param(param)
+        url: "api/keystone/v3/users?"+ $.param(param)
       })
       ret.users.map(item => {
         if (!('expired_date' in item) || item.expired_date === null || item.expired_date === '') {
@@ -644,7 +580,7 @@ export default {
       const $this = this;
       $this.$ajax({
         type: 'get',
-        url: 'api/keystone/v3/inspur/system/config/file-conf',
+        url: 'api/keystone/v3/system/config/file-conf',
         successFun(data) {
           if ('info_encrypt' in data) {
             $this.infoEncrypt = data.info_encrypt;

@@ -330,7 +330,7 @@ const routes = [{
       }
     }, {
       name: 'addUser',
-      path: 'addUser/:id/:name',
+      path: 'addUser',
       component: addUser,
       meta: {
         des: "base.addUser"

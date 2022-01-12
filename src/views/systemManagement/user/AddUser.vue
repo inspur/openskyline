@@ -16,36 +16,11 @@
         <el-form-item :label="$t('base.enable')">
           <el-checkbox v-model="userData.enabled"></el-checkbox>
         </el-form-item>
-        <el-form-item :label="$t('base.fullName')" class="is-required" prop="alias">
-          <el-input auto-complete="off" style="width:500px;" v-model="userData.alias"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('base.department')" prop="department">
-          <el-input auto-complete="off" style="width:500px;" :readonly="true" @focus="openDepartDialog" v-model="userData.department"></el-input>
-        </el-form-item>
         <el-form-item :label="$t('base.email')" class="is-required" prop="email">
           <el-input auto-complete="off" style="width:500px;" v-model="userData.email"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('base.telephone')" class="is-required" prop="phone">
-          <el-input auto-complete="off" style="width:500px;" v-model="userData.phone"></el-input>
-        </el-form-item>
         <el-form-item :label="$t('base.desc')" prop="description">
           <el-input auto-complete="off" type="textarea" v-model="userData.description" style="width:500px;"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('base.EXPIRED_DATE')" prop="expired_date">
-          <el-date-picker
-            v-model="userData.expired_date"
-            :picker-options="datePickerOptions"
-            :editable="false" />
-            <el-tooltip placement="right">
-              <div slot="content" v-html="$t('base.EXPIRED_DATE_TIPS')"></div>
-              <i class="el-icon-fa-question-circle"></i>
-            </el-tooltip>
-        </el-form-item>
-        <el-form-item :label="$t('base.sendEamilNotifications')">
-          <el-checkbox v-model="userData.sendEmail"></el-checkbox>
-        </el-form-item>
-        <el-form-item :label="$t('base.userEmpowerment')" v-if="powerFlg">
-          <el-checkbox v-model="ifPower" @change="powerFun"></el-checkbox>
         </el-form-item>
         <el-form-item :label="$t('base.roleType')" v-if="ifPower">
           <el-select v-model="roleType" @change="roleChangeFun" style="width:310px;">
@@ -193,14 +168,14 @@ export default {
     this.btnFlg = false;
     this.userData.department = this.$route.params.id=="default"?"":this.$route.params.name;
     this.userData.departmentId = this.$route.params.id=="default"?"":this.$route.params.id;
-    this.getPassStrategy();
+    // this.getPassStrategy();
   },
   methods: {
     getPassStrategy() {
       let me = this;
       this.$ajax({
         type: 'get',
-        url: 'api/keystone/v3/inspur/system/config/file-conf',
+        url: 'api/keystone/v3/system/config/file-conf',
         successFun(data) {
           me.strategy.password_regex = data.password_regex || '';
           if (Vue.language === 'en') {
@@ -256,17 +231,13 @@ export default {
       }
       let ret = await this.$ajax({
         type: 'post',
-        url: "api/keystone/v3/inspur/users",
+        url: "api/keystone/v3/users",
         data: JSON.stringify({user:{
           name:this.userData.name,
           alias:this.userData.alias,
-          department:this.userData.departmentId,
-          description:this.userData.description,
           email:this.userData.email,
           enabled:this.userData.enabled,
-          phone:this.userData.phone,
-          password:this.userData.password,
-          expired_date: expiredDate
+          password:this.userData.password
         }}),
         errFun() {
           me.loading = false;
@@ -276,7 +247,7 @@ export default {
           if (me.userData.sendEmail) {
             me.$ajax({
               type: 'post',
-              url: "api/keystone/v3/inspur/message/email/"+encodeURIComponent("system.user.create.template"),
+              url: "api/keystone/v3/message/email/"+encodeURIComponent("system.user.create.template"),
               data:JSON.stringify({
                 "email_info":{
                   "params":[
@@ -313,7 +284,7 @@ export default {
         }
         await this.$ajax({
           type: 'post',
-          url: "api/keystone/v3/inspur/assignments/users/"+ret.user.id+"/roles",
+          url: "api/keystone/v3/assignments/users/"+ret.user.id+"/roles",
           data:JSON.stringify({assignments:obj}),
           errFun() {
             me.loading = false;
@@ -332,7 +303,7 @@ export default {
         //获取超级管理员的角色
         let ret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/roles?"+ $.param({type:this.roleType})
+          url: "api/keystone/v3/roles?"+ $.param({type:this.roleType})
         });
         this.roleList = this.$convertRoleLanguage(ret.roles);
         this.userData.role = '';
