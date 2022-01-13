@@ -7,47 +7,11 @@
         <!-- <el-input auto-complete="off" v-model="userData.name" :readonly="true"></el-input> -->
         <span>{{userData.name}}</span>
       </el-form-item>
-      <el-form-item :label="$t('base.department')" prop="department_name">
-        <el-input auto-complete="off" v-model="userData.department_name" :readonly="true" @focus="openDepartDialog"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('base.fullName')" class="is-required" prop="alias">
-        <el-input v-model="userData.alias"></el-input>
-      </el-form-item>
       <el-form-item :label="$t('base.email')" class="is-required" prop="email">
         <el-input auto-complete="off" v-model="userData.email"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('base.telephone')" class="is-required" prop="phone">
-        <el-input auto-complete="off" v-model="userData.phone"></el-input>
-      </el-form-item>
       <el-form-item :label="$t('base.desc')" prop="description">
         <el-input auto-complete="off" type="textarea" v-model="userData.description"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('base.FORBID_TIME')" prop="forbid_time">
-        <el-time-picker
-          @change="handleForbidTimeChange"
-          v-model="userData.forbidTime1"
-          format="HH:mm"
-          :editable="false"
-          :disabled="userData.name === 'admin'"
-          :placeholder="$t('base.FORBID_TIME_START')" />
-        <el-time-picker
-          @change="handleForbidTimeChange"
-          v-model="userData.forbidTime2"
-          format="HH:mm"
-          :editable="false"
-          :disabled="userData.name === 'admin'"
-          :placeholder="$t('base.FORBID_TIME_END')" />
-      </el-form-item>
-      <el-form-item :label="$t('base.EXPIRED_DATE')" prop="expired_date">
-        <el-date-picker
-          v-model="userData.expired_date"
-          :disabled="userData.name === 'admin'"
-          :picker-options="datePickerOptions"
-          :editable="false" />
-          <el-tooltip placement="right">
-            <div slot="content" v-html="$t('base.EXPIRED_DATE_TIPS')"></div>
-            <i class="el-icon-fa-question-circle"></i>
-          </el-tooltip>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -164,19 +128,14 @@ export default {
       }
       this.loading = true;
       this.loadText = Vue.t('base.loadingData');
-      let ret = await this.$ajax({
+      let {user} = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+$.param({id:this.id}),
+        url:  `api/keystone/v3/users/${this.id}`,
         errFun() {
           me.loading = false;
         }
       })
-      if (ret.users[0].expired_date !== null && ret.users[0].expired_date !== '' && ret.users[0].expired_date !== undefined) {
-        ret.users[0].expired_date = moment(ret.users[0].expired_date - new Date().getTimezoneOffset() * 60 * 1000).toDate();
-      } else {
-        ret.users[0].expired_date = null;
-      }
-      this.userData = Object.assign({}, this.userData, ret.users[0]);
+      this.userData = Object.assign({}, this.userData, user);
       Object.keys(this.rules).forEach((key) => {
         if (this.userData[key]===null) this.userData[key] = "";
       })
@@ -205,7 +164,7 @@ export default {
       this.getDeptFlg = true;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/departments"
+        url: "api/keystone/v3/departments"
       })
       var arr = ret.departments;
       arr.forEach(function(item, key) {
@@ -270,7 +229,7 @@ export default {
         }
         let ret = this.$ajax({
           type: 'patch',
-          url: "api/keystone/v3/inspur/users/"+this.id,
+          url: "api/keystone/v3/users/"+this.id,
           data:JSON.stringify({
             user:{
               "description": this.userData.description,
