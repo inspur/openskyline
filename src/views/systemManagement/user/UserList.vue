@@ -259,33 +259,33 @@ export default {
           });
         }.bind(this)
       }, {
-        icon: "fa-edit",
-        name: this.$t('base.userEmpowerment'),
-        showflg: Vue.AuthList["m.systemmanage.usermanage.assignrole"],
-        multi: false,
-        enable(obj) {
-          return true;
-        },
-        handler: function(selectedRows) {
-          this.$router.push({
-            path: '/systemManagement/user/emPower/'+this.multipleSelection[0].id+"/"+this.multipleSelection[0].name
-          });
-        }.bind(this)
-      }, {
-        icon: "fa-eye",
-        name: Vue.t('base.permissionDetail'),
-        showflg: Vue.AuthList["m.systemmanage.usermanage.userroledetail"],
-        multi: false,
-        enable(rowData) {
-          return true;
-        },
-        handler: function(selectedRows) {
-          this.viewPowerFlg = true;
-          this.$nextTick(() => {
-            this.$refs.viewPower.getData();
-          })
-        }.bind(this)
-      }, {
+      //   icon: "fa-edit",
+      //   name: this.$t('base.userEmpowerment'),
+      //   showflg: Vue.AuthList["m.systemmanage.usermanage.assignrole"],
+      //   multi: false,
+      //   enable(obj) {
+      //     return true;
+      //   },
+      //   handler: function(selectedRows) {
+      //     this.$router.push({
+      //       path: '/systemManagement/user/emPower/'+this.multipleSelection[0].id+"/"+this.multipleSelection[0].name
+      //     });
+      //   }.bind(this)
+      // }, {
+      //   icon: "fa-eye",
+      //   name: Vue.t('base.permissionDetail'),
+      //   showflg: Vue.AuthList["m.systemmanage.usermanage.userroledetail"],
+      //   multi: false,
+      //   enable(rowData) {
+      //     return true;
+      //   },
+      //   handler: function(selectedRows) {
+      //     this.viewPowerFlg = true;
+      //     this.$nextTick(() => {
+      //       this.$refs.viewPower.getData();
+      //     })
+      //   }.bind(this)
+      // }, {
         icon: "fa-edit",
         name: this.$t('base.resetPassword'),
         showflg: Vue.AuthList["m.systemmanage.usermanage.resetpassword"],

@@ -38,23 +38,11 @@ module.exports = function() {
       iconType: "el-icon-fa-user-o",
       name: 'base.userManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.ipsetting"],
-      key: "ipSetting",
-      path: "ipSetting",
-      iconType: "el-icon-fa-gear",
-      name: 'base.ipSetting'
-    }, {
       flg: Vue.AuthList["m.systemmanage.systemstatus"],
       key: "systemStatus",
       path: "systemStatus",
       iconType: "el-icon-fa-desktop",
       name: 'base.systemStatus'
-    }, {
-      flg: Vue.AuthList["m.systemmanage.serialnumber"],
-      key: "serialNumber",
-      path: "serialNumber",
-      iconType: "el-icon-fa-map-pin",
-      name: 'base.serialNumberManagement'
     }, {
       flg: Vue.AuthList["m.systemmanage.paramsetting"],
       key: "parameterSetting",
