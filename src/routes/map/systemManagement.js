@@ -299,7 +299,7 @@ const routes = [{
       }
     }, {
       name: 'orgUser',
-      path: 'orgUser/:id/:name',
+      path: 'orgUser/:id/:domianid/:name',
       component: orgUser,
       meta: {
         des: "base.personnelManintenance"
@@ -443,16 +443,7 @@ const routes = [{
       path: '',
       name:'parameterSetting',
       components:{
-        systemSetting,
-        recordSetting,
-        passwordStrategy,
-        moduleSwitch,
-        leaseParameterSetting,
-        metaData,
-        templateSetting,
-        copyRightSetting,
-        pimSetting,
-        opslogSetting
+        metaData
       }
     }]
   }, {
