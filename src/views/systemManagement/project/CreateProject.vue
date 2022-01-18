@@ -2377,9 +2377,9 @@ export default {
       let roles = await this.powerFun();
       for (var i=0; i<croles.length; i++) {
         if (this.roleSet.roleType==2) {
-          this.roleSet.roleValue1.push(croles[i].id);
+          this.roleSet.roleValue1.push(croles[i].role_id);
         } else {
-          this.roleSet.roleValue2.push(croles[i].id);
+          this.roleSet.roleValue2.push(croles[i].role_id);
         }
       }
       let list = [];

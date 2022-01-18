@@ -1,23 +1,11 @@
 <template>
   <div>
     <icos-page-header :title="$t('base.parameterSetting')" :show-bottom-border="false" />
-    <el-tabs v-model="activeName" class="tab-pane-no-padding" @tab-click="onTabClick" type="border-card">
-      <el-tab-pane name="systemSetting" :label="$t('base.systemSetting')" v-if="systemSettingFlg" />
-      <el-tab-pane name="recordSetting" :label="$t('base.recordSetting')" v-if="recordSettingFlg" />
-      <el-tab-pane name="moduleSwitch" :label="$t('base.moduleSwitch')" v-if="moduleSwitchFlg" />
-      <el-tab-pane name="leaseParameterSetting" :label="$t('base.leaseParameterSetting')" v-if="leaseParameterSettingFlg" />
+    <el-tabs v-model="activeName" class="tab-pane-no-padding" @tab-click="onTabClick" type="border-card">     
       <el-tab-pane name="metaData" :label="$t('base.metadata')" v-if="metaDataFlg" />
-      <el-tab-pane name="templateSetting" :label="$t('base.businessTemplateConf')" v-if="templateSettingFlg" />
-      <el-tab-pane name="pimSetting" :label="$t('base.pimSetting')" v-if="pimSettingFlg" />
     </el-tabs>
     <icos-page>
-      <router-view v-if="activeName=='systemSetting'" name="systemSetting"></router-view>
-      <router-view v-if="activeName=='recordSetting'" name="recordSetting"></router-view>
-      <router-view v-if="activeName=='moduleSwitch'" name="moduleSwitch"></router-view>
-      <router-view v-if="activeName=='leaseParameterSetting'" name="leaseParameterSetting"></router-view>
-      <router-view v-if="activeName=='metaData'" name="metaData"></router-view>
-      <router-view v-if="activeName=='templateSetting'" name="templateSetting"></router-view>
-      <router-view v-if="activeName=='pimSetting'" name="pimSetting"></router-view>
+      <router-view v-if="activeName=='metaData'" name="metaData"></router-view>  
     </icos-page>
   </div>
 </template>
@@ -38,15 +26,7 @@ export default {
     }
   },
   mounted () {
-    this.activeName = this.systemSettingFlg?"systemSetting"
-      :this.recordSettingFlg?"recordSetting"
-      :this.moduleSwitchFlg?"moduleSwitch"
-      :this.leaseParameterSettingFlg?"leaseParameterSetting"
-      :this.metaDataFlg?"metaData"
-      :this.templateSettingFlg?"templateSetting"
-      :this.copyRightSettingFlg?"copyRightSetting"
-      :this.pimSettingFlg?"pimSetting"
-      :"";
+    this.activeName = "metaData";
   },
   methods: {
     onTabClick (tab) {
