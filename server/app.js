@@ -316,13 +316,13 @@ const DEFAULT_SESSION_TIMEOUT_SECOND = 60 * 60;
     }
   });
 
-  const replayAttackChecker = require('./routes/security/replayAttackChecker');
+  // const replayAttackChecker = require('./routes/security/replayAttackChecker');
   // 验证码请求使用image src的方式，无法增加header字段，只校验api/
-  app.use([
-    '/api/',
-    '/custom-api/',
-    '/storage-api/'
-  ], replayAttackChecker);
+  // app.use([
+  //   '/api/',
+  //   '/custom-api/',
+  //   '/storage-api/'
+  // ], replayAttackChecker);
 
   let defaultRouter = express.Router();
   defaultRouter.get('/', function(req, res) {

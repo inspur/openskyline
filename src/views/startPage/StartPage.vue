@@ -3,28 +3,19 @@
     <div style="text-align:right">
       <div v-if="roleType == 0 && pimParams.switch == true" id="pim-area">
         <el-button type="text" @click="gotoPIM" :loading="pimParams.loggingInPIM">{{ $t('base.pimButton') }}</el-button>
-      </div> 
-    </div>    
+      </div>
+    </div>
       <el-carousel :id="'carousel' + theme" style="z-index: 0;"
         :height="tempHeight"
         :autoplay="false"
-        trigger="click" 
-        v-if="roleType==0" 
-        @change="carouselChange" 
+        trigger="click"
+        v-if="roleType==0"
+        @change="carouselChange"
         indicator-position="outside"
         arrow="always"
         :initial-index="0">
         <el-carousel-item name="one">
           <router-view name="startPageOne" ref="pageone" :tempHeight="tempHeight"></router-view>
-        </el-carousel-item>
-        <el-carousel-item name="two">
-          <router-view name="startPageTwo" ref="pagetwo" :tempHeight="tempHeight"></router-view>
-        </el-carousel-item>
-        <el-carousel-item name="three">
-          <router-view name="startPageThree" ref="pagethree" :tempHeight="tempHeight"></router-view>
-        </el-carousel-item>
-        <el-carousel-item name="four">
-          <router-view name="startPageFour" ref="pagefour" :tempHeight="tempHeight"></router-view>
         </el-carousel-item>
       </el-carousel>
       <router-view v-if="roleType==2" name="startPageProject"></router-view>

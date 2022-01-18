@@ -272,7 +272,6 @@
       }
     },
     async mounted () {
-      this.getLdapConfig();
       if (Vue.roleType == "0" || Vue.roleType == "2") {
         this.getOrderNum();
       };
@@ -304,7 +303,7 @@
       async getLdapConfig() {
         let ret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/domains/config/"+Vue.domainName
+          url: "api/keystone/v3/domains/config/"+Vue.domainName
         })
         if (ret&&ret.identity&&ret.identity.driver=='ldap') {
           Vue.isLdap = true;

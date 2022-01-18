@@ -174,7 +174,9 @@ export default {
       let ret = await this.$ajax({
         type: "get",
         url:
-          "api/keystone/v3/inspur/assignments/groups/" +
+          "api/keystone/v3/domians/" +
+          this.$route.params.domianid +
+          "/groups/" +
           this.$route.params.id +
           "/roles"
       });
@@ -190,7 +192,7 @@ export default {
         this.$ajax({
           type: "delete",
           url:
-            "api/keystone/v3/inspur/assignments/groups/" +
+            "api/keystone/v3/groups/" +
             this.$route.params.id +
             "/role/" +
             item.role_id,
