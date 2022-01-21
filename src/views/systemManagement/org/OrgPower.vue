@@ -19,19 +19,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column reserve-selection type="selection" align="center" width="55"></el-table-column>
-        <el-table-column prop="role_type" :label="$t('base.roleType')" align="left" min-width="100">
-          <template slot-scope="scope">
-            <span v-if="scope.row.role_type==0">{{$t('base.superAdmin')}}</span>
-            <span v-if="scope.row.role_type==2">{{$t('base.projectAdmin')}}</span>
-            <span v-if="scope.row.role_type==3">{{$t('base.projectUser')}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="project_name" :label="$t('base.project')" min-width="100">
-          <template slot-scope="scope">
-            <span>{{scope.row.role_type==0?"-":scope.row.project_name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="role_name" :label="$t('base.role')" min-width="100"></el-table-column>
+        <el-table-column prop="name" :label="$t('base.role')" min-width="100"></el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer" style="text-align:center;margin-top:15px;">
         <el-button @click="backFun">{{$t('base.back')}}</el-button>
@@ -51,6 +39,7 @@
         ref="addPower"
         v-if="addPowerFlg"
         :id="$route.params.id"
+        :domainid="$route.params.domainid"
         :name="$route.params.name"
         @refresh="getTableData"
       ></add-power>
@@ -174,13 +163,13 @@ export default {
       let ret = await this.$ajax({
         type: "get",
         url:
-          "api/keystone/v3/domians/" +
-          this.$route.params.domianid +
+          "api/keystone/v3/domains/" +
+          this.$route.params.domainid +
           "/groups/" +
           this.$route.params.id +
           "/roles"
       });
-      this.tableData = this.$convertRoleLanguage(ret.assignments, "role_name");
+      this.tableData = ret.roles;
       this.$nextTick(() => {
         this.$refs.deTable.clearSelection();
       });

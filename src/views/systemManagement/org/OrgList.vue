@@ -139,7 +139,7 @@ export default {
         },
         handler: function(selectedRows) {
           this.$router.push({
-            path: '/systemManagement/org/orgPower/'+selectedRows[0].id+"/"+selectedRows[0].domianid+"/"+selectedRows[0].name
+            path: '/systemManagement/org/orgPower/'+selectedRows[0].id+"/"+selectedRows[0].domain_id
           });
         }.bind(this)
       }, {

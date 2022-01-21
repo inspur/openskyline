@@ -299,14 +299,14 @@ const routes = [{
       }
     }, {
       name: 'orgUser',
-      path: 'orgUser/:id/:domianid/:name',
+      path: 'orgUser/:id/:name',
       component: orgUser,
       meta: {
         des: "base.personnelManintenance"
       }
     }, {
       name: 'orgPower',
-      path: 'orgPower/:id/:name',
+      path: 'orgPower/:id/:domainid',
       component: orgPower,
       meta: {
         des: "base.groupWeighting"
