@@ -49,7 +49,7 @@ module.exports = function () {
       iconType: "el-icon-fa-key",
       name: Vue.t("calcStorLang.highConfig")
     }, {
-      flg: Vue.AuthList["m.calculate.host"],
+      flg: Vue.AuthList["m.calculate.host"] && Vue.roleType === '0',
       key: "host-management",
       path: "host-management",
       iconType: "el-icon-fa-ioxhost",
@@ -62,7 +62,7 @@ module.exports = function () {
       iconType: "el-icon-fa-hdd-o",
       name: Vue.t("calcStorLang.baremetal")
     }, {
-      flg: Vue.AuthList["m.calculate.resourcespec"],
+      flg: Vue.AuthList["m.calculate.resourcespec"] && Vue.roleType === '0',
       key: "res-spec",
       path: "res-spec",
       iconType: "el-icon-fa-sitemap",
@@ -100,4 +100,4 @@ module.exports = function () {
     });
   }
   return menus;
-}
+};

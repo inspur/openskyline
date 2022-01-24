@@ -1,34 +1,22 @@
 module.exports = function() {
   return {
-    flg: Vue.AuthList['m.operationAnalysis'],
+    flg: false && Vue.AuthList['m.operationAnalysis'],
     key: 'operationAnalysis',
     path: '/operationAnalysis/',
     iconType: 'el-icon-fa-line-chart',
     name: 'operationAnalysis.OPERATION_ANALYSIS',
     subMenus: [{
-      flg: Vue.AuthList['m.operationAnalysis.HealthStatus'],
-      key: 'healthStatus',
-      path: 'healthStatus',
-      iconType: 'el-icon-fa-heartbeat',
-      name: 'operationAnalysis.HEALTH_STATUS'
-    }, {
-      flg: Vue.AuthList['m.operationAnalysis.logSearch'],
+      flg: false && Vue.service['venus'] && Vue.AuthList['m.operationAnalysis.logSearch'],
       key: 'logSearch',
       path: 'logSearch',
       iconType: 'el-icon-fa-search',
       name: 'operationAnalysis.logSearch'
     }, {
-      flg: Vue.AuthList['m.operationAnalysis.logAnalysis'],
+      flg: false && Vue.service['venus'] && Vue.AuthList['m.operationAnalysis.logAnalysis'],
       key: 'logAnalysis',
       path: 'logAnalysis',
       iconType: 'el-icon-fa-podcast',
       name: 'operationAnalysis.logAnalysis'
-    }, {
-      flg: Vue.AuthList['m.operationAnalysis.logError'],
-      key: 'logError',
-      path: 'logError',
-      iconType: 'el-icon-fa-calendar-times-o',
-      name: 'operationAnalysis.logerrorTypical'
     }, {
       flg: Vue.service['earth'] && Vue.AuthList['m.operationAnalysis.CLUSTER_RESOURCE_PREDICTION'],
       key: 'clusterResourcePrediction',

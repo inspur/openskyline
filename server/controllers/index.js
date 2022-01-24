@@ -132,7 +132,7 @@ exports.middlewares = function (router) {
       req.session[Consts.PROJECT_TOKEN] = scopedToken;
 
       res.cookie('pid', projectId || "");
-      res.cookie('roleType', roleType);
+      res.cookie('roleType', String(roleType));
       res.cookie('roleId', roleId);
       req.session['pid'] = projectId;
       req.session['roleId'] = roleId;

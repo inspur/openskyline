@@ -249,7 +249,7 @@ const routes = [{
   path: '/systemManagement',
   alias: '/',
   component: systemManagement,
-  flg:Vue.AuthList["m.systemmanage"],
+  flg: Vue.AuthList["m.systemmanage"],
   meta: {
     des: 'base.systemManagement'
   },

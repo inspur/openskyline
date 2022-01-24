@@ -7,50 +7,50 @@ module.exports = function() {
     name: 'base.systemManagement',
     subMenus: [
     {
-      flg: Vue.AuthList["m.systemmanage.projectmanage"],
+      flg: Vue.AuthList["m.systemmanage.projectmanage"] && Vue.roleType === '0',
       key: "project",
       path: "project",
       iconType: "el-icon-fa-newspaper-o",
       name: 'base.projectManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.project.projectmanage"],
+      flg: Vue.AuthList["m.systemmanage.project.projectmanage"] && Vue.roleType === '0',
       key: "projectManage",
       path: "projectManage",
       iconType: "el-icon-fa-newspaper-o",
       name: 'base.projectManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.groupmanage"],
+      flg: Vue.AuthList["m.systemmanage.groupmanage"] && Vue.roleType === '0',
       key: "org",
       path: "org",
       iconType: "el-icon-fa-group",
       name: 'base.groupManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.rolemanage"],
+      flg: Vue.AuthList["m.systemmanage.rolemanage"] && Vue.roleType === '0',
       key: "role",
       path: "role",
       iconType: "el-icon-fa-graduation-cap",
       name: 'base.roleManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.usermanage"],
+      flg: Vue.AuthList["m.systemmanage.usermanage"] && Vue.roleType === '0',
       //flg:true,
       key: "user",
       path: "user",
       iconType: "el-icon-fa-user-o",
       name: 'base.userManagement'
     }, {
-      flg: Vue.AuthList["m.systemmanage.systemstatus"],
+      flg: Vue.AuthList["m.systemmanage.systemstatus"] && Vue.roleType === '0',
       key: "systemStatus",
       path: "systemStatus",
       iconType: "el-icon-fa-desktop",
       name: 'base.systemStatus'
     }, {
-      flg: Vue.AuthList["m.systemmanage.paramsetting"],
+      flg: Vue.AuthList["m.systemmanage.paramsetting"] && Vue.roleType === '0',
       key: "parameterSetting",
       path: "parameterSetting",
       iconType: "el-icon-fa-cog",
       name: 'base.parameterSetting'
     }, {
-      flg: Vue.AuthList["m.systemmanage.certManage"],
+      flg: Vue.service['barbican'] && Vue.AuthList["m.systemmanage.certManage"],
       key: "certManage",
       path: "certManage",
       iconType: "el-icon-fa-key",

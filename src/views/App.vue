@@ -17,13 +17,6 @@
             <el-option v-for="item in commands" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
-          <!-- <div class="main-page-t-img main-page-t-serious"></div> -->
-          <el-badge v-if="flag&&orderFlag" :value="order.faultNum" :max="99" >
-            <div @click="flowDeal">{{$t('base.order')}}</div>
-          </el-badge>
-          <el-badge v-if="flag&&faultFlag" :value="order.orderNum" :max="99" >
-            <div @click="faultFault">{{$t('base.workOrder')}}</div>
-          </el-badge>
         </div>
         <div class="layout-header-menus">
           <el-menu :default-active="operationIndex"  class="el-menu--transparent skin" mode="horizontal" @select="onOperationSelect" menu-trigger="hover">
@@ -100,9 +93,7 @@
           backgroundImage: `url(${logoSmall})`
         },
         smallLogFlag: false,
-        flag:Vue.roleType != "3",
-        orderFlag:Vue.AuthList["m.operationmanage.orderapprove"] && Vue.service['leo'],
-        faultFlag:Vue.AuthList["m.operationmanage.fault"] && Vue.service['leo'],
+        flag: Vue.roleType !== "3",
         roleType:Vue.roleType,
         loading:false,
         activeName: '',
@@ -249,9 +240,6 @@
       }
     },
     async mounted () {
-      if (Vue.roleType == "0" || Vue.roleType == "2") {
-        this.getOrderNum();
-      };
       if (this.commands.length==0) {
         this.$router.push({
           path: '/projectApply'
@@ -287,68 +275,6 @@
           this.operationMenus[0].subMenus[0].flg = false;
           this.operationMenus[0].subMenus[1].flg = false;
         }
-      },
-      async getOrderNum () {
-        if (!Vue.service['leo']) { // 不部署时，不请求
-          return;
-        }
-        var self = this;
-        var approverId = Vue.userId;
-        var projectId = "";
-        if (Vue.roleType == "0") {
-          projectId = "";
-        } else {
-          projectId = this.$cookie.get('pid');
-        };
-        var params = {
-          "approver_id": approverId,
-          "role_type": Vue.roleType,
-          "project_id": projectId
-        };
-        params = JSON.stringify(params);
-        var approvingOrderNum;
-        var approvingFaultNum;
-        try {
-          let ret = await self.$ajax({
-            type: "PUT",
-            data: params,
-            polling: true,
-            url: "api/leo/v1/order/get_approve_order_amount"
-          });
-          approvingOrderNum = ret.data.flow_order_approve_amount;
-          approvingFaultNum = ret.data.work_order_approve_amount;
-        } catch (res) {
-          console.log("获取待审批订单统计数目失败");
-        };
-        self.setOrderInfo({faultNum: approvingOrderNum, orderNum: approvingFaultNum});
-      },
-      getInteligentData() {
-        let me = this;
-        let ret = this.$ajax({
-          type: 'get',
-          url: "api/pluto/v1/alert/summary",
-          successFun(data) {
-            me.intelligentData = data.alert_info;
-          }
-        })
-      },
-      flowDeal() {
-        this.$router.push({
-          path: '/operations/flow'
-        });
-      },
-      faultFault() {
-        this.$router.push({
-          path: '/operations/fault'
-        });
-      },
-      checkStyleActive(style) {
-        this.operationMenus[2].subMenus.forEach((item, index) => {
-          item.isActive = false;
-          if (item.key === style) {
-            item.isActive = true;
-          }
-        });
       },
       async onOperationSelect(index, indexPath, vm) {
         let me = this;
@@ -398,21 +324,6 @@
               __DEV__ && console.warn(data);
             }
             break;
-          case 'helpBook':
-            window.open('/static/pdfjs/web/viewhelp.html?arch='+Vue.arch, '_blank');
-            break;
-          case 'sceneBase':
-            const PORT_SCENCE = '8200';
-            let host = window.location.host;
-            let path = "";
-            let port = window.location.port;
-            if (port) {
-              path = 'http://' + host.split(port)[0] + PORT_SCENCE;
-            } else {
-              path = 'http://' + host + ":" + PORT_SCENCE;
-            }
-            window.open(path);
-            break;
           case 'user-info':
             this.userMessageFlg = true;
             this.$nextTick(() => {
@@ -439,11 +350,6 @@
             break;
           default:
         }
-        if (['light', 'dark', 'blue'].indexOf(index) >= 0) {
-          this.$cookie.set('theme', index, { expires: '1D' });
-          this.checkStyleActive(index);
-          window.location.reload();
-        }
         if (["virtualResource", "physicalResource", "digitalVisualizationScreen"].indexOf(index)>=0) {
           let width = screen.availWidth;
           let height = screen.availHeight;
@@ -463,7 +369,6 @@
         }
       },
       handleChange(value) {
-        console.log(value);
         this.loading = true;
         this.commandSelected = value;
         let pid = value;
