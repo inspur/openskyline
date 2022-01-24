@@ -560,7 +560,7 @@ export default {
     emailWarn: "请填写正确的邮箱",
     frequencyCheck: "请检查频率是否为10~36000的整数",
     thresholdCheck: "请检查阈值是否符合阈值范围规则",
-    noRoleWarn: "你目前没有任何角色及权限，可以通过申请一个项目成为项目管理员。",
+    noRoleWarn: "你目前没有任何角色及权限，请联系管理员。",
     applySuccess: "申请成功",
     createQuotaPrompt: "创建项目时,所有Region环境都会创建以下配额。各Region下单独维护配额",
     alarm: "告警",

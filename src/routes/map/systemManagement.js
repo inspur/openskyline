@@ -160,12 +160,6 @@ const networkServer = resolve => {
   }, 'networkServer');
 }
 
-const serialNumber = resolve => {
-  require.ensure(['views/systemManagement/serialNumber/index.vue'], () => {
-    resolve(require('views/systemManagement/serialNumber/index.vue'));
-  }, 'serialNumber');
-}
-
 const parameterSetting = resolve => {
   require.ensure(['views/systemManagement/parameterSetting/ParameterSetting.vue'], () => {
     resolve(require('views/systemManagement/parameterSetting/ParameterSetting.vue'));
@@ -421,15 +415,6 @@ const routes = [{
         ipBlackList
       }
     }]
-  }, {
-    name: 'serialNumber',
-    path: 'serialNumber',
-    alias: '/',
-    component: serialNumber,
-    flg: Vue.AuthList["m.systemmanage.serialnumber"],
-    meta: {
-      des: "base.serialNumberManagement"
-    }
   }, {
     name: 'parameterSetting',
     path: 'parameterSetting',

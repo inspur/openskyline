@@ -3,14 +3,11 @@ import projectApply from './projectApply';
 import calculateStorageRoutes from './calculateStorage';
 import networkRoutes from './network';
 import databaseRouters from './database';
-import containerRouters from './container';
 import serviceOrchestrationRoutes from './serviceOrchestration';
 import scalingService from './scalingService';
-import operRoutes from './operations';
 import workFlowRouters from './workflow';
 import intelligentMonitoring from './intelligentMonitoring';
 import operationAnalysis from './operationAnalysis';
-import cloudDataRoutes from './cloudData';
 import systemManagement from './systemManagement';
 import menus from '../../views/menus/index.js';
 let menusArr = menus.call(Vue);
@@ -20,11 +17,8 @@ var routes = [
   ...calculateStorageRoutes,
   ...networkRoutes,
   ...databaseRouters,
-  ...containerRouters,
-  ...cloudDataRoutes,
   ...serviceOrchestrationRoutes,
   ...scalingService,
-  ...operRoutes,
   ...workFlowRouters,
   ...intelligentMonitoring,
   ...operationAnalysis,

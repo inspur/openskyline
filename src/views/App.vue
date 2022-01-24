@@ -245,11 +245,6 @@
           path: '/projectApply'
         });
       }
-      this.checkPasswordExpired();
-      if (this.roleType === '0') {
-        await this.checkLicenseExpired();
-        await this.checkMaintenanceExpired();
-      }
     },
     methods: {
       ...mapMutations({
@@ -415,115 +410,6 @@
         } catch (e) {
           __DEV__ && console.error(e);
         }
-      },
-      // 检查试用版序列号是否不足30天
-      async checkLicenseExpired() {
-        const $this = this;
-        try {
-          const res = await $this.$ajax({
-            type: 'get',
-            showErrMsg: false,
-            url: 'api/keystone/v3/inspur/serialnumber'
-          });
-          $this.licenseInfo.nodeAmount = res.sn_detail.node_num;
-          if (res.sn_list.findIndex(item => item.type === 'formal_license') !== -1) {
-            $this.licenseInfo.trialEdition = false;
-          }
-          const licenseNoLongRemain = $this.$cookie.get('icosLicenseNoLongRemain');
-          if (licenseNoLongRemain !== 'true') {
-            if ('left_days' in res.sn_detail) {
-              const leftDays = res.sn_detail.left_days;
-              if (leftDays < 30 && leftDays >= 0) {
-                const h = $this.$createElement;
-                const notify = $this.$notify.warning({
-                  title: $this.$t('base.SERIAL_NUMBER_NOTIFY_DUE'),
-                  message: h('div', [$this.$t('base.SERIAL_NUMBER_NOTIFY_PRODUCT_DUE', leftDays), h('el-button', {
-                    attrs: {
-                      type: 'text'
-                    },
-                    style: {
-                      padding: '2px'
-                    },
-                    on: {
-                      click() {
-                        $this.$cookie.set('icosLicenseNoLongRemain', 'true');
-                        notify.close();
-                      }
-                    }
-                  }, $this.$t('base.SERIAL_NUMBER_NOTIFY_NO_LONG_REMAIN'))]),
-                  duration: 0
-                });
-              }
-            }
-          }
-        } catch (e) {
-          __DEV__ && console.error(e);
-        }
-      },
-      // 检查维保序列号是否余量不足，不足则提示
-      async checkMaintenanceExpired() {
-        const $this = this;
-        const maintenanceExpiredNoLongRemain = $this.$cookie.get('icosMaintenanceExpiredNoLongRemain');
-        const maintenanceAlmostExpiredNoLongRemain = $this.$cookie.get('icosMaintenanceAlmostExpiredNoLongRemain');
-        if (!$this.licenseInfo.trialEdition) {
-          try {
-            const res = await $this.$ajax({
-              type: 'get',
-              showErrMsg: false,
-              url: `api/keystone/v3/inspur/maintenancenumber`
-            });
-            let maintenanceDays = res.info.maintenance / $this.licenseInfo.nodeAmount;
-            maintenanceDays = Math.floor(maintenanceDays);
-
-            let cookieKey = '';
-            let notifyTitle = '';
-            let notifyMessage = '';
-            if (maintenanceDays < 0 && maintenanceExpiredNoLongRemain !== 'true') {
-              cookieKey = 'icosMaintenanceExpiredNoLongRemain';
-              notifyTitle = $this.$t('base.SERIAL_NUMBER_NOTIFY_EXPIRED');
-              notifyMessage = $this.$t('base.SERIAL_NUMBER_NOTIFY_MAINTENANCE_EXPIRED');
-            } else if (maintenanceDays >= 0 && maintenanceDays < 30 && maintenanceAlmostExpiredNoLongRemain !== 'true') {
-              cookieKey = 'icosMaintenanceAlmostExpiredNoLongRemain';
-              notifyTitle = $this.$t('base.SERIAL_NUMBER_NOTIFY_DUE');
-              notifyMessage = $this.$t('base.SERIAL_NUMBER_NOTIFY_MAINTENANCE_DUE', maintenanceDays);
-            }
-
-            if (cookieKey !== '') {
-              const h = $this.$createElement;
-              const notify = $this.$notify.warning({
-                title: notifyTitle,
-                message: h('div', [notifyMessage, h('el-button', {
-                  attrs: {
-                    type: 'text'
-                  },
-                  style: {
-                    padding: '2px'
-                  },
-                  on: {
-                    click() {
-                      $this.$cookie.set(cookieKey, 'true');
-                      notify.close();
-                    }
-                  }
-                }, $this.$t('base.SERIAL_NUMBER_NOTIFY_NO_LONG_REMAIN'))]),
-                duration: 0
-              });
-            }
-            $this.maintenanceCal();
-          } catch (e) {
-            __DEV__ && console.error(e);
-          }
-        }
-      },
-      // 自动触发维保序列号剩余时间计算，以防止自动计算数据被篡改
-      async maintenanceCal() {
-        const $this = this;
-        await $this.$ajax({
-          type: 'post',
-          showErrMsg: false,
-          url: 'api/keystone/v3/inspur/maintenancenumber/cal',
-          data: JSON.stringify({})
-        });
       },
       handleStartPageShow() {
         this.$router.push({

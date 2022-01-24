@@ -1,25 +1,19 @@
 <template>
   <div style="padding: 10px 16px">
-    <div style="text-align:right">
-      <div v-if="roleType == 0 && pimParams.switch == true" id="pim-area">
-        <el-button type="text" @click="gotoPIM" :loading="pimParams.loggingInPIM">{{ $t('base.pimButton') }}</el-button>
-      </div>
-    </div>
-      <el-carousel :id="'carousel' + theme" style="z-index: 0;"
-        :height="tempHeight"
-        :autoplay="false"
-        trigger="click"
-        v-if="roleType==0"
-        @change="carouselChange"
-        indicator-position="outside"
-        arrow="always"
-        :initial-index="0">
-        <el-carousel-item name="one">
-          <router-view name="startPageOne" ref="pageone" :tempHeight="tempHeight"></router-view>
-        </el-carousel-item>
-      </el-carousel>
-      <router-view v-if="roleType==2" name="startPageProject"></router-view>
-      <router-view v-if="roleType==3" name="startPageMember"></router-view>
+    <el-carousel :id="'carousel' + theme" style="z-index: 0;"
+      :height="tempHeight"
+      :autoplay="false"
+      trigger="click"
+      v-if="roleType==0"
+      @change="carouselChange"
+      indicator-position="outside"
+      arrow="always"
+      :initial-index="0">
+      <el-carousel-item name="one">
+        <router-view name="startPageOne" ref="pageone" :tempHeight="tempHeight"></router-view>
+      </el-carousel-item>
+    </el-carousel>
+    <router-view v-if="roleType=='2'" name="startPageProject"></router-view>
   </div>
 </template>
 <script>
@@ -42,12 +36,7 @@ import moment from "moment";
         }
       };
     },
-    computed: {
-    },
     mounted () {
-      if (this.roleType + '' == "0") {
-         this.loadPIM();
-      }
       this.getServerTime();
     },
     beforeRouteLeave (to, from, next) {
@@ -84,44 +73,6 @@ import moment from "moment";
           this.$nextTick(() => {
             this.tempHeight = this.$refs.pagefour.tempHeight + "px";
           });
-        }
-      },
-      loadPIM() {
-        const $this = this;
-        let ret = $this.$ajax({
-          type: 'get',
-          url: `node-api/pim/settings`,
-          successFun(data) {
-            $this.pimParams = Object.assign($this.pimParams, data);
-          }
-        })
-      },
-      async gotoPIM() {
-        const $this = this;
-        $this.pimParams.loggingInPIM = true;
-        try {
-          let res = await this.$ajax({
-            type: 'post',
-            url: 'node-api/pim/login',
-            timeout: 5000,
-            data: JSON.stringify({}),
-            showErrMsg: false
-          });
-          if (res.code === '0') {
-            window.open(`${$this.pimParams.urlProtocol}://${$this.pimParams.ip}:${$this.pimParams.urlPort}/ued/auth.html?token=${res.data.token}`)
-          } else {
-            this.$message({
-              type: 'error',
-              message: res.msg
-            });
-          }
-          $this.pimParams.loggingInPIM = false;
-        } catch (e) {
-          $this.$notify.error({
-            title: Vue.t('base.pimError'),
-            message: Vue.t('base.pimTimeout')
-          });
-          $this.pimParams.loggingInPIM = false;
         }
       },
       async getServerTime() {
