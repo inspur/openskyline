@@ -966,14 +966,14 @@ export default {
       }
     },
     async getProjectNum() {
-      var param = {limit:9999, page:1, domain_id:"default"};
+      var param = {limit:999999, page:1, domain_id:"default"};
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/projects?" + $.param(param),
+        url: "api/keystone/v3/projects?" + $.param(param),
         showErrMsg:false
       });
       this.loading.row1.projectNum = false;
-      this.projectNum = ret.total;
+      this.projectNum = ret.projects.length;
       this.projectList = [];
       for (let i=0; i<ret.projects.length; i++) {
         let project = ret.projects[i];
@@ -1001,11 +1001,11 @@ export default {
       let param = {limit:1, page:1, domain_id:"default"};
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+ $.param(param),
+        url: "api/keystone/v3/users?"+ $.param(param),
         showErrMsg:false
       })
       this.loading.row1.userNum = false;
-      this.userNum = ret.total;
+      this.userNum = ret.users.length;
     },
     async getNetWorkNum() {
       let self = this;
@@ -1056,7 +1056,7 @@ export default {
     async getVMData() {
       let vmResult = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/detail?all_tenants=1&limit=1",
+        url: "api/nova/v2.1/servers/detail?all_tenants=1&limit=1",
         headers: {
           'X-OpenStack-Nova-API-Version': 2.67
         }
