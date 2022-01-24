@@ -2,8 +2,6 @@ import startPage from './startPage';
 import calculateStorage from './calculateStorage';
 import network from './network';
 import database from './database';
-import container from './container';
-import cloudData from "./cloudData";
 import operationManage from './operations';
 import serviceOrchestration from './serviceOrchestration';
 import scalingService from './scalingService';
@@ -18,8 +16,6 @@ module.exports = function() {
     calculateStorage.bind(this)(),
     network.bind(this)(),
     database.bind(this)(),
-    container.bind(this)(),
-    cloudData.bind(this)(),
     serviceOrchestration.bind(this)(),
     scalingService.bind(this)(),
     operationManage.bind(this)(),

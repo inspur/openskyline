@@ -12,7 +12,6 @@ import sortFormatter from './sortFormatter';
 import isJSON from './isJSON';
 import computeStrWidth from './computeStrWidth';
 import directives from './directives';
-import convertRoleByLanguage from './convertRoleByLanguage';
 import stringToDate from './stringToDate';
 import archIs from './archIs';
 import util from './util';
@@ -30,7 +29,6 @@ const components = {
   isJSON,
   computeStrWidth,
   directives,
-  convertRoleByLanguage,
   stringToDate,
   archIs
 };
