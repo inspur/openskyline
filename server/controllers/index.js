@@ -119,12 +119,12 @@ exports.middlewares = function (router) {
       let roleId = '';
       let adminRole = roles.find(item => item.name === 'admin');
       if (adminRole) {
-        roleType = 0;
+        roleType = '0';
         roleId = adminRole.id;
       } else {
         let memberRole = roles.find(item => item.name === 'member');
         if (memberRole) {
-          roleType = 2;
+          roleType = '2';
           roleId = memberRole.id;
         }
       }
@@ -135,6 +135,7 @@ exports.middlewares = function (router) {
       res.cookie('roleType', String(roleType));
       res.cookie('roleId', roleId);
       req.session['pid'] = projectId;
+      req.session['roleType'] = String(roleType);
       req.session['roleId'] = roleId;
 
       // 获取菜单
