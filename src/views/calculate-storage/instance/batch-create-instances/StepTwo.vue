@@ -91,7 +91,7 @@
       </div>
       <span slot="footer">
         <el-button @click="close" :disabled="saving">{{ $t('calcStorLang.BATCH_CREATE_INSTANCE_CLOSE') }}</el-button>
-        <el-button type="primary" @click="checkQuota" :disabled="loading || instances.length === 0" :loading="saving">{{ $t('calcStorLang.BATCH_CREATE_INSTANCE_SUBMIT') }}</el-button>
+        <el-button type="primary" @click="submit" :disabled="loading || instances.length === 0" :loading="saving">{{ $t('calcStorLang.BATCH_CREATE_INSTANCE_SUBMIT') }}</el-button>
       </span>
     </el-dialog>
 
@@ -305,7 +305,7 @@ export default {
       try {
         let res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/inspur-availability-zone/detail`
+          url: `api/nova/v2.1/os-availability-zone/detail`
         });
         let az = res.availabilityZoneInfo;
         az = az.filter(item => item.zoneName !== 'ironic');
@@ -336,7 +336,7 @@ export default {
       try {
         let res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/flavors-inspur/detail?project_id=${$this.projectId}`
+          url: `api/nova/v2.1/flavors/detail?project_id=${$this.projectId}`
         });
         let flavors = res.flavors;
         flavors = flavors.filter(item => !item.name.startsWith('Bare@'));
@@ -352,12 +352,8 @@ export default {
       let $this = this;
       try {
         let res = await $this.$ajax({
-          type: 'post',
-          url: `api/glance/v2/images/list?limit=99999&status=active`,
-          data: JSON.stringify({
-            project_id: $this.projectId,
-            user_id: $this.userId
-          })
+          type: 'get',
+          url: `api/glance/v2/images?limit=99999&status=active`
         });
         let images = res.images;
         images = images.filter(item => {
@@ -433,17 +429,7 @@ export default {
       }
     },
     async loadNetworkType() {
-      const $this = this;
-      try {
-        const res = await $this.$ajax({
-          type: 'get',
-          url: `api/neutron/v2.0/inspur/networkext/querynetworktype`,
-          showErrMsg: true
-        });
-        $this.networkTypes = res.support_networktype;
-      } catch (e) {
-        __DEV__ && console.error(e);
-      }
+      this.networkTypes = ['flat', 'vlan', 'vxlan', 'gre'];
     },
     getHosts(azName) {
       const $this = this;
@@ -519,20 +505,21 @@ export default {
       }
     },
     async checkIPInRange(ip, netId) {
-      const $this = this;
-      try {
-        let result = await $this.$ajax({
-          type: 'post',
-          url: 'api/neutron/v2.0/inspur/networkextension/validate_ip_in_net',
-          data: JSON.stringify({
-            ip, netId
-          }),
-          showErrMsg: true
-        });
-        return result;
-      } catch (res) {
-        return false;
-      }
+      // const $this = this;
+      // try {
+      //   let result = await $this.$ajax({
+      //     type: 'post',
+      //     url: 'api/neutron/v2.0/inspur/networkextension/validate_ip_in_net',
+      //     data: JSON.stringify({
+      //       ip, netId
+      //     }),
+      //     showErrMsg: true
+      //   });
+      //   return result;
+      // } catch (res) {
+      //   return false;
+      // }
+      return true;
     },
     async checkQuota() {
       const $this = this;
