@@ -1386,14 +1386,5 @@ module.exports = function() {
       $this.cpuPinDialog.instance = instance;
       $this.cpuPinDialog.visible = true;
     }.bind(this)
-  }, {
-    icon: "fa-check-circle-o",
-    name: Vue.t('calcStorLang.INSTANCE_AUDIT_AUDIT'),
-    showflg: String(Vue.roleType) === '0',
-    readOnly: true,
-    operateMore: true,
-    handler: function(selectRows) {
-      this.auditDialog.visible = true;
-    }.bind(this)
   }];
 };

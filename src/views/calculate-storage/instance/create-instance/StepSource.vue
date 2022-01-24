@@ -141,6 +141,7 @@ import SourceVolume from './source/SourceVolume';
 import SourceVolumeSnapshot from './source/SourceVolumeSnapshot';
 import SourceSnapshot from './source/SourceSnapshot';
 import SourceBackup from './source/SourceBackup';
+import { getUsersByProjectId } from '../../../../utils/common';
 export default {
   name: 'StepSource',
   props: {
@@ -288,11 +289,9 @@ export default {
     async loadUsers() {
       const $this = this;
       try {
-        const res = await $this.$ajax({
-          type: 'get',
-          url: `api/keystone/v3/role_assignments?scope.project.id=${$this.formData.projectId}`
-        });
-        $this.users = res.users.map(item => item.user);
+        const users = await getUsersByProjectId($this.formData.projectId);
+        console.log(users);
+        $this.users = users;
         if ($this.users.findIndex(item => item.id === $this.formData.userId) === -1) {
           $this.formData.userId = '';
         }
@@ -314,15 +313,6 @@ export default {
       this.formData.disk = disk;
       this.formData.flavorId = flavorId;
       this.formData.networks = networks;
-    },
-    async loadInspurConfigs() {
-      const $this = this
-      const res = await $this.$ajax({
-        type: 'get',
-        url: `api/nova/v2.1/inspur-configs`
-      });
-      $this.systemsSupportHotPlug = [];
-      $this.systemsSupportHotPlug = Object.keys(res);
     },
     async loadVolumeTypes() {
       const $this = this;
@@ -374,7 +364,6 @@ export default {
   },
   async mounted() {
     const $this = this;
-    $this.loadInspurConfigs();
     if ($this.roleType === '0') {
       $this.loadProjects();
     } else {
@@ -397,11 +386,6 @@ export default {
   },
   computed: {
     canHotplug() {
-      // if (this.formData.sourceType === 'snapshot') {
-      //   if (this.formData.sourceSize === 0) {
-      //     return false;
-      //   }
-      // }
       return this.systemsSupportHotPlug.includes(this.formData.sourceOSDistro);
     },
     canCreateVolume() {

@@ -119,7 +119,7 @@
                         <td class="idatatd">
                           <span>{{flavorDetailStatusRender(flavorDetailEntity)}}</span>
                         </td>
-                      </tr> 
+                      </tr>
                   </tbody>
                 </table>
               </div>
@@ -213,7 +213,6 @@
         <reset-instance v-if="resetInstanceDialog.visible" :instances="resetInstanceDialog.instances" @close="resetInstanceDialog.visible = false;" @refresh="onRefresh" />
         <device-management v-if="deviceManagementDialog.visible" :instances="deviceManagementDialog.instances" @close="deviceManagementDialog.visible = false;" @refresh="onRefresh" />
         <cpu-pin v-if="cpuPinDialog.visible" :instance="cpuPinDialog.instance" @close="cpuPinDialog.visible = false" @refresh="onRefresh" />
-        <audit v-if="auditDialog.visible" @close="auditDialog.visible = false" />
         <instance-clone v-if="instanceCloneDialog.visible" :instances="instanceCloneDialog.instances" @close="instanceCloneDialog.visible = false" />
         <delete-instances v-if="deleteInstancesDialog.visible" :instances="deleteInstancesDialog.instances" @close="deleteInstancesDialog.visible = false" @refresh="onRefresh" />
         <batch-direct-connection v-if="batchDeviceManagementDialog.visible" :instances="batchDeviceManagementDialog.instances" @close="batchDeviceManagementDialog.visible = false" @refresh="onRefresh" />
@@ -229,7 +228,7 @@
             </panel>
           </div>
         </transition>
-      </div>    
+      </div>
     </icos-page>
   </div>
 </template>
@@ -261,10 +260,10 @@ import DeviceManagement from './device-management/index';
 import CreateInstance from './create-instance/index';
 import CPUPin from './cpu-pin';
 import SelectNetcard from './SelectNetCard';
-import Audit from './Audit';
 import InstanceClone from './instance-clone/index';
 import DeleteInstances from './DeleteInstances';
 import BatchDirectConnection from './device-management/batch-direct-connection'
+import { getUsers, getUsersByProjectId } from '../../../utils/common';
 export default {
   name: "Instances",
   components: {
@@ -288,7 +287,6 @@ export default {
     ResetInstance,
     DeviceManagement,
     'cpu-pin': CPUPin,
-    Audit,
     InstanceClone,
     DeleteInstances,
     BatchDirectConnection
@@ -904,7 +902,7 @@ export default {
       try {
         let result = await $this.$ajax({
           type: 'get',
-          url: 'api/nova/v2.1/inspur-availability-zone/detail'
+          url: 'api/nova/v2.1/os-availability-zone/detail'
         });
         let list = result['availabilityZoneInfo'];
         let zones = [];
@@ -912,7 +910,7 @@ export default {
           for (let z = 0; z < list.length; z++) {
             let zone = list[z];
             let zoneState = zone['zoneState'];
-            if (zone['zoneName'] != "internal" && zoneState['available'] == true) {
+            if (zone['zoneName'] != "internal") {
               let arr = $this.loadZoneAndHostCompare(zone.hosts);
               if (arr.length > 0) {
                 zones.push(zone);
@@ -1632,7 +1630,7 @@ export default {
       const $this = this;
       const res = await $this.$ajax({
         type: 'get',
-        url: 'api/nova/v2.1/os-hypervisors-inspur/detail'
+        url: 'api/nova/v2.1/os-hypervisors/detail'
       });
       let hosts = res.hypervisors.filter(item => item.hypervisor_type !== 'ironic');
       hosts = _.sortBy(hosts, 'hypervisor_hostname');
@@ -1786,21 +1784,11 @@ export default {
     },
     async loadFilteredUsers(projectId) {
       const $this = this;
-      let url = `api/keystone/v3/inspur/users?dir=asc&field=name&domain_id=default`;
-      if (projectId !== '') {
-        url = `api/keystone/v3/inspur/assignments/projects/${projectId}/users`;
-      }
-      const res = await $this.$ajax({
-        type: 'get',
-        url
-      });
       let users = [];
       if (projectId === '') {
-        users = res.users;
+        users = await getUsers();
       } else {
-        users = res.users.map(item => {
-          return item.user;
-        });
+        users = await getUsersByProjectId(projectId);
       }
       if ($this.userMaps.size === 0) {
         users.forEach(item => {
