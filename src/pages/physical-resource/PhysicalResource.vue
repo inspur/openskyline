@@ -3,7 +3,7 @@
 <script>
 import * as utils from 'utils/index.js';
 import vueLocal from "../../locale";
-import IEcharts from 'vue-echarts-v3/src/full.vue';
+import IEcharts from 'vue-echarts-v3/src/full.js';
 import calculateIco from 'assets/img/bigScreen/calculate_ico.png';
 import storage from 'assets/img/bigScreen/storage.png';
 import Page from '../../components/page/Page.vue'

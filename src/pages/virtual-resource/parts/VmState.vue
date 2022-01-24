@@ -26,12 +26,12 @@
             </ul>
           </el-col>
         </el-row>
-        
+
       </div>
   </div>
 </template>
 <script>
-import IEcharts from 'vue-echarts-v3/src/full.vue';
+import IEcharts from 'vue-echarts-v3/src/full.js';
 export default {
   name:"",
   components:{
