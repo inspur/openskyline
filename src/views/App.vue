@@ -14,7 +14,7 @@
             </el-option>
           </el-select>
           <el-select v-model="commandSelected" filterable size="small" @change="handleChange" style="width:120px;">
-            <el-option v-for="item in commands" :key="item.uuid" :label="item.name" :value="item.uuid">
+            <el-option v-for="item in commands" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
           <!-- <div class="main-page-t-img main-page-t-serious"></div> -->
@@ -81,9 +81,6 @@
 <script>
   import logoImageBig from 'assets/img/logo-big.png';
   import logoSmall from 'assets/img/logo-small.png';
-  import projectImage from 'assets/img/1.png'
-  import projectImage1 from 'assets/img/2.png'
-  import projectImage2 from 'assets/img/3.png'
   import menus from './menus/index.js';
   import { mapGetters, mapMutations } from 'vuex';
   import UserMessage from './topDialog/UserMessage'
@@ -111,29 +108,9 @@
         activeName: '',
         activeOpeneds: ['project'],
         operationIndex: "",
-        projectImage: projectImage,
-        projectImage1: projectImage1,
-        projectImage2: projectImage2,
         iconSize: "icon-size-14",
-        commands: (function(me) {
-          Vue.projectList.forEach((item, key) => {
-            if (item.roleType==0) {
-              item.name = me.$t('base.ALL_PROJECTS');
-            }
-          });
-          return Vue.projectList;
-        }(this)),
-        commandSelected: (function() {
-          var selCommand = '';
-          Vue.projectList.forEach((item, key) => {
-            if (item.active) {
-              selCommand = item.uuid;
-              Vue.pid_roleType = item.uuid;
-              Vue.project_name = item.name;
-            }
-          });
-          return selCommand;
-        }()),
+        commands: Vue.projectList,
+        commandSelected: this.$cookie.get('pid'),
         regions:Vue.regionList,
         regionValue:(function() {
           var value = '';
@@ -486,11 +463,12 @@
         }
       },
       handleChange(value) {
+        console.log(value);
         this.loading = true;
         this.commandSelected = value;
-        let pid = value.substring(0, value.length-2);
+        let pid = value;
         this.$cookie.set("pid", pid, { expires: '1D' });
-        this.$cookie.set("roleType", value.substring(value.length-1), { expires: '1D' });
+        // this.$cookie.set("roleType", value.substring(value.length-1), { expires: '1D' });
         this.$cookie.set("switch", "project", { expires: '1D' });
         this.getProjectToken(pid);
       },

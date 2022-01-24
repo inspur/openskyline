@@ -102,8 +102,7 @@ exports.middlewares = function (router) {
       let projects = (await getProjects(endpoint, unscopedToken)).projects;
       let projectId = '';
       if (projects.length > 0) {
-        projectId = projects[0].id;
-        projects[0].active = true;
+        projectId = req.cookies['pid'] ? req.cookies['pid'] : projects[0].id;
       }
       // 通过项目获取pToken，并且获取roleId和roleType
       let { body: tokenBody, response: tokenResponse } = await getScopedToken(endpoint, unscopedToken, projectId);
