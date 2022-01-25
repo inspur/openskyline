@@ -401,10 +401,10 @@ import loadbalanceImage from 'assets/img/startPageOne/balance.png';
 import databaseImage from 'assets/img/startPageOne/database.png';
 import kbclusterImage from 'assets/img/startPageOne/kbcluster.png';
 import echarts from 'echarts';
-import md5 from 'js-md5';
 import formatFileSize from 'utils/formatFileSize';
-const chartColors = ['#0087ed', '#26A69A', "#2fc25b", "#faad14", "#f04864"];
 import Dashboard from './components/Dashboard';
+import _ from 'underscore';
+const chartColors = ['#0087ed', '#26A69A', "#2fc25b", "#faad14", "#f04864"];
 export default {
   components: {
     Dashboard
@@ -1245,34 +1245,63 @@ export default {
     },
     async getStoragePieChartData() {
       let self = this;
-      let ret = await this.$ajax({
+      let res = await self.$ajax({
         type: 'get',
-        url: "api/cinder/v3/" + self.$cookie.get('pid') + "/inspur-quota",
+        url: `api/cinder/v3/${self.$cookie.get('pid')}/volumes/detail?all_tenants=True`,
         showErrMsg:false
       });
       // 第二行 存储饼图
-      let storageData = [];
-      let ohterstorage = ret.other;
-      for (let i=0; i<ret["highest"].length; i++) {
-        let item = ret["highest"][i];
-        let allocate = item["allocate"];
-        for (let j=0; j<self.projectList.length; j++) {
-          if (item["project_id"] == self.projectList[j]["id"]) {
-            let storage = {name:self.projectList[j]["name"], value:allocate}
-            storageData.push(storage);
-          }
+      const volumeSizeData = [];
+      for (let volume of res.volumes) {
+        const projectId = volume['os-vol-tenant-attr:tenant_id'];
+        const data = volumeSizeData.find(item => item.projectId === projectId);
+        if (!data) {
+          const project = this.projectList.find(item => item.id === projectId);
+          volumeSizeData.push({
+            projectId: projectId,
+            name: project.name,
+            value: volume.size
+          });
+        } else {
+          data.value += volume.size;
         }
       }
-      storageData.push({name: Vue.t('base.other'), value: ohterstorage});
-      this.optionPieStorage.series[0].data = storageData;
-      let storageLegend = [];
-      for (let i=0; i<storageData.length; i++) {
-        if (storageData[i]["value"] != 0) {
-          let projectname = storageData[i]["name"];
-          storageLegend.push(projectname);
-        }
+      _.sortBy(volumeSizeData, 'value');
+      if (volumeSizeData.length > 4) {
+        const otherSize = _.reduce(_.rest(volumeSizeData, 3), function(memo, num) { return memo + num; }, 0);
+        volumeSizeData.splice(4);
+        volumeSizeData.push({
+            projectId: 'other',
+            name: Vue.t('base.other'),
+            value: otherSize
+        });
       }
-      this.optionPieStorage.legend.data = storageLegend;
+
+      // let ohterstorage = ret.other;
+      // for (let i=0; i<ret["highest"].length; i++) {
+      //   let item = ret["highest"][i];
+      //   let allocate = item["allocate"];
+      //   for (let j=0; j<self.projectList.length; j++) {
+      //     if (item["os-vol-tenant-attr:tenant_id"] == self.projectList[j]["id"]) {
+      //       let storage = {
+      //         name: self.projectList[j]["name"],
+      //         value:allocate
+      //       };
+      //       storageData.push(storage);
+      //     }
+      //   }
+      // }
+      // storageData.push({name: , value: ohterstorage});
+      // this.optionPieStorage.series[0].data = storageData;
+      // let storageLegend = [];
+      // for (let i=0; i<storageData.length; i++) {
+      //   if (storageData[i]["value"] != 0) {
+      //     let projectname = storageData[i]["name"];
+      //     storageLegend.push(projectname);
+      //   }
+      // }
+      this.optionPieStorage.series[0].data = volumeSizeData;
+      this.optionPieStorage.legend.data = volumeSizeData.map(item => item.name);
       this.loading.row2.storage = false;
     },
     async getResourceUtilization() {
