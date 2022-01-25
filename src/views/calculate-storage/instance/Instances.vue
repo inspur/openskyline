@@ -59,7 +59,7 @@
               </div>
             </el-popover>
             <el-button v-popover:sourceDetailPop type="text" size="small" @click="sourceDetailTip(scope.row)">
-              <span v-html="imageRender2(scope.row.mirrorName, scope.row)"></span>
+              <instance-source :instance="scope.row" />
             </el-button>
           </template>
         </el-table-column>
@@ -263,6 +263,7 @@ import SelectNetcard from './SelectNetCard';
 import InstanceClone from './instance-clone/index';
 import DeleteInstances from './DeleteInstances';
 import BatchDirectConnection from './device-management/batch-direct-connection'
+import InstanceSource from './InstanceSource'
 import { getUsers, getUsersByProjectId } from '../../../utils/common';
 export default {
   name: "Instances",
@@ -289,7 +290,8 @@ export default {
     'cpu-pin': CPUPin,
     InstanceClone,
     DeleteInstances,
-    BatchDirectConnection
+    BatchDirectConnection,
+    InstanceSource
   },
   data() {
     return {
@@ -370,7 +372,7 @@ export default {
       sourceDetailEntity: '',
       formatFileSize:formatFileSize,
       zoneOptions: [],
-      isShowTip:(navigator.userAgent.indexOf("Chrome") > 0),
+      isShowTip: true,
       columns: [{
         prop: "console",
         label: Vue.t('calcStorLang.console'),
@@ -1270,7 +1272,7 @@ export default {
       var sourceTempType = ""; //创建出云主机类型（非选择的source类型） 1: 镜像 2: 云硬盘 3：云硬盘快照 4：云主机快照
       self.templateMaps.set(rowData['id'], sourceTempType);
       if (typeof imageId == "undefined") {
-        var isVolumeOrSnap = rowData['os-extended-volumes-inspur:volumes_attached'];
+        var isVolumeOrSnap = rowData['os-extended-volumes:volumes_attached'];
         if (isVolumeOrSnap != "" && typeof isVolumeOrSnap != "undefined") {
           var vUuid = isVolumeOrSnap[0].id;
           var isVolumeFlag = self.volumeMaps.get(vUuid);
@@ -1307,31 +1309,6 @@ export default {
         }
       }
     },
-    imageRender2(value, rowData) {
-      var self = this;
-      var type = rowData['metadata']['source_type'];
-      var sourceId = "";
-      var sourceShow = "";
-      if ("image" == type) {
-        sourceId = rowData['image'].id;
-        return Vue.t('calcStorLang.image') + "(" + sourceId + ")";
-      } else if ("snapshot" == type) {
-        sourceId = rowData['image'].id;
-        return Vue.t('calcStorLang.instanceshot') + "(" + sourceId + ")";
-      } else if ("volume" == type) {
-        var volumeList = rowData['os-extended-volumes-inspur:volumes_attached'];
-        for (let v = 0; v < volumeList.length; v++) {
-          var obj = volumeList[v];
-          if ((obj['boot_disk'] + "") == "true") {
-            sourceId = obj.id;
-            break;
-          }
-        }
-        return Vue.t('calcStorLang.volume') + "(" + sourceId + ")";
-      } else {
-        return "-";
-      }
-    },
     sourceDetailTip(row) {
       var self = this;
       self.popoverFlag = true;
@@ -1344,7 +1321,7 @@ export default {
         uuId = row['image'].id;
         self.loadImageOrSnapshotDetail(uuId);
       } else {
-        var volumeList = row['os-extended-volumes-inspur:volumes_attached'];
+        var volumeList = row['os-extended-volumes:volumes_attached'];
         for (let v = 0; v < volumeList.length; v++) {
           var obj = volumeList[v];
           if ((obj['boot_disk'] + "") == "true") {
@@ -1729,7 +1706,6 @@ export default {
         clearTimeout($this.refreshTimeout);
       }
       let url = `api/nova/v2.1/servers/detail`;
-      let roleType = Vue.roleType + '';
       let queryString = Object.keys(params).map(key => {
         return `${key}=${params[key]}`
       }).join('&');
@@ -1737,6 +1713,27 @@ export default {
         $this.loading = true;
       }
       try {
+        if (page === 1) {
+          let allDataUrl = `api/nova/v2.1/servers?sort_key=${params['sort_key']}&sort_dir=${params['sort_dir']}&limit=999999`;
+          if ('all_tenants' in params) {
+            allDataUrl += `&all_tenants=1`;
+          }
+          const allDataRes = await $this.$ajax({
+            url: allDataUrl,
+            type: 'get',
+            headers: {
+              'X-OpenStack-Nova-API-Version': 2.67
+            },
+            showErrMsg: true
+          });
+          const ranges = _.range(-1, allDataRes.servers.length-1, $this.pageSize); // 计算总共有多少marker id要获取
+          ranges.splice(0, 1);  // 删除第一个-1
+          const markerList = ranges.map(i => {
+            return allDataRes.servers[i]['id'];
+          });
+          $this.markerList = markerList;
+          $this.total = allDataRes.servers.length;
+        }
         const res = await $this.$ajax({
           url: `${url}?${queryString}`,
           type: 'get',
@@ -1751,7 +1748,6 @@ export default {
             item.projectName = $this.projectRender('', item);
             item.ownerName = $this.ownerRender('', item);
             item.flavorName = $this.flavorMaps.size === 0 ? '' : $this.flavorRender(item.flavor.id);
-            let source = $this.imageRender(item.mirrorName, item) || '';
             item.sourceType = $this.templateMaps.get(item.id);
             $this.instanceMaps.set(item.id, item);
             let tagsShown = item.tags.filter(item => {
@@ -1761,10 +1757,6 @@ export default {
             item.tagsShown = tagsShown;
           });
           $this.totalData = res.servers;
-          if ('all_instances_info' in res) {
-            $this.markerList = res.all_instances_info.marker_list;
-            $this.total = res.all_instances_info.total_instances;
-          }
           $this.handleSelectionChange($this.multipleSelection);
           $this.refreshTimeout = setTimeout(() => {
             if (!$this._isDestroyed) {

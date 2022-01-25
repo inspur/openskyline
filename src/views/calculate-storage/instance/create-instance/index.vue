@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <el2-dialog
       :before-close="handleBeforeClose"
@@ -400,7 +400,8 @@ export default {
           flavorRef: $this.formData.flavorId,
           availability_zone: $this.formData.az + ($this.formData.host === '' ? '' : `::${$this.formData.host}`),
           metadata: {
-            panic: $this.formData.panicStrategy
+            panic: $this.formData.panicStrategy,
+            source_type: $this.sourceType
           }
         }
       };
@@ -415,12 +416,6 @@ export default {
       // }
       // 来源及云硬盘
       let deviceName = 'vda';
-      if ($this.formData.inspurDiskBus === 'scsi') {
-        deviceName = 'sda';
-      }
-      if ($this.formData.inspurDiskBus === 'ide') {
-        deviceName = 'hda';
-      }
       if ($this.formData.sourceType === 'image') {
         if (!$this.formData.createNewVolume) {
           body.server.imageRef = $this.formData.sourceId;
@@ -678,6 +673,22 @@ export default {
           this.$refs.stepAddition.$emit('did-show');
         }
       }
+    }
+  },
+  computed: {
+    sourceType() {
+      if (this.formData.sourceType === 'image') {
+        if (this.formData.createNewVolume) {
+          return 'volume';
+        }
+      }
+      if (this.formData.sourceType === 'volumeSnapshot') {
+        return 'volume';
+      }
+      if (this.formData.sourceType === 'backup') {
+        return 'volume';
+      }
+      return this.formData.sourceType;
     }
   }
 }

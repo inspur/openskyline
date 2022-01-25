@@ -1309,9 +1309,9 @@ export default {
         const otherSize = _.reduce(_.rest(volumeSizeData, 3), function(memo, num) { return memo + num; }, 0);
         volumeSizeData.splice(4);
         volumeSizeData.push({
-            projectId: 'other',
-            name: Vue.t('base.other'),
-            value: otherSize
+          projectId: 'other',
+          name: Vue.t('base.other'),
+          value: otherSize
         });
       }
 

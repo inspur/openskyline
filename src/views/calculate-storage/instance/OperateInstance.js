@@ -142,7 +142,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
       var sourceType = rowData['metadata']['source_type'];
@@ -182,10 +182,10 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       var self = this;
@@ -238,10 +238,10 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -275,10 +275,10 @@ module.exports = function() {
     multi: true,
     operateMore: true,
     enable(rowData) {
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -322,7 +322,7 @@ module.exports = function() {
     multi: true,
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -521,7 +521,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" !== "3"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -564,7 +564,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" !== "3"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -607,7 +607,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" !== "3"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -650,7 +650,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" !== "3"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -790,10 +790,10 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (rowData.metadata.source_type === "volume") {
@@ -846,7 +846,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -889,10 +889,10 @@ module.exports = function() {
     showflg: (Vue.roleType + "" === "2" || Vue.roleType + "" === "0"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
-      if (rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -934,7 +934,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" === "2" || Vue.roleType + "" === "0"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -957,7 +957,7 @@ module.exports = function() {
       if (rowData['metadata']['source_type'] !== 'volume') {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (rowData['OS-EXT-STS:task_state'] !== null) {
@@ -978,7 +978,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
@@ -1020,7 +1020,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (roleType !== '0' && rowData['locked'] === true) {
@@ -1083,7 +1083,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (roleType !== '0' && rowData['locked'] === true) {
@@ -1141,7 +1141,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (roleType !== '0' && rowData['locked'] === true) {
@@ -1172,7 +1172,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== "0") {
@@ -1217,7 +1217,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
@@ -1241,7 +1241,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
@@ -1261,7 +1261,7 @@ module.exports = function() {
     multi: false,
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
@@ -1285,7 +1285,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
@@ -1311,7 +1311,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData['locked'] === true) {
@@ -1340,7 +1340,7 @@ module.exports = function() {
     multi: true,
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
@@ -1369,7 +1369,7 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes-inspur:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
+      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
       if (String(Vue.roleType) !== '0' && rowData.locked === true) {
