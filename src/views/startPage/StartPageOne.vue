@@ -1060,7 +1060,7 @@ export default {
       // let vmtotalNum = vmResult.all_instances_info.total_instances;
       let {servers} = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers/detail?all_tenants=1",
+        url: "api/nova/v2.1/servers/detail?all_tenants=1&&limit=99999",
         headers: {
           'X-OpenStack-Nova-API-Version': 2.67
         }
@@ -1069,13 +1069,6 @@ export default {
         type: 'get',
         url: "api/keystone/v3/projects"
       });
-      //tanentId去重
-      let tanentidList=[];
-      servers.forEach(item => {
-        if (!tanentidList.includes(item.tenant_id)) {
-          tanentidList.push(item)
-        }
-      })
       let azList=[];
       let projectList=[];
       let obj = {};
@@ -1090,18 +1083,28 @@ export default {
         }
         azList.push(tt)
       }
-      tanentidList.forEach(item => {
+      ret.projects.forEach(item => {
         let projectItem;
-        projectItem = ret.projects.filter(project => {
-          return project.id == item.tenant_id
+        projectItem = servers.filter(_ => {
+          return _.tenant_id == item.id
         })
-        let mm = {
-          value: projectItem.length,
-          name: projectItem[0].name,
-          cpuvalue:item.flavor.vcpus,
-          memvalue:item.flavor.ram
+        if (projectItem.length > 0 ) {
+          let cpuvalue=0;
+          let memvalue=0;
+          projectItem.forEach(_ => {
+            cpuvalue = cpuvalue + _.flavor.vcpus
+          })
+          projectItem.forEach(_ => {
+            memvalue = memvalue + _.flavor.ram
+          })
+          let mm = {
+            value: projectItem.length,
+            name: item.name,
+            cpuvalue:cpuvalue,
+            memvalue:memvalue
+          }
+          projectList.push(mm);
         }
-        projectList.push(mm);
       })
       // let  = instancenum["project_list"] || {};
       // let azLeft = 0;
