@@ -181,10 +181,12 @@ export default {
         this.$ajax({
           type: "delete",
           url:
-            "api/keystone/v3/groups/" +
+            "api/keystone/v3/domains/" +
+            this.$route.params.domainid +
+            "/groups/" +
             this.$route.params.id +
-            "/role/" +
-            item.role_id,
+            "/roles/" +
+            item.id,
           data: JSON.stringify({
             projects: list
           }),

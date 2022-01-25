@@ -952,7 +952,6 @@ export default {
       Promise.all([self.getProjectNum(), self.getazNum()]).then(function(result) {
         self.getVMData();
         self.getNetWorkNum();
-        self.getCPUMemPieData();
         self.getStoragePieChartData();
       });
       this.getNetworkIps();
@@ -1054,47 +1053,83 @@ export default {
       this.loading.row2.net = false;
     },
     async getVMData() {
-      let vmResult = await this.$ajax({
+      // let vmResult = await this.$ajax({
+      //   type: 'get',
+      //   url: "",
+      // });
+      // let vmtotalNum = vmResult.all_instances_info.total_instances;
+      let {servers} = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers/detail?all_tenants=1&limit=1",
+        url: "api/nova/v2.1/servers/detail?all_tenants=1",
         headers: {
           'X-OpenStack-Nova-API-Version': 2.67
         }
       });
-      let vmtotalNum = vmResult.all_instances_info.total_instances;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/index",
-        headers: {
-          'X-OpenStack-Nova-API-Version': 2.67
-        }
+        url: "api/keystone/v3/projects"
       });
-      let instancenum = ret.instance_num;
-      let azlist = instancenum["az_list"] || {};
-      let plist = instancenum["project_list"] || {};
-      let azLeft = 0;
-      let projectLeft = 0;
-      for (let az in azlist) {
-        azLeft+=azlist[az];
-        for (let i=1; i<this.azList.length; i++) {
-          if (this.azList[i]['name'] == az) {
-            this.azList[i]['value'] = azlist[az];
-            break;
-          }
+      //tanentId去重
+      let tanentidList=[];
+      servers.forEach(item => {
+        if (!tanentidList.includes(item.tenant_id)) {
+          tanentidList.push(item)
         }
-      }
-      this.azList[0]["value"] = vmtotalNum - azLeft;
-      for (let pj in plist) {
-        projectLeft+=plist[pj];
-        for (let i=0; i<this.projectList.length; i++) {
-          if (this.projectList[i]['id'] == pj) {
-            this.projectList[i]['value'] = plist[pj];
-            break;
-          }
+      })
+      let azList=[];
+      let projectList=[];
+      let obj = {};
+      servers.forEach(item => {
+        var mm = item["OS-EXT-AZ:availability_zone"];
+        obj[mm] = (obj[mm] + 1) || 1
+      })
+      for (var key in obj) {
+        let tt = {
+          name: key || '其他',
+          value: obj[key]
         }
+        azList.push(tt)
       }
+      tanentidList.forEach(item => {
+        let projectItem;
+        projectItem = ret.projects.filter(project => {
+          return project.id == item.tenant_id
+        })
+        let mm = {
+          value: projectItem.length,
+          name: projectItem[0].name,
+          cpuvalue:item.flavor.vcpus,
+          memvalue:item.flavor.ram
+        }
+        projectList.push(mm);
+      })
+      // let  = instancenum["project_list"] || {};
+      // let azLeft = 0;
+      // let projectLeft = 0;
+      // for (let az in azlist) {
+      //   azLeft+=azlist[az];
+      //   for (let i=1; i<this.azList.length; i++) {
+      //     if (this.azList[i]['name'] == az) {
+      //       this.azList[i]['value'] = azlist[az];
+      //       break;
+      //     }
+      //   }
+      // }
+      // this.azList[0]["value"] = vmtotalNum - azLeft;
+      // for (let pj in plist) {
+      //   projectLeft+=plist[pj];
+      //   for (let i=0; i<this.projectList.length; i++) {
+      //     if (this.projectList[i]['id'] == pj) {
+      //       this.projectList[i]['value'] = plist[pj];
+      //       break;
+      //     }
+      //   }
+      // }
+      this.azList=azList;
+      this.projectList=projectList;
       this.setVMChart();
       this.getResourceUtilization();
+      this.getCPUMemPieData();
     },
     // async getVMData() {
     //   let self = this;
@@ -1178,27 +1213,27 @@ export default {
         }
       }
     },
-    async getCPUMemPieData() {
+    getCPUMemPieData() {
       let self = this;
-      let ret = await this.$ajax({
-        type: 'get',
-        url: "api/nova/v2.1/os-quota-sets"
-      });
-      // 第二行 CPU
+      // let ret = await this.$ajax({
+      //   type: 'get',
+      //   url: "api/nova/v2.1/os-quota-sets"
+      // });
+      // // 第二行 CPU
       let cpuData = [];
       let ohtercpunumber = 0;
-      for (let i=0; i<ret["all_projects_quotas"].length; i++) {
-        let item = ret["all_projects_quotas"][i];
-        let quotaset = item["quota_set"];
-        for (let j=0; j<self.projectList.length; j++) {
-          if (quotaset["id"] == self.projectList[j]["id"]) {
-            let cpuinuse = quotaset["cores"]["in_use"];
-            let meminuse = quotaset["ram"]["in_use"];
-            self.projectList[j]["cpuvalue"] += cpuinuse;
-            self.projectList[j]["memvalue"] += meminuse;
-          }
-        }
-      }
+      // for (let i=0; i<ret["all_projects_quotas"].length; i++) {
+      //   let item = ret["all_projects_quotas"][i];
+      //   let quotaset = item["quota_set"];
+      //   for (let j=0; j<self.projectList.length; j++) {
+      //     if (quotaset["id"] == self.projectList[j]["id"]) {
+      //       let cpuinuse = quotaset["cores"]["in_use"];
+      //       let meminuse = quotaset["ram"]["in_use"];
+      //       self.projectList[j]["cpuvalue"] += cpuinuse;
+      //       self.projectList[j]["memvalue"] += meminuse;
+      //     }
+      //   }
+      // }
       this.projectList.sort(self.compare("cpuvalue"));
       for (let i=0; i<self.projectList.length; i++) {
         if (i < 4) {
