@@ -57,6 +57,7 @@
  </div>
 </template>
 <script>
+import {getUsersByProjectId} from '../../../utils/common';
 export default {
   name:"volumeManagment",
   props: [],
@@ -182,18 +183,12 @@ export default {
       if (!self.volumeManagment.projectId) {
         return false;
       }
-      let url = 'api/keystone/v3/inspur/assignments/projects/' + projectId + '/users';
       try {
-        let result = await self.$ajax({
-          type: 'get',
-          url: url,
-          showErrMsg: false
-        });
-        let users = result['users'];
+        let users = await getUsersByProjectId(projectId);
         let loginUser = "";
         if (users != null) {
           for (let u = 0; u < users.length; u++) {
-            let userObj = users[u].user;
+            let userObj = users[u];
             self.userList.push(userObj);
             //判断一下，查询出来用户列表是否包含当前登录账号
             //如果包含，则默认展示i当前登陆用户
@@ -257,7 +252,7 @@ export default {
           try {
             let ret = await this.$ajax({
               type: "post",
-              url: "api/cinderv3/v3/" + pId + "/os-volume-manage-inspur",
+              url: "api/cinderv3/v3/" + pId + "/os-volume-manage",
               data: body,
               successMsg: this.$t('storage.sendVolumeManagmentSuccess'),
               log: {
@@ -304,7 +299,7 @@ export default {
       self.loading = true;
       let projectId = this.$cookie.get('pid');
       self.volumeManagment.type = "";
-      let url = "api/cinderv3/v3/" + projectId + "/inspur-types?is_public=None";
+      let url = "api/cinderv3/v3/" + projectId + "/types?is_public=None";
       try {
         let result = await self.$ajax({
           type: 'get',

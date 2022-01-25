@@ -358,7 +358,6 @@ export default {
                 type: "get",
                 url: qosUrl,
                 successFun(qosSpecsData) {
-                  console.log(qosSpecsData);
                   if (qosSpecsData["qos_specs"]) {
                     qosSpecs = qosSpecsData["qos_specs"];
                   } else {
@@ -406,7 +405,7 @@ export default {
         if (qosSpecs != null) {
           let result = await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur/${instanceId}/action`,
+            url: `api/nova/v2.1/servers/${instanceId}/action`,
             data: JSON.stringify({
               set_block_qos: {
                 volume_id: $this.volumeInfo.id,
