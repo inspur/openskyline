@@ -401,9 +401,9 @@ export default {
       if (typeof (isPublic) === "undefined" || isPublic === null || isPublic === '') {
         isPublic = "None";
       }
-      url = "api/cinderv3/v3/" + projectId + "/inspur-types?is_public=" + isPublic;
+      url = "api/cinderv3/v3/" + projectId + "/types?is_public=" + isPublic;
       if (String(Vue.roleType) === '2' || String(Vue.roleType) === '3') { //超级
-        url = "api/cinderv3/v3/" + projectId + "/inspur-types";
+        url = "api/cinderv3/v3/" + projectId + "/types";
       }
       try {
         let result = await $this.$ajax({

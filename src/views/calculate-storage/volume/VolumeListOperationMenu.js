@@ -673,7 +673,8 @@ module.exports = function() {
         {
             icon: "fa-plus",
             name: this.$t("storage.cloneVolume"), //克隆云硬盘
-            showflg: this.isUser(),
+            // showflg: this.isUser(),
+            showflg: false,
             operateMore: true,
             multi: false,
             enable(rowData) {
