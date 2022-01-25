@@ -92,7 +92,9 @@ export default {
               name: instance.netSafeGroupId
             }],
             tags: [],
-            metadata: {}
+            metadata: {
+              source_type: 'volume'
+            }
           };
           if (instance.password !== '') {
             server.adminPass = instance.password;
