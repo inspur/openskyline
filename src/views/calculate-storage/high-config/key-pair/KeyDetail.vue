@@ -82,11 +82,11 @@ export default {
         self.keyPair.keyDate = details.created_at;
         self.keyPair.publicKey = details.public_key;
         self.keyPair.fingerprint = details.fingerprint;
-        let ret = await this.$ajax({
+        let res = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/users?" + $.param({id:details.user_id})
+          url: `api/keystone/v3/users/${details.user_id}`
         })
-        self.keyPair.keyOwner = ret["users"] && ret["users"].length > 0 ? ret["users"][0].name : "-";
+        self.keyPair.keyOwner = res.user.name || '-';
       } catch (res) {
         // self.loading = false;
         self.$message.error(Vue.t('calcStorLang.getError'));

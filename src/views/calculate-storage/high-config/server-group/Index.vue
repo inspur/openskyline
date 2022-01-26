@@ -230,7 +230,7 @@ export default {
       const $this = this;
       const res = await $this.$ajax({
         type: 'get',
-        url: `api/keystone/v3/inspur/projects`
+        url: `api/keystone/v3/projects`
       });
       $this.projects = res.projects;
       $this.searchBar.conditions.project_id.options = res.projects.map(item => {
