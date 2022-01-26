@@ -290,11 +290,11 @@
           <div class="start-page-one-percent3" :class="theme">
             <div :class="'start-page-one-toleft' + theme2">
               <span>{{$t('network.IP_EXTERNAL_USAGE')}}</span>
-              <el-tooltip :effect="theme" :content="networkName">
+              <!-- <el-tooltip :effect="theme" :content="networkName">
                 <el-select v-model="networkName" filterable size="small" @change="setNetworkChart" class="storege-short-select">
                   <el-option v-for="item in networkList" :key="item.id" :value="item.name" :label="item.name"></el-option>
                 </el-select>
-              </el-tooltip>
+              </el-tooltip> -->
               <i v-if="parseFloat(ipusage) >= 80" class="el-icon-fa-exclamation-circle" style="color: #fa1914"></i>
             </div>
             <div :class="'start-page-one-toright' + theme2">{{ipusage}}%</div>
@@ -1600,55 +1600,66 @@ export default {
     // 网络外网IP使用情况
     async getNetworkIps() {
       let self = this;
-      let totalIps = JSBI.BigInt(0);
-      let usedIps = JSBI.BigInt(0);
+      let totalIps = 0;
+      let usedIps = 0;
       self.ipusage = 0;
       self.loading.row3.network = true;
       self.networkList = [];
+      let ret = await self.$ajax({
+        type: 'get',
+        url: `api/neutron/v2.0/network-ip-availabilities`
+      });
+      let networks = ret['network_ip_availabilities'] || [];
       await self.$ajax({
         type: 'get',
-        url: `api/neutron/v2.0/inspur/inspur-network-ip-availabilities?router:external=true`,
+        url: `api/neutron/v2.0/networks?router:external=true`,
         successFun(data) {
           self.loading.row3.network = false;
-          let d = data['inspur_network_ip_availabilities'] || [];
-          for (let i=0; i<d.length; i++) {
-            let subnets = d[i]["subnets"];
-            let totalipssubnet = JSBI.BigInt(0 + '');
-            let usedipssubnet = JSBI.BigInt(0 + '');
+          let externalNets = [];
+          data.networks.forEach(_ => {
+            let externalNet = networks.filter(mm => {
+              return mm.network_id == _.id
+            })
+            externalNets.push(externalNet[0])
+          });
+          for (let i=0; i<externalNets.length; i++) {
+            let subnets = externalNets[i]["subnet_ip_availability"];
+            let totalipssubnet = 0;
+            let usedipssubnet = 0;
             if (subnets.length > 0) {
               for (let j=0; j<subnets.length; j++) {
                 let ips = subnets[j];
-                let totalips_ = JSBI.BigInt(ips["total_ips"] + '');
-                let usedips_ = JSBI.BigInt(ips["used_ips"] + '');
-                totalIps = JSBI.add(totalIps, totalips_);
-                totalipssubnet = JSBI.add(totalipssubnet, totalips_);
-                usedIps = JSBI.add(usedIps, usedips_);
-                usedipssubnet = JSBI.add(usedipssubnet, usedips_);
+                let totalips_ = JSBI.toNumber(JSBI.BigInt(ips["total_ips"] + ''));
+                let usedips_ = JSBI.toNumber(JSBI.BigInt(ips["used_ips"] + ''));
+                totalIps += totalips_;
+                totalipssubnet += totalips_;
+                usedIps += usedips_;
+                usedipssubnet += usedips_;
               }
               let realUsage = usedipssubnet/totalipssubnet * 100;
               if (realUsage < 0.01) {
                 realUsage = 0;
               }
-              let obj = {
-                "name":d[i]["network_name"],
-                "id": d[i]["network_id"],
-                "totalIps": totalipssubnet + "",
-                "usedIps": usedipssubnet + "",
-                "ipusage": realUsage.toFixed(2)
-              };
-              self.networkList.push(obj);
+              if (totalIps > 0) {
+                self.iptotalNum = totalIps;
+                self.ipusedNum = usedIps;
+                let realNum = self.ipusedNum / self.iptotalNum * 100;
+                if (realNum < 0.01) {
+                  realNum = 0;
+                }
+                self.ipusage = realNum.toFixed(2);
+              }
+              // let obj = {
+              //   "name":externalNets[i]["network_name"],
+              //   "id": externalNets[i]["network_id"],
+              //   "totalIps": totalipssubnet + "",
+              //   "usedIps": usedipssubnet + "",
+              //   "ipusage": realUsage.toFixed(2)
+              // };
+              // self.networkList.push(obj);
             }
           }
           self.networkList.sort(compare('totalIps'));
-          if (totalIps > 0) {
-            self.iptotalNum = totalIps+"";
-            self.ipusedNum = usedIps+"";
-            let realNum = self.ipusedNum / self.iptotalNum * 100;
-            if (realNum < 0.01) {
-              realNum = 0;
-            }
-            self.ipusage = realNum.toFixed(2);
-          }
           let obj = {
             'name':Vue.t('base.all'),
             'id':Vue.t('base.all'),

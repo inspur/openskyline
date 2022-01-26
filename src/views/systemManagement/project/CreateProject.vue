@@ -2375,6 +2375,10 @@ export default {
       this.roleSet.roleType = "3"; //现在只有用户角色
       //获取角色名称
       let roles = await this.powerFun();
+      console.log("ttttttt")
+      console.log(roles)
+      console.log(croles)
+      console.log(this.roleSet.roleType)
       for (var i=0; i<croles.length; i++) {
         if (this.roleSet.roleType==2) {
           this.roleSet.roleValue1.push(croles[i].role_id);
@@ -2382,6 +2386,8 @@ export default {
           this.roleSet.roleValue2.push(croles[i].role_id);
         }
       }
+      console.log("mmmmmmm")
+      console.log(this.roleSet.roleValue2)
       let list = [];
       for (var k=0; k<roles.length; k++) {
         list.push({
@@ -2390,7 +2396,7 @@ export default {
           role_type:3
         });
       }
-      this.roleList = this.$convertRoleLanguage(list, "role_name");
+      this.roleList = list;
     },
     async roleTypeChange() {
       let arr = [];
