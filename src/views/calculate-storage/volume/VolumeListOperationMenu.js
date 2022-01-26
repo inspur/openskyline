@@ -785,7 +785,8 @@ module.exports = function() {
         {
             icon: "fa-plus",
             name: this.$t("storage.manageQosSpec"), // QoS规格
-            showflg: this.isUser(),
+            // showflg: this.isUser(),
+            showflg: false,
             operateMore: true,
             multi: false,
             enable(rowData) {
