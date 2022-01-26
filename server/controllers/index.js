@@ -114,7 +114,8 @@ exports.middlewares = function (router) {
         let endpointItem = catalogItem.endpoints[0];
         services[catalogItem['name']] = cutEndpointUrl(endpointItem.url);
       }
-      let region = 'RegionOne';
+      let regions = await getRegions();
+      let activeRegion = regions[0]['region_id'];
       let roleType = '';
       let roleId = '';
       let adminRole = roles.find(item => item.name === 'admin');
@@ -134,6 +135,7 @@ exports.middlewares = function (router) {
       res.cookie('pid', projectId || "");
       res.cookie('roleType', String(roleType));
       res.cookie('roleId', roleId);
+      res.cookie('region_id', activeRegion);
       req.session['pid'] = projectId;
       req.session['roleType'] = String(roleType);
       req.session['roleId'] = roleId;

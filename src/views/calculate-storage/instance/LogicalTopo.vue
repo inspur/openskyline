@@ -98,7 +98,7 @@ export default {
         }).join('&');
         let res = await self.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/detail?${paramsStr}`
+          url: `api/nova/v2.1/servers/detail?${paramsStr}`
         });
         self.servers = res.servers;
       } catch (res) {
