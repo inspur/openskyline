@@ -131,7 +131,7 @@
                     {{dateRender(imageInfo.updated_at)}}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="'locations' in imageInfo">
                   <th class="idatath">{{ $t('calcStorLang.IMAGE_BACKEND_URL') }}</th>
                   <td class="idatatd">
                     <div v-div-wrap="{minHeight: '34px', expandText: $t('lang.EXPAND'), collapseText: $t('lang.COLLAPSE')}" v-html="imageInfo.locations.map(item => item.url).join('<br>')">
