@@ -1346,7 +1346,7 @@ export default {
       let me = this;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/os-hypervisors-inspur/detail"
+        url: "api/nova/v2.1/os-hypervisors/detail"
       })
       let cputotal = 0;
       let cpuused = 0;
@@ -1354,9 +1354,9 @@ export default {
       let memoryused = 0;
       ret.hypervisors.forEach((item, index) => {
         if (item.hypervisor_type!="ironic") {
-          cputotal += parseInt(item.vcpus) * parseFloat(item.cpu_allocation_ratio);
+          cputotal += parseInt(item.vcpus);
           cpuused += parseInt(item.vcpus_used);
-          memorytotal += parseInt(item.memory_mb) * parseFloat(item.ram_allocation_ratio);
+          memorytotal += parseInt(item.memory_mb);
           memoryused += parseInt(item.memory_mb_used);
         }
       });
