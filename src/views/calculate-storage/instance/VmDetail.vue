@@ -134,7 +134,7 @@
         </el-col>
       </el-collapse-item>
       <el-collapse-item :title="$t('calcStorLang.instDetailNetDetail')" name="netaddr">
-        <el-table id="netcardTbl" ref="specTable" :data="network.netCards" highlight-current-row border stripe row-key="key" v-loading="network.loading">
+        <el-table id="netcardTbl" ref="specTable" :data="network.netCards" highlight-current-row border stripe row-key="key" v-loading="loading">
           <el-table-column prop="name" :label="$t('calcStorLang.instNetworkName')" align="left">
           </el-table-column>
           <el-table-column prop="ip" align="left" label="IP">
@@ -171,7 +171,7 @@
                       <tr>
                         <th class="idatath" style="width:80px">{{$t('lang.name')}}:</th>
                         <td class="idatatd">
-                          <span>{{ scope.row.name || scope.row.id }}</span>
+                          <span>{{ scope.row.name}}</span>
                         </td>
                       </tr>
                       <tr>
@@ -214,7 +214,7 @@
                   </table>
                 </div>
               </el-popover>
-              <el-button v-popover:volDetailPop type="text">{{scope.row.volumeName}}</el-button>
+              <el-button v-popover:volDetailPop size="small" type="text">{{ scope.row.name }}</el-button>
             </template>
           </el-table-column>
           <el-table-column prop="size" align="left" :label="$t('calcStorLang.volumeDiskSize')" min-width="30">
@@ -235,7 +235,7 @@
         </el-table>
         <el-button type="primary" v-show="volume.volumes != ''" @click="confirmSave" size="small" :disabled="!canModify" :loading="saving" style="margin-top: 5px;">{{$t('calcStorLang.instDetailSave')}}</el-button>
       </el-collapse-item>
-      <el-collapse-item :title="$t('calcStorLang.VM_DETAIL_DIRECT_CONNECT_DEVICE')" name="directConnectDevices" v-if="from!=='balanceList'">
+      <el-collapse-item :title="$t('calcStorLang.VM_DETAIL_DIRECT_CONNECT_DEVICE')" name="directConnectDevices" v-if="false">
         <el-table :data="directConnectDevices.devices" v-loading="directConnectDevices.loading">
           <el-table-column :label="$t('calcStorLang.VM_DETAIL_DIRECT_CONNECT_DEVICE_TYPE')" prop="type" width="100" />
           <el-table-column :label="$t('calcStorLang.VM_DETAIL_DIRECT_CONNECT_DEVICE_ADDR')" prop="address" width="100" />
@@ -356,20 +356,19 @@ export default {
       try {
         $this.loading = true;
         $this.volume.loading = true;
-        $this.network.loading = true;
         $this.directConnectDevices.loading = true;
         let result = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/${this.instanceId}`,
+          url: `api/nova/v2.1/servers/${this.instanceId}`,
           headers: {
-            'X-OpenStack-Nova-API-Version': 2.41
+            'X-OpenStack-Nova-API-Version': 2.67
           }
         });
         let instance = result['server'];
         if (instance.description === null) {
           instance.description = '';
         }
-        $this.instance = instance;
+        $this.instance = Object.assign($this.instance, instance);
         $this.projectId = instance['tenant_id'];
         $this.projectName = $this.projectRender(instance['tenant_id']);
         $this.userName = $this.ownerRender(instance['user_id']);
@@ -394,13 +393,12 @@ export default {
         for (let key in addresses) {
           for (let i = 0; i < addresses[key].length; i++) {
             const address = addresses[key][i];
-            let netCard = netCards.find(item => item.id === address.network_id && item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
+            let netCard = netCards.find(item => item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
             // 相同netCard，不同IP的情况，只增加IP
             if (!netCard) {
               // const networkName = this.networkMaps.get(address.network_id);
               netCard = {
-                id: address.network_id,
-                name: '-',
+                name: key,
                 ip: [],
                 fip: [],
                 mac: ''
@@ -416,7 +414,7 @@ export default {
         for (let key in addresses) {
           for (let i = 0; i < addresses[key].length; i++) {
             const address = addresses[key][i];
-            let netCard = netCards.find(item => item.id === address.network_id && item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
+            let netCard = netCards.find(item => item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
             // 相同netCard，不同IP的情况，只增加IP
             if (netCard) {
               if (address['OS-EXT-IPS:type'] === 'floating') {
@@ -431,9 +429,8 @@ export default {
         $this.loading = false;
         __DEV__ && console.error(e);
       }
-      $this.getNetworkData();
       $this.getVolumesData();
-      $this.loadDirectConnectDevices();
+      // $this.loadDirectConnectDevices();
     },
     async confirmSave() {
       var $this = this;
@@ -469,7 +466,7 @@ export default {
         try {
           $this.saving = true;
           let ret = await this.$ajax({
-            url: "api/nova/v2.1/servers-inspur/" + this.instanceId,
+            url: "api/nova/v2.1/servers/" + this.instanceId,
             data: JSON.stringify(body),
             type: 'put',
             log: {
@@ -502,7 +499,7 @@ export default {
       $this.volume.loading = true;
       try {
         let volumesWithInfo = [];
-        let bdmVolumes = $this.instance['os-extended-volumes-inspur:volumes_attached'];
+        let bdmVolumes = $this.instance['os-extended-volumes:volumes_attached'];
         bdmVolumes = bdmVolumes.filter(item => item.volume_type !== 'passthru');
         for (let volume of bdmVolumes) {
           const uuid = volume.id;
@@ -532,45 +529,8 @@ export default {
         $this.volume.loading = false;
       } catch (e) {
         $this.volume.loading = false;
-        __DEV__ && console.error(e);
+        console.error(e);
       }
-    },
-    async getNetworkData() {
-      const $this = this;
-      $this.network.loading = true;
-      for (let netCard of $this.network.netCards) {
-        try {
-          let res = await $this.$ajax({
-            type: 'get',
-            url: `api/neutron/v2.0/networks/${netCard.id}`
-          });
-          netCard.name = res.network.name;
-        } catch (e) {
-          __DEV__ && console.error(e);
-        }
-      }
-      $this.network.loading = false;
-    },
-    async getVolumeList() {
-      var $this = this;
-      var url = "api/cinderv3/v3/" + $this.$cookie.get('pid') + "/volumes/detail?all_tenants=True&limit=99999";
-      if ("2" == Vue.roleType || "3" == Vue.roleType) { //超级
-          url= "api/cinderv3/v3/" + $this.$cookie.get('pid') + "/volumes/detail?limit=99999";
-      }
-      try {
-        let result = await $this.$ajax({
-          type: 'get',
-          url: url,
-          showErrMsg: false,
-          complete: function(XMLHttpRequest, textStatus) {}
-        });
-        var list = result['volumes'];
-        for (let v = 0; v < list.length; v++) {
-          var obj = list[v];
-          $this.volumeMaps.set(obj.id, obj);
-        }
-        } catch (data) {
-        }
     },
     typeRender(value) {
       var $this = this;
@@ -724,7 +684,7 @@ export default {
       try {
         const res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/${$this.instanceId}/os-inspur-passthrus`
+          url: `api/nova/v2.1/servers/${$this.instanceId}/os-passthrus`
         });
         let attachedDisks = $this.instanceId in res ? res[$this.instanceId] : [];
         attachedDisks.forEach(item => {

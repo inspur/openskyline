@@ -266,7 +266,7 @@ export default {
        try {
         let result = await self.$ajax({
           type: 'get',
-          url: 'api/keystone/v3/inspur/users?domain_id=default',
+          url: 'api/keystone/v3/users?domain_id=default',
           showErrMsg: true
         });
         self.loading = false;

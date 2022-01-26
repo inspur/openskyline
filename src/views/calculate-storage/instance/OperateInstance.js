@@ -22,7 +22,7 @@ module.exports = function() {
     multi: true,
     showflg: true,
     enable(rowData) {
-      if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
+      if (rowData['locked'] === true) {
         return false;
       }
       return (rowData['status'] === "SHUTOFF" && rowData['OS-EXT-STS:task_state'] === null);
@@ -65,7 +65,7 @@ module.exports = function() {
       if (rowData['status'] === "CRASHED") {
         return true;
       }
-      if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
+      if (rowData['locked'] === true) {
         return false;
       }
       return (rowData['status'] === "ACTIVE" && rowData['OS-EXT-STS:task_state'] === null);
@@ -104,11 +104,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" !== "3"),
     multi: false,
     enable(rowData) {
-      if (String(Vue.roleType) !== "0") {
-        return rowData['locked'] === false;
-      } else {
-        return true;
-      }
+      return rowData['locked'] === false;
     },
     handler: function(selectRows) {
       var row = selectRows[0];
@@ -122,11 +118,7 @@ module.exports = function() {
     showflg: true,
     multi: true,
     enable(rowData) {
-      if (String(Vue.roleType) !== "0") {
-        return rowData['locked'] === false;
-      } else {
-        return true;
-      }
+      return rowData['locked'] === false;
     },
     handler: function(selectRows) {
       var $this = this;
@@ -142,28 +134,10 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
+      if (rowData['locked'] === true) {
         return false;
       }
-      var sourceType = rowData['metadata']['source_type'];
-      if (String(Vue.roleType) !== "0") {
-        var isLocked = rowData['locked'];
-        if (true === isLocked) {
-          return false;
-        } else {
-          if (sourceType === "volume") {
-            return false;
-          } else {
-            return (rowData['status'] === "ACTIVE" || rowData['status'] === "SHUTOFF");
-          }
-        }
-      } else {
-        if (sourceType === "volume") {
-          return false;
-        } else {
-          return (rowData['status'] === "ACTIVE" || rowData['status'] === "SHUTOFF");
-        }
-      }
+      return (rowData['status'] === "ACTIVE" || rowData['status'] === "SHUTOFF");
     },
     handler: function(selectRows) {
       var row = selectRows[0];
@@ -176,13 +150,10 @@ module.exports = function() {
   }, {
     icon: "fa-retweet",
     name: Vue.t('calcStorLang.instCreateSnapshot'),
-    showflg: (String(Vue.roleType) === "2"),
+    showflg: true,
     multi: false,
     enable(rowData) {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
-        return false;
-      }
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
         return false;
       }
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
@@ -238,9 +209,6 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
-        return false;
-      }
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
@@ -275,9 +243,6 @@ module.exports = function() {
     multi: true,
     operateMore: true,
     enable(rowData) {
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
-        return false;
-      }
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
@@ -790,9 +755,6 @@ module.exports = function() {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
         return false;
       }
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
-        return false;
-      }
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
@@ -889,13 +851,7 @@ module.exports = function() {
     showflg: (Vue.roleType + "" === "2" || Vue.roleType + "" === "0"),
     operateMore: true,
     enable(rowData) {
-      if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
-        return false;
-      }
-      if (rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.volume_type === 'passthru') !== -1) {
-        return false;
-      }
-      if (String(Vue.roleType) !== "0" && rowData['locked'] === true) {
+      if (rowData['locked'] === true) {
         return false;
       }
       return ((rowData['status'] === "PAUSED" || rowData['status'] === "ACTIVE" || rowData['status'] === "SHUTOFF" || rowData['status'] === "SUSPENDED") && rowData['OS-EXT-STS:task_state'] === null);
@@ -1362,7 +1318,7 @@ module.exports = function() {
   }, {
     icon: "fa-plus",
     name: Vue.t('calcStorLang.CPU_PIN'),
-    showflg: Vue.roleType + '' === '0',
+    showflg: true,
     multi: false,
     operateMore: true,
     enable(rowData) {
@@ -1372,7 +1328,7 @@ module.exports = function() {
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
-      if (String(Vue.roleType) !== '0' && rowData.locked === true) {
+      if (rowData.locked === true) {
         return false;
       }
       if (['ACTIVE'].includes(rowData.status)) { //运行状态
