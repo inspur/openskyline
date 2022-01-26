@@ -42,7 +42,7 @@ export default {
       this.loading = true;
       var projectId = this.$cookie.get('pid');
       let G2BackendList = await this.getPools();
-      let url = "api/cinderv3/v3/" + projectId + "/inspur-types?is_public=None";
+      let url = "api/cinderv3/v3/" + projectId + "/types?is_public=None";
       try {
         let result = await self.$ajax({
           type: 'get',
@@ -105,9 +105,9 @@ export default {
             return;
           }
           var Pid = this.$cookie.get('pid');
-          let url = "api/cinderv3/v3/" + Pid + "/volumes/" + self.detailVolume.id + "/action";
+          let url = "api/cinderv3/v3/" + Pid + "/volumes/" + self.detailVolume.id + "9";
           let body = {
-            "os-retype_inspur": {
+            "os-retype": {
               "new_type": type,
               "migration_policy": "on-demand"
             }
