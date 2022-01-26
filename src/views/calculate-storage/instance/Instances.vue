@@ -87,14 +87,8 @@
                     <tr class="odd">
                       <th class="idatath" style="width:80px">{{$t('lang.name')}}:</th>
                       <td class="idatatd">
-                        <span>{{flavorDetailEntity.name || "-"}}</span>
+                        <span>{{flavorDetailEntity.original_name || "-"}}</span>
                       </td>
-                      </tr>
-                      <tr class="even">
-                        <th class="idatath">ID:</th>
-                        <td class="idatatd">
-                          <span>{{flavorDetailEntity.id || "-"}}</span>
-                        </td>
                       </tr>
                       <tr class="even">
                         <th class="idatath">{{$t('calcStorLang.cpuCore')}}:</th>
@@ -124,8 +118,8 @@
                 </table>
               </div>
             </el-popover>
-            <el-button v-popover:volDetailPop type="text" size="small" @click="flavorDetail(scope.row.flavor.id)">
-              {{ scope.row.flavorName }}
+            <el-button v-popover:volDetailPop type="text" size="small" @click="flavorDetail(scope.row.flavor)">
+              {{ scope.row.flavor.original_name }}
             </el-button>
           </template>
         </el-table-column>
@@ -962,20 +956,8 @@ export default {
       } catch (data) {
       }
     },
-    async flavorDetail(id) {
-      var self = this;
-      self.popoverFlavorFlag = true;
-      try {
-        let result = await self.$ajax({
-          type: 'get',
-          url: 'api/nova/v2.1/flavors/' + id,
-          showErrMsg: true
-        });
-        self.flavorDetailEntity = result['flavor'];
-      } catch (res) {
-        self.flavorDetailEntity = "";
-        self.loading = false;
-      }
+    async flavorDetail(flavor) {
+      this.flavorDetailEntity = flavor;
     },
     alterConfigOperate(value) {
        var self = this;
