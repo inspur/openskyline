@@ -42,34 +42,6 @@
             <span>{{ scope.row.memory_mb * 1024 * 1024 | fileSize }}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          v-if="columnsChecked.indexOf('cpu_usage') >= 0"
-          prop="cpu_usage"
-          :label="$t('monitor.CPU_USAGE')"
-          min-width="120"
-        >
-          <template v-slot="scope">
-            <el-progress
-              :show-text="true"
-              :percentage="scope.row.cpu_usage.value"
-              :class="scope.row.cpu_usage.class"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="columnsChecked.indexOf('mem_usage') >= 0"
-          prop="mem_usage"
-          :label="$t('monitor.MEM_USAGE')"
-          min-width="120"
-        >
-          <template v-slot="scope">
-            <el-progress
-              :show-text="true"
-              :percentage="scope.row.mem_usage.value"
-              :class="scope.row.mem_usage.class"
-            />
-          </template>
-        </el-table-column> -->
       </el-table>
       <div style="margin: 10px 0; position: relative">
       <el-row>
@@ -107,19 +79,14 @@
         </panel>
       </div>
     </transition>
-    <bmc-ip v-if="bmcflg" @handlebmcFlag="handlebmcFlag" :selectedRow="selectedRow" @onRefresh="onRefresh"></bmc-ip>
-    <batch-bmc-set v-if="batchBMCSetDialog.visible" :hosts="batchBMCSetDialog.hosts" @close="batchBMCSetDialog.visible = false" />
   </div>
 </template>
 <script>
-import { utils } from "../../../intelligentMonitoring/public/utils";
 import HostDetail from './HostDetail';
-import BmcIp from '../BmcIp';
-import BatchBMCSet from './BatchBMCSet';
 import formatFileSize from 'utils/formatFileSize';
 export default {
-  name: 'domain',
-  components: { HostDetail, BmcIp, 'batch-bmc-set': BatchBMCSet },
+  name: 'HostList',
+  components: { HostDetail },
   data() {
     return {
       bmcflg:false,
@@ -152,16 +119,10 @@ export default {
         prop: "memory",
         label: Vue.t('calcStorLang.memory') + Vue.t('calcStorLang.usedTotal')
       }, {
-        prop: "real_cpu",
+        prop: "real_memory",
         label: Vue.t('calcStorLang.REAL_RAM')
-      // }, {
-      //   prop: 'cpu_usage',
-      //   label: Vue.t('monitor.CPU_USAGE')
-      // }, {
-      //   prop: 'mem_usage',
-      //   label: Vue.t('monitor.MEM_USAGE')
       }],
-      columnsChecked: ['name', 'host_ip', 'type', 'status', 'cpu', 'memory', 'real_cpu', 'real_cpu'],
+      columnsChecked: ['name', 'host_ip', 'type', 'status', 'cpu', 'real_cpu', 'memory', 'real_memory'],
       tableData: [],
       selectedRow:[],
       hostname: "",
@@ -177,107 +138,6 @@ export default {
         visible: false
       },
       operationMenus: [{
-        icon: "fa-play",
-        name: Vue.t('base.start'),
-        showflg: true,
-        enable(rowData) {
-          return true
-        },
-        handler: async function(selectRows) {
-          var self = this;
-          var body = { "poweron": null };
-          body = JSON.stringify(body);
-          self.$sequence({
-            type: 'post',
-            data: body,
-            url: 'api/nova/v2.1/os-hypervisor-ipmis/' + selectRows[0].hypervisor_hostname + '/action',
-            params: selectRows,
-            confirmMsg: Vue.t('calcStorLang.openHostConfirm'),
-            log: {
-              description: {
-                en: "Start Host：" + selectRows[0].hypervisor_hostname,
-                zh_cn: "开启主机：" + selectRows[0].hypervisor_hostname
-              },
-              target: Vue.logTarget.hostmanage
-            },
-            successMsg: Vue.t('calcStorLang.openSendSuccess')
-          }).then((data) => {
-          }).catch((err) => {});
-        }.bind(this)
-      }, {
-        icon: "fa-stop",
-        name: Vue.t('base.shutdown'),
-        showflg: true,
-        enable(rowData) {
-          return true
-        },
-        handler: async function(selectRows) {
-          var self = this;
-          var body = { "poweroff": null };
-          body = JSON.stringify(body);
-          self.$sequence({
-            type: 'post',
-            data: body,
-            url: 'api/nova/v2.1/os-hypervisor-ipmis/' + selectRows[0].hypervisor_hostname + '/action',
-            params: selectRows,
-            confirmMsg:Vue.t('calcStorLang.closeHostConfirm'),
-            log: {
-              description: {
-                en: "Shutdown Host" + selectRows[0].hypervisor_hostname,
-                zh_cn: "关闭主机" + selectRows[0].hypervisor_hostname
-              },
-              target: Vue.logTarget.hostmanage
-            },
-            successMsg: Vue.t('calcStorLang.closeSendSuccess')
-          }).then((data) => {
-          }).catch((err) => {});
-        }.bind(this)
-      }, {
-        icon: "fa-refresh",
-        name: Vue.t('calcStorLang.instLogReboot'),
-        showflg: true,
-        enable(rowData) {
-          return true
-        },
-        handler: async function(selectRows) {
-          var self = this;
-          var body = { "reboot": null };
-          body = JSON.stringify(body);
-          self.$sequence({
-            type: 'post',
-            data: body,
-            url: 'api/nova/v2.1/os-hypervisor-ipmis/' + selectRows[0].hypervisor_hostname + '/action',
-            params: selectRows,
-            confirmMsg:Vue.t('calcStorLang.restartHostConfirm'),
-            log: {
-              description: {
-                en: "Restart Host" + selectRows[0].hypervisor_hostname,
-                zh_cn: "重启主机" + selectRows[0].hypervisor_hostname
-              },
-              target: Vue.logTarget.hostmanage
-            },
-            successMsg: Vue.t('calcStorLang.restartSendSuccess')
-          }).then((data) => {
-          }).catch((err) => {});
-        }.bind(this)
-      }, {
-        icon: "fa-pencil-square-o",
-        name: Vue.t('calcStorLang.BMC'),
-        showflg: true,
-        multi: true,
-        enable(rowData) {
-          return true;
-        },
-        handler: function(selectRows) {
-          if (selectRows.length === 1) {
-            this.selectedRow = selectRows[0];
-            this.bmcflg = true;
-          } else {
-            this.batchBMCSetDialog.hosts = selectRows;
-            this.batchBMCSetDialog.visible = true;
-          }
-        }.bind(this)
-      }, {
         icon: "fa-refresh",
         name: Vue.t("lang.refresh"),
         showflg: true,
@@ -444,26 +304,11 @@ export default {
         self.tableData = finalResult;
         self.total = finalResult.length;
         self.totalData = finalResult;
-        this.loadCetusData();
         self.loading = false;
       } catch (res) {
         self.loading = false;
         self.$message.error(Vue.t("calcStorLang.getError"));
       }
-    },
-    async loadCetusData() {
-      const $this = this;
-      const res = await $this.$ajax({
-        type: 'get',
-        url: 'api/pluto/v1/monitor/sub_resources?subclass_id=hs&page_size=999999'
-      });
-      $this.totalData.forEach(item => {
-        let cetusHost = res.resource_list.find(c => c.collect_host === item.hypervisor_hostname);
-        if (cetusHost) {
-          item.cpu_usage = utils.getProgressPercentageStatus(cetusHost.cpu_usage);
-          item.mem_usage = utils.getProgressPercentageStatus(cetusHost.mem_usage);
-        }
-      });
     },
     hostDetail(row) {
       this.hostDetailFlag = true;
