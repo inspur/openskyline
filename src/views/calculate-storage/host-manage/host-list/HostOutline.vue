@@ -105,28 +105,6 @@
           </el-col>
         </el-row>
       </el-collapse-item>
-      <el-collapse-item :title="$t('Numa')" name="4" style="text-align: left;">
-        <el-row :gutter="10">
-          <el-col :span="24">
-            <span style="color:#249476">cpu:&nbsp;</span><span>{{ $t('calcStorLang.hostCPUNumaAvailable') }}</span>
-            <span style="color:#ff4949">cpu:&nbsp;</span><span>{{ $t('calcStorLang.hostCPUNumaNotAvailable') }}</span>
-            <div class="table_panel">
-              <el-card class="box-card" v-for="(numa, index) in numaList" :key="index">
-                <div slot="header" class="clearfix">
-                  <span>{{'node' + index}}</span>
-                </div>
-                <div class="text item">
-                  <el-radio-group size="small" fill="#bfcbd9"><!-- fill="#ff4949" -->
-                    <el-radio-button v-for="cpu in numa.split(' ')" :key="cpu">
-                      <span :style="showStyle(cpu)">{{nameRender(cpu)}}</span>
-                    </el-radio-button>
-                  </el-radio-group>
-                </div>
-              </el-card>
-            </div>
-          </el-col>
-        </el-row>
-      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -219,22 +197,6 @@ export default {
           totalmem:this.formatFileSize(this.info['memory_mb'], "MB")
         }
       }
-      this.loadNumaList();
-    },
-    async loadNumaList() {
-      try {
-          let result = await this.$ajax({
-            type: 'get',
-            url: "api/nova/v2.1/os-hypervisors-inspur/"+ this.hostname + "/get_host_numainfo"
-          })
-          var data = result['numa_info'];
-          this.numaList = data;
-          var bingList = result['cpu_pin_info'].split(",");
-          for (let b in bingList) {
-            this.bindingMap.set(bingList[b], bingList[b]);
-          }
-        } catch (res) {
-        }
     },
     showStyle(value) {
       var self = this;

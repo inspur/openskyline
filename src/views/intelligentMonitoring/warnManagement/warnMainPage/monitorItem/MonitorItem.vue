@@ -240,13 +240,6 @@ export default {
               ? item.information_cn
               : item.information_en;
           })
-          // if (!Vue.poc) { //poc开关未开启的话，过滤掉磁盘总量和磁盘利用率
-          //   for (let i=rtn.alerts.length-1; i>=0; i--) {
-          //     if (rtn.alerts[i].alert_name=="instance_disk_utilization"||rtn.alerts[i].alert_name=="instance_disk_total") {
-          //       rtn.alerts.splice(i, 1);
-          //     }
-          //   }
-          // }
           me.allData = rtn.alerts;
         },
         errFun() {

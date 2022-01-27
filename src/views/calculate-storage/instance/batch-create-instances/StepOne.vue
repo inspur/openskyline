@@ -11,12 +11,12 @@
             auto-complete="off"
             @focus="showSelectProject"
             v-model="form.projectName"
-            :disabled="roleType === '2'"
+            :disabled="true"
             :placeholder="$t('calcStorLang.pleaseChoose')"></el-input>
         </el-form-item>
         <el-form-item :label="$t('calcStorLang.BATCH_CREATE_INSTANCE_USER')" prop="userId">
-          <el-select v-model="form.userId" style="width: 100%;">
-            <el-option v-for="(item, index) in users" :key="index" :value="item.user.id" :label="item.user.name" />
+          <el-select v-model="form.userId" :disabled="true" style="width: 100%;">
+            <el-option v-for="(item, index) in users" :key="index" :value="item.id" :label="item.name" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { getUsersByProjectId } from '../../../../utils/common';
 export default {
   name: 'StepOne',
   data() {
@@ -43,7 +44,7 @@ export default {
       form: {
         projectId: '',
         projectName: '',
-        userId: ''
+        userId: Vue.userId
       },
       selectProjectDialog: {
         visible: false
@@ -91,19 +92,32 @@ export default {
         this.loadUsers(id);
       }
     },
-    async loadUsers(projectId) {
-      let $this = this;
-      $this.form.userId = '';
+    async loadProject(projectId) {
+      const $this = this;
       try {
-        let res = await $this.$ajax({
+        const res = await $this.$ajax({
           type: 'get',
-          url: `api/keystone/v3/inspur/assignments/projects/${projectId}/users`
+          url: `api/keystone/v3/projects/${projectId}`
         });
-        $this.users = res.users;
+        $this.form.projectId = projectId;
+        $this.form.projectName = res.project.name;
+      } catch (e) {
+        __DEV__ && console.error(e);
+      }
+    },
+    async loadUsers(projectId) {
+      const $this = this;
+      try {
+        const users = await getUsersByProjectId(projectId);
+        $this.users = users;
       } catch (e) {
         __DEV__ && console.error(e);
       }
     }
+  },
+  mounted() {
+    this.loadProject(this.$cookie.get('pid'));
+    this.loadUsers(this.$cookie.get('pid'));
   }
 }
 </script>

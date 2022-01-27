@@ -160,12 +160,6 @@ const networkServer = resolve => {
   }, 'networkServer');
 }
 
-const serialNumber = resolve => {
-  require.ensure(['views/systemManagement/serialNumber/index.vue'], () => {
-    resolve(require('views/systemManagement/serialNumber/index.vue'));
-  }, 'serialNumber');
-}
-
 const parameterSetting = resolve => {
   require.ensure(['views/systemManagement/parameterSetting/ParameterSetting.vue'], () => {
     resolve(require('views/systemManagement/parameterSetting/ParameterSetting.vue'));
@@ -249,7 +243,7 @@ const routes = [{
   path: '/systemManagement',
   alias: '/',
   component: systemManagement,
-  flg:Vue.AuthList["m.systemmanage"],
+  flg: Vue.AuthList["m.systemmanage"],
   meta: {
     des: 'base.systemManagement'
   },
@@ -306,7 +300,7 @@ const routes = [{
       }
     }, {
       name: 'orgPower',
-      path: 'orgPower/:id/:name',
+      path: 'orgPower/:id/:domainid',
       component: orgPower,
       meta: {
         des: "base.groupWeighting"
@@ -330,7 +324,7 @@ const routes = [{
       }
     }, {
       name: 'addUser',
-      path: 'addUser/:id/:name',
+      path: 'addUser',
       component: addUser,
       meta: {
         des: "base.addUser"
@@ -422,15 +416,6 @@ const routes = [{
       }
     }]
   }, {
-    name: 'serialNumber',
-    path: 'serialNumber',
-    alias: '/',
-    component: serialNumber,
-    flg: Vue.AuthList["m.systemmanage.serialnumber"],
-    meta: {
-      des: "base.serialNumberManagement"
-    }
-  }, {
     name: 'parameterSetting',
     path: 'parameterSetting',
     alias: '/',
@@ -443,16 +428,7 @@ const routes = [{
       path: '',
       name:'parameterSetting',
       components:{
-        systemSetting,
-        recordSetting,
-        passwordStrategy,
-        moduleSwitch,
-        leaseParameterSetting,
-        metaData,
-        templateSetting,
-        copyRightSetting,
-        pimSetting,
-        opslogSetting
+        metaData
       }
     }]
   }, {

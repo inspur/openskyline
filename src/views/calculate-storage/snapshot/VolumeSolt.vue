@@ -542,9 +542,9 @@ export default {
       let sortField = self.sortObj.sortField;
       let sortOrder = self.sortObj.sortOrder;
       let data = {
-        id: params.snapshotId==undefined?"":params.snapshotId,
-        display_name: params.soltName==undefined?"":params.soltName,
-        vol_name: params.volumeName==undefined?"":params.volumeName,
+        // id: params.snapshotId==undefined?"":params.snapshotId,
+        // display_name: params.soltName==undefined?"":params.soltName,
+        // vol_name: params.volumeName==undefined?"":params.volumeName,
         limit: self.pageSize,
         with_count: "True",
         offset: self.pageSize * (self.currentPage - 1),
@@ -800,8 +800,7 @@ export default {
       }
     },
     idToNameRender(rowData) {
-      let volumeInfo = rowData["volume"];
-      return volumeInfo["display_name"] || rowData["volume_id"];
+      return rowData["name"] || rowData["volume_id"];
     },
     hrefToVolumeListPage() {
       this.$router.push({

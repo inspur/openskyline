@@ -70,23 +70,21 @@
           </panel>
         </div>
       </transition>
-      <transition name="slide-right" mode="out-in">
+      <!-- <transition name="slide-right" mode="out-in">
         <div style="width: 750px;" class="slide-panel" v-if="viewPowerFlg">
           <panel style="height: 100%">
             <div slot="title" class="clearfix">
               <el-button type="text" icon="fa-arrow-right" @click="onBack">{{$t('base.back')}}</el-button>
             </div>
-            <view-power ref="viewPower" :id="editId"></view-power>
           </panel>
         </div>
-      </transition>
+      </transition> -->
       <delete-project v-for="(deleteProject, key) in deletingProjects" :key="key" :show.sync="deleteProject.show" :id="deleteProject.id" :name="deleteProject.name" @refreshData="getTableData" @finish="getTableData" @error="setDeletingProjectError"></delete-project>
     </icos-page>
   </div>
 </template>
 <script>
 import CreateProject from './CreateProject'
-import ViewPower from './ViewPower'
 import ViewUsage from './ViewUsage'
 import DeleteProject from './DeleteProject'
 export default {
@@ -212,21 +210,6 @@ export default {
           this.viewUsageFlg = true;
           this.$nextTick(() => {
             this.$refs.viewUsage.getData();
-          });
-        }.bind(this)
-      }, {
-        icon: "fa-eye",
-        name: Vue.t('base.permissionDetail'),
-        showflg: Vue.AuthList["m.systemmanage.projectmanage.roledetail"],
-        multi: false,
-        enable(rowData) {
-          return true;
-        },
-        handler: function(selectedRows) {
-          this.viewUsageFlg = false;
-          this.viewPowerFlg = true;
-          this.$nextTick(() => {
-            this.$refs.viewPower.getData();
           });
         }.bind(this)
       }, {
@@ -359,7 +342,6 @@ export default {
   components: {
     CreateProject,
     ViewUsage,
-    ViewPower,
     DeleteProject
   }
 }

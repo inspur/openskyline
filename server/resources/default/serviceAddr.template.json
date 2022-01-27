@@ -1,6 +1,5 @@
 {
   "keystone": "10.48.51.203/identity",
-  "poc": false,
   "bindip":"0.0.0.0",
   "twoFactorAuth": {
     "switch": false,
@@ -12,12 +11,9 @@
     "sk": "sk"
   },
   "showSafeDelete": false,
-  "uploadImageUseFakeS3": true,
-  "sdsipaddress": "100.2.124.190:8080",
   "encryptAlgorithm": "aes-256-cbc",
   "encryptKey": "0123456789abcdef0123456789abcdef",
   "encryptIV": "0123456789abcdef",
-  "leoKeystonePassword": "password",
   "forceCheckCurrentUser": false,
   "forceVNCPassword": false
 }

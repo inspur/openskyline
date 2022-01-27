@@ -137,7 +137,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.vmaz')}}</div>
             <IEcharts :option="optionPieVMAZ"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row2.vmAZ"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -147,7 +147,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.vmproject')}}</div>
             <IEcharts :option="optionPieVMProject"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row2.vmProject"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -157,7 +157,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">CPU{{$t('container.byProject')}}</div>
             <IEcharts :option="optionPieCPU"
-                      :resizable="true"  
+                      :resizable="true"
                       :loading="loading.row2.cpu"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -166,8 +166,8 @@
         <el-col :span="4">
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('base.memory')+$t('container.byProject')}}</div>
-            <IEcharts :option="optionPieMem" 
-                      :resizable="true" 
+            <IEcharts :option="optionPieMem"
+                      :resizable="true"
                       :loading="loading.row2.mem"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -176,8 +176,8 @@
         <el-col :span="4">
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('container.blockStorage')+$t('container.byProject')}}</div>
-            <IEcharts :option="optionPieStorage" 
-                      :resizable="true" 
+            <IEcharts :option="optionPieStorage"
+                      :resizable="true"
                       :loading="loading.row2.storage"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -187,7 +187,7 @@
           <div class="start-page-one-percent2" :class="theme" :style="'height:'+secondDivHeight+'px;'">
             <div :class="'start-page-one-percent2-t' + theme2">{{$t('base.network')+$t('container.byProject')}}</div>
             <IEcharts :option="optionPieNetIp"
-                      :resizable="true"  
+                      :resizable="true"
                       :loading="loading.row2.net"
                       :style="'height:'+secondHeight+'px;'">
             </IEcharts>
@@ -290,11 +290,11 @@
           <div class="start-page-one-percent3" :class="theme">
             <div :class="'start-page-one-toleft' + theme2">
               <span>{{$t('network.IP_EXTERNAL_USAGE')}}</span>
-              <el-tooltip :effect="theme" :content="networkName">
+              <!-- <el-tooltip :effect="theme" :content="networkName">
                 <el-select v-model="networkName" filterable size="small" @change="setNetworkChart" class="storege-short-select">
                   <el-option v-for="item in networkList" :key="item.id" :value="item.name" :label="item.name"></el-option>
                 </el-select>
-              </el-tooltip>
+              </el-tooltip> -->
               <i v-if="parseFloat(ipusage) >= 80" class="el-icon-fa-exclamation-circle" style="color: #fa1914"></i>
             </div>
             <div :class="'start-page-one-toright' + theme2">{{ipusage}}%</div>
@@ -325,7 +325,7 @@
         <el-col :span="8">
           <div class="start-page-one-percent4" :class="theme" :style="'height:'+chartHeight+'px;'">
             <IEcharts :option="optionCpuHistory"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row4.cpu">
             </IEcharts>
           </div>
@@ -333,7 +333,7 @@
         <el-col :span="8">
           <div class="start-page-one-percent4" :class="theme" :style="'height:'+chartHeight+'px;'">
             <IEcharts :option="optionMemHistory"
-                      :resizable="true" 
+                      :resizable="true"
                       :loading="loading.row4.mem">
             </IEcharts>
           </div>
@@ -343,7 +343,7 @@
             <div :class="'start-page-one-toleft' + theme2" style="margin-bottom:0px;">
               <span>{{$t('container.blockStorageUsage')}}</span>
             </div>
-          <dashboard 
+          <dashboard
           class="left"
           :option="{percent:storageUsage,content:{text: this.$t('container.realstoragetotal')}, progressBar: {backgroundInnerColor:'#2fc25b'}}"/>
           </div>
@@ -401,10 +401,10 @@ import loadbalanceImage from 'assets/img/startPageOne/balance.png';
 import databaseImage from 'assets/img/startPageOne/database.png';
 import kbclusterImage from 'assets/img/startPageOne/kbcluster.png';
 import echarts from 'echarts';
-import md5 from 'js-md5';
 import formatFileSize from 'utils/formatFileSize';
-const chartColors = ['#0087ed', '#26A69A', "#2fc25b", "#faad14", "#f04864"];
 import Dashboard from './components/Dashboard';
+import _ from 'underscore';
+const chartColors = ['#0087ed', '#26A69A', "#2fc25b", "#faad14", "#f04864"];
 export default {
   components: {
     Dashboard
@@ -952,7 +952,6 @@ export default {
       Promise.all([self.getProjectNum(), self.getazNum()]).then(function(result) {
         self.getVMData();
         self.getNetWorkNum();
-        self.getCPUMemPieData();
         self.getStoragePieChartData();
       });
       this.getNetworkIps();
@@ -966,14 +965,14 @@ export default {
       }
     },
     async getProjectNum() {
-      var param = {limit:9999, page:1, domain_id:"default"};
+      var param = {limit:999999, page:1, domain_id:"default"};
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/projects?" + $.param(param),
+        url: "api/keystone/v3/projects?" + $.param(param),
         showErrMsg:false
       });
       this.loading.row1.projectNum = false;
-      this.projectNum = ret.total;
+      this.projectNum = ret.projects.length;
       this.projectList = [];
       for (let i=0; i<ret.projects.length; i++) {
         let project = ret.projects[i];
@@ -1001,11 +1000,11 @@ export default {
       let param = {limit:1, page:1, domain_id:"default"};
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+ $.param(param),
+        url: "api/keystone/v3/users?"+ $.param(param),
         showErrMsg:false
       })
       this.loading.row1.userNum = false;
-      this.userNum = ret.total;
+      this.userNum = ret.users.length;
     },
     async getNetWorkNum() {
       let self = this;
@@ -1054,47 +1053,86 @@ export default {
       this.loading.row2.net = false;
     },
     async getVMData() {
-      let vmResult = await this.$ajax({
+      // let vmResult = await this.$ajax({
+      //   type: 'get',
+      //   url: "",
+      // });
+      // let vmtotalNum = vmResult.all_instances_info.total_instances;
+      let {servers} = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/detail?all_tenants=1&limit=1",
+        url: "api/nova/v2.1/servers/detail?all_tenants=1&&limit=99999",
         headers: {
           'X-OpenStack-Nova-API-Version': 2.67
         }
       });
-      let vmtotalNum = vmResult.all_instances_info.total_instances;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/index",
-        headers: {
-          'X-OpenStack-Nova-API-Version': 2.67
-        }
+        url: "api/keystone/v3/projects"
       });
-      let instancenum = ret.instance_num;
-      let azlist = instancenum["az_list"] || {};
-      let plist = instancenum["project_list"] || {};
-      let azLeft = 0;
-      let projectLeft = 0;
-      for (let az in azlist) {
-        azLeft+=azlist[az];
-        for (let i=1; i<this.azList.length; i++) {
-          if (this.azList[i]['name'] == az) {
-            this.azList[i]['value'] = azlist[az];
-            break;
-          }
+      let azList=[];
+      let projectList=[];
+      let obj = {};
+      servers.forEach(item => {
+        var mm = item["OS-EXT-AZ:availability_zone"];
+        obj[mm] = (obj[mm] + 1) || 1
+      })
+      for (var key in obj) {
+        let tt = {
+          name: key || '其他',
+          value: obj[key]
         }
+        azList.push(tt)
       }
-      this.azList[0]["value"] = vmtotalNum - azLeft;
-      for (let pj in plist) {
-        projectLeft+=plist[pj];
-        for (let i=0; i<this.projectList.length; i++) {
-          if (this.projectList[i]['id'] == pj) {
-            this.projectList[i]['value'] = plist[pj];
-            break;
+      ret.projects.forEach(item => {
+        let projectItem;
+        projectItem = servers.filter(_ => {
+          return _.tenant_id == item.id
+        })
+        if (projectItem.length > 0 ) {
+          let cpuvalue=0;
+          let memvalue=0;
+          projectItem.forEach(_ => {
+            cpuvalue = cpuvalue + _.flavor.vcpus
+          })
+          projectItem.forEach(_ => {
+            memvalue = memvalue + _.flavor.ram
+          })
+          let mm = {
+            value: projectItem.length,
+            name: item.name,
+            cpuvalue:cpuvalue,
+            memvalue:memvalue
           }
+          projectList.push(mm);
         }
-      }
+      })
+      // let  = instancenum["project_list"] || {};
+      // let azLeft = 0;
+      // let projectLeft = 0;
+      // for (let az in azlist) {
+      //   azLeft+=azlist[az];
+      //   for (let i=1; i<this.azList.length; i++) {
+      //     if (this.azList[i]['name'] == az) {
+      //       this.azList[i]['value'] = azlist[az];
+      //       break;
+      //     }
+      //   }
+      // }
+      // this.azList[0]["value"] = vmtotalNum - azLeft;
+      // for (let pj in plist) {
+      //   projectLeft+=plist[pj];
+      //   for (let i=0; i<this.projectList.length; i++) {
+      //     if (this.projectList[i]['id'] == pj) {
+      //       this.projectList[i]['value'] = plist[pj];
+      //       break;
+      //     }
+      //   }
+      // }
+      this.azList=azList;
+      this.projectList=projectList;
       this.setVMChart();
       this.getResourceUtilization();
+      this.getCPUMemPieData();
     },
     // async getVMData() {
     //   let self = this;
@@ -1178,27 +1216,27 @@ export default {
         }
       }
     },
-    async getCPUMemPieData() {
+    getCPUMemPieData() {
       let self = this;
-      let ret = await this.$ajax({
-        type: 'get',
-        url: "api/nova/v2.1/os-quota-sets"
-      });
-      // 第二行 CPU
+      // let ret = await this.$ajax({
+      //   type: 'get',
+      //   url: "api/nova/v2.1/os-quota-sets"
+      // });
+      // // 第二行 CPU
       let cpuData = [];
       let ohtercpunumber = 0;
-      for (let i=0; i<ret["all_projects_quotas"].length; i++) {
-        let item = ret["all_projects_quotas"][i];
-        let quotaset = item["quota_set"];
-        for (let j=0; j<self.projectList.length; j++) {
-          if (quotaset["id"] == self.projectList[j]["id"]) {
-            let cpuinuse = quotaset["cores"]["in_use"];
-            let meminuse = quotaset["ram"]["in_use"];
-            self.projectList[j]["cpuvalue"] += cpuinuse;
-            self.projectList[j]["memvalue"] += meminuse;
-          }
-        }
-      }
+      // for (let i=0; i<ret["all_projects_quotas"].length; i++) {
+      //   let item = ret["all_projects_quotas"][i];
+      //   let quotaset = item["quota_set"];
+      //   for (let j=0; j<self.projectList.length; j++) {
+      //     if (quotaset["id"] == self.projectList[j]["id"]) {
+      //       let cpuinuse = quotaset["cores"]["in_use"];
+      //       let meminuse = quotaset["ram"]["in_use"];
+      //       self.projectList[j]["cpuvalue"] += cpuinuse;
+      //       self.projectList[j]["memvalue"] += meminuse;
+      //     }
+      //   }
+      // }
       this.projectList.sort(self.compare("cpuvalue"));
       for (let i=0; i<self.projectList.length; i++) {
         if (i < 4) {
@@ -1245,41 +1283,70 @@ export default {
     },
     async getStoragePieChartData() {
       let self = this;
-      let ret = await this.$ajax({
+      let res = await self.$ajax({
         type: 'get',
-        url: "api/cinder/v3/" + self.$cookie.get('pid') + "/inspur-quota",
+        url: `api/cinder/v3/${self.$cookie.get('pid')}/volumes/detail?all_tenants=True`,
         showErrMsg:false
       });
       // 第二行 存储饼图
-      let storageData = [];
-      let ohterstorage = ret.other;
-      for (let i=0; i<ret["highest"].length; i++) {
-        let item = ret["highest"][i];
-        let allocate = item["allocate"];
-        for (let j=0; j<self.projectList.length; j++) {
-          if (item["project_id"] == self.projectList[j]["id"]) {
-            let storage = {name:self.projectList[j]["name"], value:allocate}
-            storageData.push(storage);
-          }
+      const volumeSizeData = [];
+      for (let volume of res.volumes) {
+        const projectId = volume['os-vol-tenant-attr:tenant_id'];
+        const data = volumeSizeData.find(item => item.projectId === projectId);
+        if (!data) {
+          const project = this.projectList.find(item => item.id === projectId);
+          volumeSizeData.push({
+            projectId: projectId,
+            name: project.name,
+            value: volume.size
+          });
+        } else {
+          data.value += volume.size;
         }
       }
-      storageData.push({name: Vue.t('base.other'), value: ohterstorage});
-      this.optionPieStorage.series[0].data = storageData;
-      let storageLegend = [];
-      for (let i=0; i<storageData.length; i++) {
-        if (storageData[i]["value"] != 0) {
-          let projectname = storageData[i]["name"];
-          storageLegend.push(projectname);
-        }
+      _.sortBy(volumeSizeData, 'value');
+      if (volumeSizeData.length > 4) {
+        const otherSize = _.reduce(_.rest(volumeSizeData, 3), function(memo, num) { return memo + num; }, 0);
+        volumeSizeData.splice(4);
+        volumeSizeData.push({
+          projectId: 'other',
+          name: Vue.t('base.other'),
+          value: otherSize
+        });
       }
-      this.optionPieStorage.legend.data = storageLegend;
+
+      // let ohterstorage = ret.other;
+      // for (let i=0; i<ret["highest"].length; i++) {
+      //   let item = ret["highest"][i];
+      //   let allocate = item["allocate"];
+      //   for (let j=0; j<self.projectList.length; j++) {
+      //     if (item["os-vol-tenant-attr:tenant_id"] == self.projectList[j]["id"]) {
+      //       let storage = {
+      //         name: self.projectList[j]["name"],
+      //         value:allocate
+      //       };
+      //       storageData.push(storage);
+      //     }
+      //   }
+      // }
+      // storageData.push({name: , value: ohterstorage});
+      // this.optionPieStorage.series[0].data = storageData;
+      // let storageLegend = [];
+      // for (let i=0; i<storageData.length; i++) {
+      //   if (storageData[i]["value"] != 0) {
+      //     let projectname = storageData[i]["name"];
+      //     storageLegend.push(projectname);
+      //   }
+      // }
+      this.optionPieStorage.series[0].data = volumeSizeData;
+      this.optionPieStorage.legend.data = volumeSizeData.map(item => item.name);
       this.loading.row2.storage = false;
     },
     async getResourceUtilization() {
       let me = this;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/os-hypervisors-inspur/detail"
+        url: "api/nova/v2.1/os-hypervisors/detail"
       })
       let cputotal = 0;
       let cpuused = 0;
@@ -1287,9 +1354,9 @@ export default {
       let memoryused = 0;
       ret.hypervisors.forEach((item, index) => {
         if (item.hypervisor_type!="ironic") {
-          cputotal += parseInt(item.vcpus) * parseFloat(item.cpu_allocation_ratio);
+          cputotal += parseInt(item.vcpus);
           cpuused += parseInt(item.vcpus_used);
-          memorytotal += parseInt(item.memory_mb) * parseFloat(item.ram_allocation_ratio);
+          memorytotal += parseInt(item.memory_mb);
           memoryused += parseInt(item.memory_mb_used);
         }
       });
@@ -1529,86 +1596,70 @@ export default {
     // 对象存储总量，已使用
     async getObjectStorage() {
       let vm = this;
-      let sdsipaddress = Vue.sdsipaddress;
-      if (sdsipaddress) {
-        await vm.$ajax({
-          type: 'POST',
-          url: "storage-api/"+sdsipaddress+"/rest/security/token",
-          data: JSON.stringify({
-            name:Vue.t('container.blockName'),
-            password:Vue.t('container.blockPs')
-          }),
-          successFun(data) {
-            if (data.code == "0" && data.data.token!="") {
-              vm.$ajax({
-                type: 'get',
-                headers:{
-                  'X-Target-Device-Auth-Token': data.data.token
-                },
-                url: "storage-api/"+sdsipaddress+"/rest/block/pool/capacityUsage",
-                successFun(resule) {
-                  if (resule.code == "0") {
-                    vm.objectStorageUsed = (resule.data.data_pool_info.poolUsage || 0);
-                  }
-                }
-              });
-            }
-          }
-        });
-      }
     },
     // 网络外网IP使用情况
     async getNetworkIps() {
       let self = this;
-      let totalIps = JSBI.BigInt(0);
-      let usedIps = JSBI.BigInt(0);
+      let totalIps = 0;
+      let usedIps = 0;
       self.ipusage = 0;
       self.loading.row3.network = true;
       self.networkList = [];
+      let ret = await self.$ajax({
+        type: 'get',
+        url: `api/neutron/v2.0/network-ip-availabilities`
+      });
+      let networks = ret['network_ip_availabilities'] || [];
       await self.$ajax({
         type: 'get',
-        url: `api/neutron/v2.0/inspur/inspur-network-ip-availabilities?router:external=true`,
+        url: `api/neutron/v2.0/networks?router:external=true`,
         successFun(data) {
           self.loading.row3.network = false;
-          let d = data['inspur_network_ip_availabilities'] || [];
-          for (let i=0; i<d.length; i++) {
-            let subnets = d[i]["subnets"];
-            let totalipssubnet = JSBI.BigInt(0 + '');
-            let usedipssubnet = JSBI.BigInt(0 + '');
+          let externalNets = [];
+          data.networks.forEach(_ => {
+            let externalNet = networks.filter(mm => {
+              return mm.network_id == _.id
+            })
+            externalNets.push(externalNet[0])
+          });
+          for (let i=0; i<externalNets.length; i++) {
+            let subnets = externalNets[i]["subnet_ip_availability"];
+            let totalipssubnet = 0;
+            let usedipssubnet = 0;
             if (subnets.length > 0) {
               for (let j=0; j<subnets.length; j++) {
                 let ips = subnets[j];
-                let totalips_ = JSBI.BigInt(ips["total_ips"] + '');
-                let usedips_ = JSBI.BigInt(ips["used_ips"] + '');
-                totalIps = JSBI.add(totalIps, totalips_);
-                totalipssubnet = JSBI.add(totalipssubnet, totalips_);
-                usedIps = JSBI.add(usedIps, usedips_);
-                usedipssubnet = JSBI.add(usedipssubnet, usedips_);
+                let totalips_ = JSBI.toNumber(JSBI.BigInt(ips["total_ips"] + ''));
+                let usedips_ = JSBI.toNumber(JSBI.BigInt(ips["used_ips"] + ''));
+                totalIps += totalips_;
+                totalipssubnet += totalips_;
+                usedIps += usedips_;
+                usedipssubnet += usedips_;
               }
               let realUsage = usedipssubnet/totalipssubnet * 100;
               if (realUsage < 0.01) {
                 realUsage = 0;
               }
-              let obj = {
-                "name":d[i]["network_name"],
-                "id": d[i]["network_id"],
-                "totalIps": totalipssubnet + "",
-                "usedIps": usedipssubnet + "",
-                "ipusage": realUsage.toFixed(2)
-              };
-              self.networkList.push(obj);
+              if (totalIps > 0) {
+                self.iptotalNum = totalIps;
+                self.ipusedNum = usedIps;
+                let realNum = self.ipusedNum / self.iptotalNum * 100;
+                if (realNum < 0.01) {
+                  realNum = 0;
+                }
+                self.ipusage = realNum.toFixed(2);
+              }
+              // let obj = {
+              //   "name":externalNets[i]["network_name"],
+              //   "id": externalNets[i]["network_id"],
+              //   "totalIps": totalipssubnet + "",
+              //   "usedIps": usedipssubnet + "",
+              //   "ipusage": realUsage.toFixed(2)
+              // };
+              // self.networkList.push(obj);
             }
           }
           self.networkList.sort(compare('totalIps'));
-          if (totalIps > 0) {
-            self.iptotalNum = totalIps+"";
-            self.ipusedNum = usedIps+"";
-            let realNum = self.ipusedNum / self.iptotalNum * 100;
-            if (realNum < 0.01) {
-              realNum = 0;
-            }
-            self.ipusage = realNum.toFixed(2);
-          }
           let obj = {
             'name':Vue.t('base.all'),
             'id':Vue.t('base.all'),

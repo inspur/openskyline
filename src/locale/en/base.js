@@ -561,7 +561,7 @@ export default {
     emailWarn: "Please enter the correct email",
     frequencyCheck: "Please check whether the frequency is an integer of 10~36000",
     thresholdCheck: "Please check threshold complies with the threshold rule",
-    noRoleWarn: "You do not currently have any roles and permissions.You can become a project manager by applying for a project.",
+    noRoleWarn: "You do not currently have any roles and permissions. Please contact to administrator.",
     applySuccess: "Apply Success",
     createQuotaPrompt: "When creating a project,all region environments create the following quotas.Separate maintenance of quotas under each region",
     alarm: "Alarm",

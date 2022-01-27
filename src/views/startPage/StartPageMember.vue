@@ -3,9 +3,6 @@
     <div style="display: table-cell;width:1%;max-width: 10px;">&nbsp;</div>
     <div class="startpage_layout">
       <div style="height: 100%;padding:20px 16px;">
-        <el-button type="primary" @click="applyProject">{{$t('base.applyProject')}}</el-button>
-        <apply-project-card ref="projectApplyCard" @loadData="getOrderData" v-if="cardFlg">
-        </apply-project-card>
         <div :style="style0">{{$t('base.orderAppList')}}&nbsp;&nbsp;
           <a @click="viewOrderFun" class="startpage_more">{{$t('base.lookMore')}}</a>
         </div>
@@ -18,7 +15,7 @@
             <el-table-column prop="resType" align="center" :label="$t('opt.businessType')" min-width="100">
               <template slot-scope="scope">
                 <span v-html="resTypeRender(scope.row.resType)"></span>
-              </template> 
+              </template>
             </el-table-column>
             <el-table-column prop="desc" :label="$t('opt.description')" min-width="100">
               <template slot-scope="scope">
@@ -93,7 +90,6 @@
 </template>
 <script>
 import timeLine from 'assets/img/timeLine.png';
-import ApplyProjectCard from '../systemManagement/projectApply/ProjectApplyCard.vue'
 export default {
   name: "",
   data () {
@@ -418,7 +414,6 @@ export default {
     applyProject() {
       this.cardFlg = true;
       this.$nextTick(() => {
-        this.$refs.projectApplyCard.show();
       });
     },
     resTypeRender(value) {
@@ -460,9 +455,6 @@ export default {
     hasRecordLog() {
       return Vue.AuthList['m.systemmanage.opreatelog'];
     }
-  },
-  components: {
-    ApplyProjectCard
   }
 }
 </script>

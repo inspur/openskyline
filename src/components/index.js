@@ -3,7 +3,7 @@ import OperationPanel from './OperationPanel';
 import OperationPanelNew from './OperationPanelNew';
 import Ztree from './ztree/index';
 import Panel from './panel/Panel';
-import IEcharts from 'vue-echarts-v3/src/full.vue';
+import IEcharts from 'vue-echarts-v3/src/full.js';
 import Affix from './affix/';
 import Page from './page/Page';
 import ColumnHover from './columnHover/ColumnHover';

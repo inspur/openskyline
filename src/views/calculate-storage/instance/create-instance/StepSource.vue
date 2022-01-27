@@ -60,14 +60,6 @@
         </el-row>
         <el-collapse v-model="activeCollapseNames">
           <el-collapse-item :title="$t('calcStorLang.NG_CREATE_INSTANCE_ADVANCED')" name="advanced">
-            <el-card v-if="formData.sourceType !== 'backup' && $archIs('x86')" class="margin-bottom-10" :body-style="{ 'margin-bottom': '-20px' }">
-              <el-form-item :label="$t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_HOTPLUG_ON')" label-width="140px">
-                <el-switch v-model="formData.hotplug" :disabled="!canHotplug" />
-                <el-tooltip v-if="!canHotplug" placement="top" trigger="hover" :content="$t('calcStorLang.currentSystemNotSupportHotPlug')">
-                  <i class="el-icon-fa-question-circle"></i>
-                </el-tooltip>
-              </el-form-item>
-            </el-card>
             <el-card v-if="['volume', 'volumeSnapshot'].includes(formData.sourceType)" class="margin-bottom-10" :body-style="{ 'margin-bottom': '-20px' }">
               <el-form-item :label="$t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_VOLUME_DELETE_WITH_INSTANCE')" label-width="140px">
                 <el-switch v-model="formData.volumeDeleteOnTermination" />
@@ -109,20 +101,6 @@
                 <el-switch v-model="formData.volumeDeleteOnTermination" />
               </el-form-item>
             </el-card>
-            <el-card v-if="roleType !== '3' && ['image', 'volume'].includes(formData.sourceType)" class="margin-bottom-10" :body-style="{ 'margin-bottom': '-20px' }">
-              <el-form-item prop="inspurDiskBus" :label="$t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_DISK_BUS')" label-width="140px" class="is-required">
-                <el-select v-model="formData.inspurDiskBus">
-                  <el-option :label="$t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_DISK_BUS_SELF_ADAPTIVE')" value="">{{ $t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_DISK_BUS_SELF_ADAPTIVE') }}</el-option>
-                  <el-option label="virtio-blk" value="virtio">virtio-blk</el-option>
-                  <el-option label="virtio-scsi" value="scsi">virtio-scsi</el-option>
-                  <!-- <el-option label="ide" value="ide">ide</el-option> -->
-                </el-select>
-                <el-tooltip placement="right">
-                  <div slot="content" v-html="$t('calcStorLang.NG_CREATE_INSTANCE_SOURCE_DISK_BUS_TIPS')" />
-                  <i class="el-icon-fa-question-circle"></i>
-                </el-tooltip>
-              </el-form-item>
-            </el-card>
           </el-collapse-item>
         </el-collapse>
       </el-form>
@@ -141,6 +119,7 @@ import SourceVolume from './source/SourceVolume';
 import SourceVolumeSnapshot from './source/SourceVolumeSnapshot';
 import SourceSnapshot from './source/SourceSnapshot';
 import SourceBackup from './source/SourceBackup';
+import { getUsersByProjectId } from '../../../../utils/common';
 export default {
   name: 'StepSource',
   props: {
@@ -179,13 +158,11 @@ export default {
         sourceImageFormat: '',
         sourceSize: 0,
         sourceVirtualSize: 0,
-        hotplug: false,
         createNewVolume: true,
         newVolumeType: '',
         newVolumeName: '',
         newVolumeSize: 100,
         volumeDeleteOnTermination: false,
-        inspurDiskBus: '',
         loginType: 1,
         keyPair: '',
         userName: 'root / Administrator',
@@ -288,11 +265,9 @@ export default {
     async loadUsers() {
       const $this = this;
       try {
-        const res = await $this.$ajax({
-          type: 'get',
-          url: `api/keystone/v3/role_assignments?scope.project.id=${$this.formData.projectId}`
-        });
-        $this.users = res.users.map(item => item.user);
+        const users = await getUsersByProjectId($this.formData.projectId);
+        console.log(users);
+        $this.users = users;
         if ($this.users.findIndex(item => item.id === $this.formData.userId) === -1) {
           $this.formData.userId = '';
         }
@@ -314,15 +289,6 @@ export default {
       this.formData.disk = disk;
       this.formData.flavorId = flavorId;
       this.formData.networks = networks;
-    },
-    async loadInspurConfigs() {
-      const $this = this
-      const res = await $this.$ajax({
-        type: 'get',
-        url: `api/nova/v2.1/inspur-configs`
-      });
-      $this.systemsSupportHotPlug = [];
-      $this.systemsSupportHotPlug = Object.keys(res);
     },
     async loadVolumeTypes() {
       const $this = this;
@@ -374,7 +340,6 @@ export default {
   },
   async mounted() {
     const $this = this;
-    $this.loadInspurConfigs();
     if ($this.roleType === '0') {
       $this.loadProjects();
     } else {
@@ -397,11 +362,6 @@ export default {
   },
   computed: {
     canHotplug() {
-      // if (this.formData.sourceType === 'snapshot') {
-      //   if (this.formData.sourceSize === 0) {
-      //     return false;
-      //   }
-      // }
       return this.systemsSupportHotPlug.includes(this.formData.sourceOSDistro);
     },
     canCreateVolume() {
@@ -484,10 +444,8 @@ export default {
         this.formData.sourceSize = 0;
         this.formData.sourceVirtualSize = 0;
         this.formData.loginType = 1;
-        this.formData.hotplug = false;
         // this.formData.createNewVolume = false;
         // this.formData.volumeDeleteOnTermination = false;
-        this.formData.inspurDiskBus = '';
       }
       if (oldValue === 'backup' && newValue !== 'backup') { // 如果是从备份切换到非备份来源，应重新赋值用户
         if (this.roleType === '2') {

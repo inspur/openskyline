@@ -351,7 +351,6 @@ export default {
   },
   async mounted() {
     const $this = this;
-    await $this.loadInspurConfigs();
     if ($this.detailConfig.roleType == '3') {
       $this.initForm = Object.assign({}, this.projectCreateForm);
       $this.ruleStore = Object.assign({}, this.rules);
@@ -1184,17 +1183,6 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.loadVolumeTypeList();
-    },
-    async loadInspurConfigs() {
-      const $this = this
-      const res = await $this.$ajax({
-        type: 'get',
-        url: `api/nova/v2.1/inspur-configs`
-      });
-      $this.systemsSupportHotPlug = [];
-      for (let key in res) {
-        $this.systemsSupportHotPlug.push(key);
-      }
     }
   }
 }

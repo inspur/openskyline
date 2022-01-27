@@ -2,16 +2,7 @@ module.exports = function() {
   return [{
     icon: "fa-plus",
     name: Vue.t('calcStorLang.createImage'),
-    showflg: Vue.uploadImageUseFakeS3 === false,
-    readOnly: true,
-    handler: function(selectRows) {
-      //创建
-      this.addFlag = true;
-    }.bind(this)
-  }, {
-    icon: "fa-plus",
-    name: Vue.t('calcStorLang.createImage'),
-    showflg: Vue.uploadImageUseFakeS3 === true,
+    showflg: true,
     readOnly: true,
     handler: function(selectRows) {
       //创建支持断点续传
@@ -20,7 +11,7 @@ module.exports = function() {
   }, {
     icon: "fa-cloud-upload",
     name: Vue.t('calcStorLang.IMAGE_RESUME_BUTTON'),
-    showflg: Vue.uploadImageUseFakeS3 === true,
+    showflg: true,
     multi: false,
     enable(rowData) {
       return (rowData['status'] + "" === "queued");

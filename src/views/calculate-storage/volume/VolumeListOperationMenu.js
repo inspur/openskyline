@@ -598,7 +598,7 @@ module.exports = function() {
                         //try {
                         let result = await self.$ajax({
                             type: "DELETE",
-                            url: `api/cinderv3/v3/${pid}/inspur-volumes/${volumeId}?clear=True`,
+                            url: `api/cinderv3/v3/${pid}/volumes/${volumeId}?clear=True`,
                             showErrMsg: true,
                             headers: {
                                 "OpenStack-API-Version": "volume 3.52"
@@ -673,7 +673,8 @@ module.exports = function() {
         {
             icon: "fa-plus",
             name: this.$t("storage.cloneVolume"), //克隆云硬盘
-            showflg: this.isUser(),
+            // showflg: this.isUser(),
+            showflg: false,
             operateMore: true,
             multi: false,
             enable(rowData) {
@@ -698,8 +699,7 @@ module.exports = function() {
         {
             icon: "fa-clone",
             name: this.$t("storage.volumeManagment"), //云硬盘纳管
-            showflg: Vue.roleType === "0",
-            nonSelected: true,
+            showflg: Vue.roleType == "0",
             operateMore: true,
             handler: function (selectRows) {
                 this.volumeManagmentFlg = true;
@@ -785,7 +785,8 @@ module.exports = function() {
         {
             icon: "fa-plus",
             name: this.$t("storage.manageQosSpec"), // QoS规格
-            showflg: this.isUser(),
+            // showflg: this.isUser(),
+            showflg: false,
             operateMore: true,
             multi: false,
             enable(rowData) {

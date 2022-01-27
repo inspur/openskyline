@@ -89,13 +89,10 @@ exports.middlewares = function (router) {
     async function (req, res, next) {
       const session = req.session;
 
-      session.poc = !!serviceAddr.poc;
       session.objectStorageType = serviceAddr.objectStorageType || 'S3';
       session.S3SuperUser = serviceAddr.S3SuperUser || {};
       session.showSafeDelete = serviceAddr.showSafeDelete || false;
       session.showManageConnect = serviceAddr.showManageConnect || false;
-      session.uploadImageUseFakeS3 = 'uploadImageUseFakeS3' in serviceAddr ? serviceAddr.uploadImageUseFakeS3 : true;
-      session.sdsipaddress = serviceAddr.sdsipaddress || '';
       session.forceCheckCurrentUser = 'forceCheckCurrentUser' in serviceAddr ? serviceAddr.forceCheckCurrentUser : false;
       session.forceVNCPassword = 'forceVNCPassword' in serviceAddr ? serviceAddr.forceVNCPassword : false;
       session.arch = serviceAddr.arch || 'x86';
@@ -105,8 +102,7 @@ exports.middlewares = function (router) {
       let projects = (await getProjects(endpoint, unscopedToken)).projects;
       let projectId = '';
       if (projects.length > 0) {
-        projectId = projects[0].id;
-        projects[0].active = true;
+        projectId = req.cookies['pid'] ? req.cookies['pid'] : projects[0].id;
       }
       // 通过项目获取pToken，并且获取roleId和roleType
       let { body: tokenBody, response: tokenResponse } = await getScopedToken(endpoint, unscopedToken, projectId);
@@ -118,17 +114,18 @@ exports.middlewares = function (router) {
         let endpointItem = catalogItem.endpoints[0];
         services[catalogItem['name']] = cutEndpointUrl(endpointItem.url);
       }
-      let region = 'RegionOne';
+      let regions = await getRegions();
+      let activeRegion = regions[0]['region_id'];
       let roleType = '';
       let roleId = '';
       let adminRole = roles.find(item => item.name === 'admin');
       if (adminRole) {
-        roleType = 0;
+        roleType = '0';
         roleId = adminRole.id;
       } else {
         let memberRole = roles.find(item => item.name === 'member');
         if (memberRole) {
-          roleType = 2;
+          roleType = '2';
           roleId = memberRole.id;
         }
       }
@@ -136,9 +133,11 @@ exports.middlewares = function (router) {
       req.session[Consts.PROJECT_TOKEN] = scopedToken;
 
       res.cookie('pid', projectId || "");
-      res.cookie('roleType', roleType);
+      res.cookie('roleType', String(roleType));
       res.cookie('roleId', roleId);
+      res.cookie('region_id', activeRegion);
       req.session['pid'] = projectId;
+      req.session['roleType'] = String(roleType);
       req.session['roleId'] = roleId;
 
       // 获取菜单

@@ -137,6 +137,7 @@ import _ from 'underscore';
 import moment from 'moment';
 import SourcePopover from './SourcePopover';
 import FlavorPopover from './FlavorPopover';
+import { getUsers, getUsersByProjectId } from '../../../../utils/common';
 export default {
   name: 'RecycleBin',
   components: { SourcePopover, FlavorPopover },
@@ -178,7 +179,7 @@ export default {
                 const instance = selectRows[i];
                 const res = await $this.$ajax({
                   type: 'post',
-                  url: `api/nova/v2.1/servers-inspur/${instance.id}/action`,
+                  url: `api/nova/v2.1/servers/${instance.id}/action`,
                   data: JSON.stringify({
                     restore: ''
                   }),
@@ -228,10 +229,10 @@ export default {
                 try {
                   const instance = selectRows[i];
                   const res = await $this.$ajax({
-                    type: 'delete',
-                    url: `api/nova/v2.1/servers-inspur/${instance.id}/delete-type?type=force-delete`,
+                    type: 'post',
+                    url: `api/nova/v2.1/servers/${instance.id}/action`,
                     data: JSON.stringify({
-                      restore: ''
+                      forceDelete: null
                     }),
                     log: {
                       description: {
@@ -432,9 +433,30 @@ export default {
         return `${key}=${params[key]}`
       }).join('&');
       try {
+        if (page === 1) {
+          let allDataUrl = `api/nova/v2.1/servers?sort_key=${params['sort_key']}&sort_dir=${params['sort_dir']}&limit=999999`;
+          if ('all_tenants' in params) {
+            allDataUrl += `&all_tenants=1`;
+          }
+          const allDataRes = await $this.$ajax({
+            url: allDataUrl,
+            type: 'get',
+            headers: {
+              'X-OpenStack-Nova-API-Version': 2.67
+            },
+            showErrMsg: true
+          });
+          const ranges = _.range(-1, allDataRes.servers.length-1, $this.pageSize); // 计算总共有多少marker id要获取
+          ranges.splice(0, 1);  // 删除第一个-1
+          const markerList = ranges.map(i => {
+            return allDataRes.servers[i]['id'];
+          });
+          $this.markerList = markerList;
+          $this.total = allDataRes.servers.length;
+        }
         const res = await $this.$ajax({
           method: 'get',
-          url: `api/nova/v2.1/servers-inspur/detail?${queryString}`,
+          url: `api/nova/v2.1/servers/detail?${queryString}`,
           headers: {
             'X-OpenStack-Nova-API-Version': 2.67
           }
@@ -450,10 +472,6 @@ export default {
             item['estimatedDeleteTime'] = deletedAt.add(item.reclaim_interval, 's').format('YYYY-MM-DD HH:mm:ss');
           });
           $this.tableData = res.servers;
-          if ('all_instances_info' in res) {
-            $this.markerList = res.all_instances_info.marker_list;
-            $this.total = res.all_instances_info.total_instances;
-          }
           if (res.servers.findIndex(item => item['OS-EXT-STS:task_state'] !== null) !== -1) {
             $this.refreshTimeOut = setTimeout(() => {
               // 自动刷新时，不能改变条件
@@ -488,15 +506,12 @@ export default {
       const $this = this;
       if (this.roleType === '0' && (projectId === '' || projectId === null || projectId === undefined)) {
         try {
-          const res = await $this.$ajax({
-            type: 'get',
-            url: 'api/keystone/v3/inspur/users?dir=asc&field=name&domain_id=default'
-          });
+          const users = await getUsers();
           if ($this.users.length === 0) {
-            $this.users = res.users;
+            $this.users = users;
           }
-          $this.filteredUsers = res.users;
-          $this.searchBar.conditions.user_id.options = res.users.map(item => {
+          $this.filteredUsers = users;
+          $this.searchBar.conditions.user_id.options = users.map(item => {
             return {
               value: item.id,
               label: item.name
@@ -510,13 +525,10 @@ export default {
           if (roleType !== '0') {
             projectId = $this.$cookie.get('pid');
           }
-          const res = await $this.$ajax({
-            type: 'get',
-            url: `api/keystone/v3/inspur/assignments/projects/${projectId}/users`
-          });
-          $this.users = res.users.map(item => item.user);
-          $this.filteredUsers = res.users.map(item => item.user);
-          $this.searchBar.conditions.user_id.options = res.users.map(item => {
+          const users = await getUsersByProjectId(projectId);
+          $this.users = users.map(item => item.user);
+          $this.filteredUsers = users.map(item => item.user);
+          $this.searchBar.conditions.user_id.options = users.map(item => {
             return {
               label: item.user.name,
               value: item.user.id
@@ -532,7 +544,7 @@ export default {
       try {
         let res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/flavors-inspur/detail`
+          url: `api/nova/v2.1/flavors/detail`
         });
         let flavors = res.flavors;
         $this.flavors = flavors;
@@ -544,7 +556,7 @@ export default {
       const $this = this;
       const res = await $this.$ajax({
         type: 'get',
-        url: `api/nova/v2.1/os-hypervisors-inspur/detail`
+        url: `api/nova/v2.1/os-hypervisors/detail`
       });
       let hosts = res.hypervisors.filter(item => item.hypervisor_type !== 'ironic');
       hosts = _.sortBy(hosts, 'hypervisor_hostname');

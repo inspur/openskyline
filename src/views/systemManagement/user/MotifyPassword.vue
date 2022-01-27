@@ -80,7 +80,7 @@ export default {
       let me = this;
       this.$ajax({
         type: 'get',
-        url: 'api/keystone/v3/inspur/system/config/file-conf',
+        url: 'api/keystone/v3/system/config/file-conf',
         successFun(data) {
           me.strategy.password_regex = data.password_regex || '';
           if (Vue.language === 'en') {
@@ -94,7 +94,7 @@ export default {
     },
     show(name) {
       this.visible = true;
-      this.getPassStrategy();
+      // this.getPassStrategy();
       this.name = name;
       if (this.$refs.passwordFom) {
         this.$refs.passwordFom.resetFields();
@@ -126,7 +126,7 @@ export default {
       try {
         let ret = await me.$ajax({
           type: 'patch',
-          url: "api/keystone/v3/inspur/users/"+me.id,
+          url: "api/keystone/v3/users/"+me.id,
           data:JSON.stringify({
             user:{
               "password": me.passwordObj.password

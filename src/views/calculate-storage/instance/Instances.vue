@@ -59,7 +59,7 @@
               </div>
             </el-popover>
             <el-button v-popover:sourceDetailPop type="text" size="small" @click="sourceDetailTip(scope.row)">
-              <span v-html="imageRender2(scope.row.mirrorName, scope.row)"></span>
+              <instance-source :instance="scope.row" />
             </el-button>
           </template>
         </el-table-column>
@@ -87,14 +87,8 @@
                     <tr class="odd">
                       <th class="idatath" style="width:80px">{{$t('lang.name')}}:</th>
                       <td class="idatatd">
-                        <span>{{flavorDetailEntity.name || "-"}}</span>
+                        <span>{{flavorDetailEntity.original_name || "-"}}</span>
                       </td>
-                      </tr>
-                      <tr class="even">
-                        <th class="idatath">ID:</th>
-                        <td class="idatatd">
-                          <span>{{flavorDetailEntity.id || "-"}}</span>
-                        </td>
                       </tr>
                       <tr class="even">
                         <th class="idatath">{{$t('calcStorLang.cpuCore')}}:</th>
@@ -119,13 +113,13 @@
                         <td class="idatatd">
                           <span>{{flavorDetailStatusRender(flavorDetailEntity)}}</span>
                         </td>
-                      </tr> 
+                      </tr>
                   </tbody>
                 </table>
               </div>
             </el-popover>
-            <el-button v-popover:volDetailPop type="text" size="small" @click="flavorDetail(scope.row.flavor.id)">
-              {{ scope.row.flavorName }}
+            <el-button v-popover:volDetailPop type="text" size="small" @click="flavorDetail(scope.row.flavor)">
+              {{ scope.row.flavor.original_name }}
             </el-button>
           </template>
         </el-table-column>
@@ -213,7 +207,6 @@
         <reset-instance v-if="resetInstanceDialog.visible" :instances="resetInstanceDialog.instances" @close="resetInstanceDialog.visible = false;" @refresh="onRefresh" />
         <device-management v-if="deviceManagementDialog.visible" :instances="deviceManagementDialog.instances" @close="deviceManagementDialog.visible = false;" @refresh="onRefresh" />
         <cpu-pin v-if="cpuPinDialog.visible" :instance="cpuPinDialog.instance" @close="cpuPinDialog.visible = false" @refresh="onRefresh" />
-        <audit v-if="auditDialog.visible" @close="auditDialog.visible = false" />
         <instance-clone v-if="instanceCloneDialog.visible" :instances="instanceCloneDialog.instances" @close="instanceCloneDialog.visible = false" />
         <delete-instances v-if="deleteInstancesDialog.visible" :instances="deleteInstancesDialog.instances" @close="deleteInstancesDialog.visible = false" @refresh="onRefresh" />
         <batch-direct-connection v-if="batchDeviceManagementDialog.visible" :instances="batchDeviceManagementDialog.instances" @close="batchDeviceManagementDialog.visible = false" @refresh="onRefresh" />
@@ -229,7 +222,7 @@
             </panel>
           </div>
         </transition>
-      </div>    
+      </div>
     </icos-page>
   </div>
 </template>
@@ -261,10 +254,11 @@ import DeviceManagement from './device-management/index';
 import CreateInstance from './create-instance/index';
 import CPUPin from './cpu-pin';
 import SelectNetcard from './SelectNetCard';
-import Audit from './Audit';
 import InstanceClone from './instance-clone/index';
 import DeleteInstances from './DeleteInstances';
 import BatchDirectConnection from './device-management/batch-direct-connection'
+import InstanceSource from './InstanceSource'
+import { getUsers, getUsersByProjectId } from '../../../utils/common';
 export default {
   name: "Instances",
   components: {
@@ -288,10 +282,10 @@ export default {
     ResetInstance,
     DeviceManagement,
     'cpu-pin': CPUPin,
-    Audit,
     InstanceClone,
     DeleteInstances,
-    BatchDirectConnection
+    BatchDirectConnection,
+    InstanceSource
   },
   data() {
     return {
@@ -372,7 +366,7 @@ export default {
       sourceDetailEntity: '',
       formatFileSize:formatFileSize,
       zoneOptions: [],
-      isShowTip:(navigator.userAgent.indexOf("Chrome") > 0),
+      isShowTip: true,
       columns: [{
         prop: "console",
         label: Vue.t('calcStorLang.console'),
@@ -904,7 +898,7 @@ export default {
       try {
         let result = await $this.$ajax({
           type: 'get',
-          url: 'api/nova/v2.1/inspur-availability-zone/detail'
+          url: 'api/nova/v2.1/os-availability-zone/detail'
         });
         let list = result['availabilityZoneInfo'];
         let zones = [];
@@ -912,7 +906,7 @@ export default {
           for (let z = 0; z < list.length; z++) {
             let zone = list[z];
             let zoneState = zone['zoneState'];
-            if (zone['zoneName'] != "internal" && zoneState['available'] == true) {
+            if (zone['zoneName'] != "internal") {
               let arr = $this.loadZoneAndHostCompare(zone.hosts);
               if (arr.length > 0) {
                 zones.push(zone);
@@ -962,20 +956,8 @@ export default {
       } catch (data) {
       }
     },
-    async flavorDetail(id) {
-      var self = this;
-      self.popoverFlavorFlag = true;
-      try {
-        let result = await self.$ajax({
-          type: 'get',
-          url: 'api/nova/v2.1/flavors/' + id,
-          showErrMsg: true
-        });
-        self.flavorDetailEntity = result['flavor'];
-      } catch (res) {
-        self.flavorDetailEntity = "";
-        self.loading = false;
-      }
+    async flavorDetail(flavor) {
+      this.flavorDetailEntity = flavor;
     },
     alterConfigOperate(value) {
        var self = this;
@@ -1272,7 +1254,7 @@ export default {
       var sourceTempType = ""; //创建出云主机类型（非选择的source类型） 1: 镜像 2: 云硬盘 3：云硬盘快照 4：云主机快照
       self.templateMaps.set(rowData['id'], sourceTempType);
       if (typeof imageId == "undefined") {
-        var isVolumeOrSnap = rowData['os-extended-volumes-inspur:volumes_attached'];
+        var isVolumeOrSnap = rowData['os-extended-volumes:volumes_attached'];
         if (isVolumeOrSnap != "" && typeof isVolumeOrSnap != "undefined") {
           var vUuid = isVolumeOrSnap[0].id;
           var isVolumeFlag = self.volumeMaps.get(vUuid);
@@ -1309,31 +1291,6 @@ export default {
         }
       }
     },
-    imageRender2(value, rowData) {
-      var self = this;
-      var type = rowData['metadata']['source_type'];
-      var sourceId = "";
-      var sourceShow = "";
-      if ("image" == type) {
-        sourceId = rowData['image'].id;
-        return Vue.t('calcStorLang.image') + "(" + sourceId + ")";
-      } else if ("snapshot" == type) {
-        sourceId = rowData['image'].id;
-        return Vue.t('calcStorLang.instanceshot') + "(" + sourceId + ")";
-      } else if ("volume" == type) {
-        var volumeList = rowData['os-extended-volumes-inspur:volumes_attached'];
-        for (let v = 0; v < volumeList.length; v++) {
-          var obj = volumeList[v];
-          if ((obj['boot_disk'] + "") == "true") {
-            sourceId = obj.id;
-            break;
-          }
-        }
-        return Vue.t('calcStorLang.volume') + "(" + sourceId + ")";
-      } else {
-        return "-";
-      }
-    },
     sourceDetailTip(row) {
       var self = this;
       self.popoverFlag = true;
@@ -1346,7 +1303,7 @@ export default {
         uuId = row['image'].id;
         self.loadImageOrSnapshotDetail(uuId);
       } else {
-        var volumeList = row['os-extended-volumes-inspur:volumes_attached'];
+        var volumeList = row['os-extended-volumes:volumes_attached'];
         for (let v = 0; v < volumeList.length; v++) {
           var obj = volumeList[v];
           if ((obj['boot_disk'] + "") == "true") {
@@ -1632,7 +1589,7 @@ export default {
       const $this = this;
       const res = await $this.$ajax({
         type: 'get',
-        url: 'api/nova/v2.1/os-hypervisors-inspur/detail'
+        url: 'api/nova/v2.1/os-hypervisors/detail'
       });
       let hosts = res.hypervisors.filter(item => item.hypervisor_type !== 'ironic');
       hosts = _.sortBy(hosts, 'hypervisor_hostname');
@@ -1731,7 +1688,6 @@ export default {
         clearTimeout($this.refreshTimeout);
       }
       let url = `api/nova/v2.1/servers/detail`;
-      let roleType = Vue.roleType + '';
       let queryString = Object.keys(params).map(key => {
         return `${key}=${params[key]}`
       }).join('&');
@@ -1739,6 +1695,27 @@ export default {
         $this.loading = true;
       }
       try {
+        if (page === 1) {
+          let allDataUrl = `api/nova/v2.1/servers?sort_key=${params['sort_key']}&sort_dir=${params['sort_dir']}&limit=999999`;
+          if ('all_tenants' in params) {
+            allDataUrl += `&all_tenants=1`;
+          }
+          const allDataRes = await $this.$ajax({
+            url: allDataUrl,
+            type: 'get',
+            headers: {
+              'X-OpenStack-Nova-API-Version': 2.67
+            },
+            showErrMsg: true
+          });
+          const ranges = _.range(-1, allDataRes.servers.length-1, $this.pageSize); // 计算总共有多少marker id要获取
+          ranges.splice(0, 1);  // 删除第一个-1
+          const markerList = ranges.map(i => {
+            return allDataRes.servers[i]['id'];
+          });
+          $this.markerList = markerList;
+          $this.total = allDataRes.servers.length;
+        }
         const res = await $this.$ajax({
           url: `${url}?${queryString}`,
           type: 'get',
@@ -1753,7 +1730,6 @@ export default {
             item.projectName = $this.projectRender('', item);
             item.ownerName = $this.ownerRender('', item);
             item.flavorName = $this.flavorMaps.size === 0 ? '' : $this.flavorRender(item.flavor.id);
-            let source = $this.imageRender(item.mirrorName, item) || '';
             item.sourceType = $this.templateMaps.get(item.id);
             $this.instanceMaps.set(item.id, item);
             let tagsShown = item.tags.filter(item => {
@@ -1763,10 +1739,6 @@ export default {
             item.tagsShown = tagsShown;
           });
           $this.totalData = res.servers;
-          if ('all_instances_info' in res) {
-            $this.markerList = res.all_instances_info.marker_list;
-            $this.total = res.all_instances_info.total_instances;
-          }
           $this.handleSelectionChange($this.multipleSelection);
           $this.refreshTimeout = setTimeout(() => {
             if (!$this._isDestroyed) {
@@ -1786,21 +1758,11 @@ export default {
     },
     async loadFilteredUsers(projectId) {
       const $this = this;
-      let url = `api/keystone/v3/inspur/users?dir=asc&field=name&domain_id=default`;
-      if (projectId !== '') {
-        url = `api/keystone/v3/inspur/assignments/projects/${projectId}/users`;
-      }
-      const res = await $this.$ajax({
-        type: 'get',
-        url
-      });
       let users = [];
       if (projectId === '') {
-        users = res.users;
+        users = await getUsers();
       } else {
-        users = res.users.map(item => {
-          return item.user;
-        });
+        users = await getUsersByProjectId(projectId);
       }
       if ($this.userMaps.size === 0) {
         users.forEach(item => {

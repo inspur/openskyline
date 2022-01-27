@@ -88,13 +88,13 @@ export default {
             networks: [{
               uuid: instance.networkId
             }],
-            projectId: $this.projectId,
             security_groups: [{
               name: instance.netSafeGroupId
             }],
             tags: [],
-            userId: $this.userId,
-            metadata: {}
+            metadata: {
+              source_type: 'volume'
+            }
           };
           if (instance.password !== '') {
             server.adminPass = instance.password;
@@ -104,7 +104,7 @@ export default {
           }
           let res = await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur`,
+            url: `api/nova/v2.1/servers`,
             data: JSON.stringify({
               'OS-SCH-HNT:scheduler_hints': {
                 '_nova_check_type': true

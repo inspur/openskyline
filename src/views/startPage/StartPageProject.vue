@@ -3,9 +3,6 @@
     <div style="display: table-cell;width:1%;max-width: 10px;">&nbsp;</div>
     <div class="startpage_layout">
       <div style="height: 100%;padding:20px 16px;">
-        <el-button type="primary" @click="applyProject">{{$t('base.applyProject')}}</el-button>
-        <apply-project-card ref="projectApplyCard" v-if="cardFlg">
-        </apply-project-card>
         <div :style="style0">{{$t('base.utilizationReQuo')}}</div>
         <div class="startpage_divider"></div>
         <div style="margin-top:10px;">
@@ -116,7 +113,6 @@
 </template>
 <script>
 import timeLine from 'assets/img/timeLine.png';
-import ApplyProjectCard from '../systemManagement/projectApply/ProjectApplyCard.vue'
 export default {
   name: "",
   data () {
@@ -756,21 +752,12 @@ export default {
           __: +new Date()
         }
       });
-    },
-    applyProject() {
-      this.cardFlg = true;
-      this.$nextTick(() => {
-        this.$refs.projectApplyCard.show();
-      });
     }
   },
   computed: {
     hasRecordLog() {
       return Vue.AuthList['m.systemmanage.opreatelog'];
     }
-  },
-  components: {
-    ApplyProjectCard
   }
 }
 </script>

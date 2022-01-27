@@ -62,8 +62,11 @@ export default {
       const $this = this;
       return new Promise((resolve, reject) => {
         $this.$ajax({
-          type: 'delete',
-          url: `api/nova/v2.1/servers/${instance.id}`,
+          type: 'post',
+          url: `api/nova/v2.1/servers/${instance.id}/action`,
+          data: JSON.stringify({
+            forceDelete: null
+          }),
           log: {
             description: {
               en: `Delete Instance(Instance ID: ${instance.id}, Instance Name: ${instance.name})`,
@@ -88,7 +91,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.$ajax({
           type: 'delete',
-          url: `api/nova/v2.1/servers-inspur/${instance.id}/delete-type?type=soft-delete`,
+          url: `api/nova/v2.1/servers/${instance.id}`,
           log: {
             description: {
               en: `Soft Delete Instance(Instance ID: ${instance.id}, Instance Name: ${instance.name})`,

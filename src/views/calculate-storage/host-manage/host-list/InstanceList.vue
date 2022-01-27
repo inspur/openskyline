@@ -29,10 +29,10 @@
         <el-col :span="19">
           <el-pagination
             class="right"
-            @size-change="handleSizeChange" 
-            @current-change="handleCurrentChange" 
-            :current-page="currentPage" 
-            :page-size="pageSize" 
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next"
             :total="total">
           </el-pagination>
@@ -110,7 +110,7 @@ export default {
         }).join('&');
         let result = await self.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/detail?${paramsStr}`
+          url: `api/nova/v2.1/servers/detail?${paramsStr}`
         });
         let servers = result.servers;
         self.totalData = servers;
@@ -144,7 +144,7 @@ export default {
       try {
         let result = await self.$ajax({
           type: 'get',
-          url: 'api/keystone/v3/inspur/users?dir=asc&field=name'
+          url: 'api/keystone/v3/users?dir=asc&field=name'
         });
         var list = result['users'];
         for (var u = 0; u < list.length; u++) {

@@ -81,6 +81,7 @@
  </div>
 </template>
 <script>
+import {getUsersByProjectId} from '../../../utils/common';
 export default {
   name:"CloneVolume",
   props: ["projectInfo", "instancelSoltInfo", "imageInfo", "volumeInfo"],
@@ -204,7 +205,7 @@ export default {
     async getVolumeType() {
       let self = this;
       let projectId = this.$cookie.get('pid');
-      let url = "api/cinderv3/v3/" + projectId + "/inspur-types?is_public=None";
+      let url = "api/cinderv3/v3/" + projectId + "/types?is_public=None";
       try {
         let result = await self.$ajax({
           type: 'get',
@@ -224,6 +225,7 @@ export default {
       let self = this;
       const volumeInfo = self.volumeInfo;
       const joinedProjecList = Vue.projectList;
+      self.loadUserList();
       self.newVolume.project = volumeInfo['os-vol-tenant-attr:tenant_id'];
       if (self.roleType === "0") {
         const projectListMap = await this.loadProjectList();
@@ -352,18 +354,12 @@ export default {
       if ( !self.newVolume.project ) {
         return false;
       }
-      let url = 'api/keystone/v3/inspur/assignments/projects/' + projectId + '/users';
       try {
-        let result = await self.$ajax({
-          type: 'get',
-          url: url,
-          showErrMsg: false
-        });
-        let users = result['users'];
+        let users = await getUsersByProjectId(projectId);
         let loginUser = "";
         if (users != null) {
           for (let u = 0; u < users.length; u++) {
-            let userObj = users[u].user;
+            let userObj = users[u];
             self.userList.push(userObj);
             //判断一下，查询出来用户列表是否包含当前登录账号
             //如果包含，则默认展示i当前登陆用户
@@ -503,7 +499,7 @@ export default {
           let type = "post";
           let msg = this.$t('storage.createVolSuccess');
           let body = {
-            "os-retype_inspur":{
+            "os-retype":{
                 "new_type": vType,
                 "migration_policy":"on-demand",
                 "is_clone": true,
@@ -554,7 +550,7 @@ export default {
             }
             disknames.push({diskname : tempName});
           }
-          body["os-retype_inspur"]['display_name'] = "{diskname}";
+          body["os-retype"]['display_name'] = "{diskname}";
               try {
                 let logObj = {
                   description: {

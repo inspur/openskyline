@@ -3,7 +3,7 @@
 <script>
 import * as utils from 'utils/index.js';
 import vueLocal from "../../locale";
-import IEcharts from 'vue-echarts-v3/src/full.vue';
+import IEcharts from 'vue-echarts-v3/src/full.js';
 import ResourceStatistics from './parts/ResourceStatistics.vue'
 
 import VmState from './parts/VmState'

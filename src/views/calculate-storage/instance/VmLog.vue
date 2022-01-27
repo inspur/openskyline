@@ -91,7 +91,7 @@ export default {
       try {
         let result = await self.$ajax({
           type: 'get',
-          url: "api/nova/v2.1/servers-inspur/" + self.instanceId,
+          url: "api/nova/v2.1/servers/" + self.instanceId,
           headers: {
             'X-OpenStack-Nova-API-Version': 2.41
           },

@@ -60,7 +60,7 @@ export default {
           try {
             let result = await self.$ajax({
               type: 'post',
-              url: 'api/nova/v2.1/servers-inspur/' + self.instUuid + '/action',
+              url: 'api/nova/v2.1/servers/' + self.instUuid + '/action',
               data: body,
               showErrMsg: true,
               errorKey: "forbidden",

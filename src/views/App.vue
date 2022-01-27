@@ -14,16 +14,9 @@
             </el-option>
           </el-select>
           <el-select v-model="commandSelected" filterable size="small" @change="handleChange" style="width:120px;">
-            <el-option v-for="item in commands" :key="item.uuid" :label="item.name" :value="item.uuid">
+            <el-option v-for="item in commands" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
-          <!-- <div class="main-page-t-img main-page-t-serious"></div> -->
-          <el-badge v-if="flag&&orderFlag" :value="order.faultNum" :max="99" >
-            <div @click="flowDeal">{{$t('base.order')}}</div>
-          </el-badge>
-          <el-badge v-if="flag&&faultFlag" :value="order.orderNum" :max="99" >
-            <div @click="faultFault">{{$t('base.workOrder')}}</div>
-          </el-badge>
         </div>
         <div class="layout-header-menus">
           <el-menu :default-active="operationIndex"  class="el-menu--transparent skin" mode="horizontal" @select="onOperationSelect" menu-trigger="hover">
@@ -81,9 +74,6 @@
 <script>
   import logoImageBig from 'assets/img/logo-big.png';
   import logoSmall from 'assets/img/logo-small.png';
-  import projectImage from 'assets/img/1.png'
-  import projectImage1 from 'assets/img/2.png'
-  import projectImage2 from 'assets/img/3.png'
   import menus from './menus/index.js';
   import { mapGetters, mapMutations } from 'vuex';
   import UserMessage from './topDialog/UserMessage'
@@ -103,38 +93,15 @@
           backgroundImage: `url(${logoSmall})`
         },
         smallLogFlag: false,
-        flag:Vue.roleType != "3",
-        orderFlag:Vue.AuthList["m.operationmanage.orderapprove"] && Vue.service['leo'],
-        faultFlag:Vue.AuthList["m.operationmanage.fault"] && Vue.service['leo'],
+        flag: Vue.roleType !== "3",
         roleType:Vue.roleType,
-        poc:Vue.poc,
         loading:false,
         activeName: '',
         activeOpeneds: ['project'],
         operationIndex: "",
-        projectImage: projectImage,
-        projectImage1: projectImage1,
-        projectImage2: projectImage2,
         iconSize: "icon-size-14",
-        commands: (function(me) {
-          Vue.projectList.forEach((item, key) => {
-            if (item.roleType==0) {
-              item.name = me.$t('base.ALL_PROJECTS');
-            }
-          });
-          return Vue.projectList;
-        }(this)),
-        commandSelected: (function() {
-          var selCommand = '';
-          Vue.projectList.forEach((item, key) => {
-            if (item.active) {
-              selCommand = item.uuid;
-              Vue.pid_roleType = item.uuid;
-              Vue.project_name = item.name;
-            }
-          });
-          return selCommand;
-        }()),
+        commands: Vue.projectList,
+        commandSelected: this.$cookie.get('pid'),
         regions:Vue.regionList,
         regionValue:(function() {
           var value = '';
@@ -273,22 +240,10 @@
       }
     },
     async mounted () {
-      this.getLdapConfig();
-      // if (this.poc&&this.roleType==0) {
-      //   this.getInteligentData(); //监控数据
-      // }
-      if (Vue.roleType == "0" || Vue.roleType == "2") {
-        this.getOrderNum();
-      };
       if (this.commands.length==0) {
         this.$router.push({
           path: '/projectApply'
         });
-      }
-      this.checkPasswordExpired();
-      if (this.roleType === '0') {
-        await this.checkLicenseExpired();
-        await this.checkMaintenanceExpired();
       }
     },
     methods: {
@@ -308,75 +263,13 @@
       async getLdapConfig() {
         let ret = await this.$ajax({
           type: 'get',
-          url: "api/keystone/v3/inspur/domains/config/"+Vue.domainName
+          url: "api/keystone/v3/domains/config/"+Vue.domainName
         })
         if (ret&&ret.identity&&ret.identity.driver=='ldap') {
           Vue.isLdap = true;
           this.operationMenus[0].subMenus[0].flg = false;
           this.operationMenus[0].subMenus[1].flg = false;
         }
-      },
-      async getOrderNum () {
-        if (!Vue.service['leo']) { // 不部署时，不请求
-          return;
-        }
-        var self = this;
-        var approverId = Vue.userId;
-        var projectId = "";
-        if (Vue.roleType == "0") {
-          projectId = "";
-        } else {
-          projectId = this.$cookie.get('pid');
-        };
-        var params = {
-          "approver_id": approverId,
-          "role_type": Vue.roleType,
-          "project_id": projectId
-        };
-        params = JSON.stringify(params);
-        var approvingOrderNum;
-        var approvingFaultNum;
-        try {
-          let ret = await self.$ajax({
-            type: "PUT",
-            data: params,
-            polling: true,
-            url: "api/leo/v1/order/get_approve_order_amount"
-          });
-          approvingOrderNum = ret.data.flow_order_approve_amount;
-          approvingFaultNum = ret.data.work_order_approve_amount;
-        } catch (res) {
-          console.log("获取待审批订单统计数目失败");
-        };
-        self.setOrderInfo({faultNum: approvingOrderNum, orderNum: approvingFaultNum});
-      },
-      getInteligentData() {
-        let me = this;
-        let ret = this.$ajax({
-          type: 'get',
-          url: "api/pluto/v1/alert/summary",
-          successFun(data) {
-            me.intelligentData = data.alert_info;
-          }
-        })
-      },
-      flowDeal() {
-        this.$router.push({
-          path: '/operations/flow'
-        });
-      },
-      faultFault() {
-        this.$router.push({
-          path: '/operations/fault'
-        });
-      },
-      checkStyleActive(style) {
-        this.operationMenus[2].subMenus.forEach((item, index) => {
-          item.isActive = false;
-          if (item.key === style) {
-            item.isActive = true;
-          }
-        });
       },
       async onOperationSelect(index, indexPath, vm) {
         let me = this;
@@ -426,21 +319,6 @@
               __DEV__ && console.warn(data);
             }
             break;
-          case 'helpBook':
-            window.open('/static/pdfjs/web/viewhelp.html?arch='+Vue.arch, '_blank');
-            break;
-          case 'sceneBase':
-            const PORT_SCENCE = '8200';
-            let host = window.location.host;
-            let path = "";
-            let port = window.location.port;
-            if (port) {
-              path = 'http://' + host.split(port)[0] + PORT_SCENCE;
-            } else {
-              path = 'http://' + host + ":" + PORT_SCENCE;
-            }
-            window.open(path);
-            break;
           case 'user-info':
             this.userMessageFlg = true;
             this.$nextTick(() => {
@@ -467,11 +345,6 @@
             break;
           default:
         }
-        if (['light', 'dark', 'blue'].indexOf(index) >= 0) {
-          this.$cookie.set('theme', index, { expires: '1D' });
-          this.checkStyleActive(index);
-          window.location.reload();
-        }
         if (["virtualResource", "physicalResource", "digitalVisualizationScreen"].indexOf(index)>=0) {
           let width = screen.availWidth;
           let height = screen.availHeight;
@@ -493,9 +366,9 @@
       handleChange(value) {
         this.loading = true;
         this.commandSelected = value;
-        let pid = value.substring(0, value.length-2);
+        let pid = value;
         this.$cookie.set("pid", pid, { expires: '1D' });
-        this.$cookie.set("roleType", value.substring(value.length-1), { expires: '1D' });
+        // this.$cookie.set("roleType", value.substring(value.length-1), { expires: '1D' });
         this.$cookie.set("switch", "project", { expires: '1D' });
         this.getProjectToken(pid);
       },
@@ -537,115 +410,6 @@
         } catch (e) {
           __DEV__ && console.error(e);
         }
-      },
-      // 检查试用版序列号是否不足30天
-      async checkLicenseExpired() {
-        const $this = this;
-        try {
-          const res = await $this.$ajax({
-            type: 'get',
-            showErrMsg: false,
-            url: 'api/keystone/v3/inspur/serialnumber'
-          });
-          $this.licenseInfo.nodeAmount = res.sn_detail.node_num;
-          if (res.sn_list.findIndex(item => item.type === 'formal_license') !== -1) {
-            $this.licenseInfo.trialEdition = false;
-          }
-          const licenseNoLongRemain = $this.$cookie.get('icosLicenseNoLongRemain');
-          if (licenseNoLongRemain !== 'true') {
-            if ('left_days' in res.sn_detail) {
-              const leftDays = res.sn_detail.left_days;
-              if (leftDays < 30 && leftDays >= 0) {
-                const h = $this.$createElement;
-                const notify = $this.$notify.warning({
-                  title: $this.$t('base.SERIAL_NUMBER_NOTIFY_DUE'),
-                  message: h('div', [$this.$t('base.SERIAL_NUMBER_NOTIFY_PRODUCT_DUE', leftDays), h('el-button', {
-                    attrs: {
-                      type: 'text'
-                    },
-                    style: {
-                      padding: '2px'
-                    },
-                    on: {
-                      click() {
-                        $this.$cookie.set('icosLicenseNoLongRemain', 'true');
-                        notify.close();
-                      }
-                    }
-                  }, $this.$t('base.SERIAL_NUMBER_NOTIFY_NO_LONG_REMAIN'))]),
-                  duration: 0
-                });
-              }
-            }
-          }
-        } catch (e) {
-          __DEV__ && console.error(e);
-        }
-      },
-      // 检查维保序列号是否余量不足，不足则提示
-      async checkMaintenanceExpired() {
-        const $this = this;
-        const maintenanceExpiredNoLongRemain = $this.$cookie.get('icosMaintenanceExpiredNoLongRemain');
-        const maintenanceAlmostExpiredNoLongRemain = $this.$cookie.get('icosMaintenanceAlmostExpiredNoLongRemain');
-        if (!$this.licenseInfo.trialEdition) {
-          try {
-            const res = await $this.$ajax({
-              type: 'get',
-              showErrMsg: false,
-              url: `api/keystone/v3/inspur/maintenancenumber`
-            });
-            let maintenanceDays = res.info.maintenance / $this.licenseInfo.nodeAmount;
-            maintenanceDays = Math.floor(maintenanceDays);
-
-            let cookieKey = '';
-            let notifyTitle = '';
-            let notifyMessage = '';
-            if (maintenanceDays < 0 && maintenanceExpiredNoLongRemain !== 'true') {
-              cookieKey = 'icosMaintenanceExpiredNoLongRemain';
-              notifyTitle = $this.$t('base.SERIAL_NUMBER_NOTIFY_EXPIRED');
-              notifyMessage = $this.$t('base.SERIAL_NUMBER_NOTIFY_MAINTENANCE_EXPIRED');
-            } else if (maintenanceDays >= 0 && maintenanceDays < 30 && maintenanceAlmostExpiredNoLongRemain !== 'true') {
-              cookieKey = 'icosMaintenanceAlmostExpiredNoLongRemain';
-              notifyTitle = $this.$t('base.SERIAL_NUMBER_NOTIFY_DUE');
-              notifyMessage = $this.$t('base.SERIAL_NUMBER_NOTIFY_MAINTENANCE_DUE', maintenanceDays);
-            }
-
-            if (cookieKey !== '') {
-              const h = $this.$createElement;
-              const notify = $this.$notify.warning({
-                title: notifyTitle,
-                message: h('div', [notifyMessage, h('el-button', {
-                  attrs: {
-                    type: 'text'
-                  },
-                  style: {
-                    padding: '2px'
-                  },
-                  on: {
-                    click() {
-                      $this.$cookie.set(cookieKey, 'true');
-                      notify.close();
-                    }
-                  }
-                }, $this.$t('base.SERIAL_NUMBER_NOTIFY_NO_LONG_REMAIN'))]),
-                duration: 0
-              });
-            }
-            $this.maintenanceCal();
-          } catch (e) {
-            __DEV__ && console.error(e);
-          }
-        }
-      },
-      // 自动触发维保序列号剩余时间计算，以防止自动计算数据被篡改
-      async maintenanceCal() {
-        const $this = this;
-        await $this.$ajax({
-          type: 'post',
-          showErrMsg: false,
-          url: 'api/keystone/v3/inspur/maintenancenumber/cal',
-          data: JSON.stringify({})
-        });
       },
       handleStartPageShow() {
         this.$router.push({

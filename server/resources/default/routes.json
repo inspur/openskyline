@@ -91,11 +91,6 @@
     "mapping": "/node-api/keystone/downloadObject"
   },
   {
-    "name": "serialNumber",
-    "class": "serialNumber",
-    "mapping": "/node-api/keystone/serialNumber"
-  },
-  {
     "name": "getToken",
     "class": "login/getToken",
     "mapping": "/node-api/getToken"
@@ -120,7 +115,7 @@
     "class": "configBeforeAuth",
     "mapping": "/node-api/keystone/config-before-auth"
   },
-  { 
+  {
     "name": "fake-s3",
     "class": "fake-s3/route",
     "mapping": "/node-api/fake-s3"

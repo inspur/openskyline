@@ -346,15 +346,15 @@ export default {
       total: 1,
       searchBar: {
         conditions: {
-          name: {
-            label: this.$t('lang.name'),
-            type: 'input',
-            validator: (value) => {
-              if (!/^[_\-0-9a-zA-Z\u4e00-\u9fa5]+$/.test(value)) {
-                throw new Error(this.$t('validation.onlyLetter_MinusNumberChinese'));
-              }
-            }
-          },
+          // name: {
+          //   label: this.$t('lang.name'),
+          //   type: 'input',
+          //   validator: (value) => {
+          //     if (!/^[_\-0-9a-zA-Z\u4e00-\u9fa5]+$/.test(value)) {
+          //       throw new Error(this.$t('validation.onlyLetter_MinusNumberChinese'));
+          //     }
+          //   }
+          // },
           id: {
             label: 'ID',
             type: 'input',
@@ -648,8 +648,8 @@ export default {
       if ("3" == roleType) {
          data["user_id"] = Vue.userId;
       }
-      data['soft_deleted'] = "False";
-      let url = "api/cinderv3/v3/" + projectId + "/volumes/detail";
+      // data['soft_deleted'] = "False";
+      let url = "api/cinderv3/v3/" + projectId + "/volumes/detail?" + $.param(data);
       try {
         let result = await self.$ajax({
           type: "get",

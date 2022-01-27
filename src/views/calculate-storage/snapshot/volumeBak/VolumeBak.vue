@@ -635,9 +635,9 @@ export default {
       let Pid = this.$cookie.get('pid');
       let url = "";
       if ("2" == Vue.roleType || "3" == Vue.roleType) {
-        url = "api/cinderv3/v3/" + Pid + "/inspur-backups/detail?";
+        url = "api/cinderv3/v3/" + Pid + "/backups/detail?";
       } else {
-        url = "api/cinderv3/v3/" + Pid + "/inspur-backups/detail?all_tenants=True&";
+        url = "api/cinderv3/v3/" + Pid + "/backups/detail?all_tenants=True&";
       }
       let result = await self.$ajax({
         type: 'get',

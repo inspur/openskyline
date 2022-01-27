@@ -2,13 +2,13 @@
 <div>
   <el-dialog :title="$t('base.addPermission')" :visible.sync="visible">
     <el-form v-loading="loading" :element-loading-text="$t('base.sendingData')" ref="addPowerForm" class="me-required-form" label-width="100px" :model="addPowerForm" label-position="left" :rules="rules">
-      <el-form-item :label="$t('base.roleType')">
+      <!-- <el-form-item :label="$t('base.roleType')">
         <el-select v-model="addPowerForm.type" style="width:400px;" @change="changeFun" size="small">
           <el-option :label="$t('base.superAdmin')" value="SuperAdmin" v-if="id!=userId"></el-option>
           <el-option :label="$t('base.projectAdmin')" value="SuperProject"></el-option>
           <el-option :label="$t('base.projectUser')" value="ProjectUser"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('base.project')" class="is-required" v-if="proFlg" prop="projectName">
         <!-- <el-select v-model="addPowerForm.pid" :multiple="true" style="width:400px;" filterable size="small" placeholder="">
           <el-option v-for="item in proList" :key="item.id" :value="item.id" :label="item.name"></el-option>
@@ -32,7 +32,7 @@
 <script>
 export default {
   name:"addPower",
-  props:["id", "name"],
+  props:["id", "domainid", "name"],
   data() {
     return {
       selProjectFlg:false,
@@ -88,7 +88,7 @@ export default {
     async getRole() {
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/roles?"+ $.param({type:(this.addPowerForm.type=="SuperAdmin"?"0":(this.addPowerForm.type=="SuperProject"?"2":"3"))})
+        url: "api/keystone/v3/roles"
       });
       this.roleList = this.$convertRoleLanguage(ret.roles);
     },
@@ -137,9 +137,8 @@ export default {
         })
       }
       let ret = await this.$ajax({
-        type: 'post',
-        url: "api/keystone/v3/inspur/assignments/groups/"+this.id+"/roles",
-        data:JSON.stringify({assignments:arr}),
+        type: 'put',
+        url: "api/keystone/v3/domains/"+this.domainid+"/groups/"+this.id+"/roles/"+this.addPowerForm.role,
         errFun() {
           me.loading = false;
           me.saving = false;

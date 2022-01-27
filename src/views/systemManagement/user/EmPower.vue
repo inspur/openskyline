@@ -134,7 +134,7 @@ export default {
     async getData() {
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/assignments/users/"+this.$route.params.id+"/roles"
+        url: "api/keystone/v3/users/"+this.$route.params.id+"/roles"
       })
       this.$convertRoleLanguage(ret.assignments, "role_name")
       this.tableData = this.filter(ret.assignments);
@@ -155,7 +155,7 @@ export default {
       }
       await this.$ajax({
         type: 'post',
-        url: "api/keystone/v3/inspur/assignments/users/"+me.$route.params.id+"/role/"+item.role_id,
+        url: "api/keystone/v3/assignments/users/"+me.$route.params.id+"/role/"+item.role_id,
         data:JSON.stringify({
           assignments:{
             "project_id":item.project_id,
