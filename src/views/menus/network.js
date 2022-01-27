@@ -18,7 +18,7 @@ module.exports = function () {
       iconType: "el-icon-fa-link",
       name: Vue.t("network.router")
     }, {
-      flg: Vue.AuthList["m.network.firewall"],
+      flg: Vue.AuthList["m.network.firewall"] && false,
       key: "firewall",
       path: "firewall",
       iconType: "el-icon-fa-shield",
@@ -42,13 +42,13 @@ module.exports = function () {
       iconType: "el-icon-fa-lock",
       name: Vue.t("network.securityTeam")
     }, {
-      flg: Vue.AuthList["m.network.vpn"] && Vue.archIs('x86'),
+      flg: Vue.AuthList["m.network.vpn"] && Vue.archIs('x86') && false,
       key: "vpn",
       path: "vpn",
       iconType: "el-icon-fa-exchange",
       name: "VPN"
     }, {
-      flg: Vue.AuthList["m.network.qos"],
+      flg: Vue.AuthList["m.network.qos"] && false,
       key: "qosView",
       path: "qosView",
       iconType: "el-icon-fa-dedent",
