@@ -131,37 +131,7 @@
             flg: true,
             key: "user-info",
             name: Vue.t('base.userInfo')
-          }, {
-            flg: true,
-            key: "modify-password",
-            name: Vue.t('base.modifyPassword')
           }]
-        }, {
-          flg: Vue.roleType == "0",
-          iconType: "el-icon-fa-window-maximize",
-          key: "big-screen",
-          name: Vue.t('base.bigScreen'),
-          subMenus: [
-            // {
-            //   flg: Vue.roleType==="0",
-            //   key: "physicalResource",
-            //   name: Vue.t('base.phResDis')
-            // }, {
-            //   flg: true,
-            //   key: "virtualResource",
-            //   name: Vue.t('base.virResDis')
-            // },
-            {
-              flg: true,
-              key: "digitalVisualizationScreen",
-              name: Vue.t('base.BIG_SCREEN')
-            },
-            {
-              flg: true,
-              key: "customStartPage",
-              name: Vue.t('container.customStartPage')
-            }
-          ]
         }, {
           flg: true,
           key: "help",

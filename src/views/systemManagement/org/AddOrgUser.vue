@@ -5,12 +5,6 @@
       <el-form-item :label="$t('base.accountNumber')">
         <el-input v-model="formInline.name" @blur="blurFun('name')" style="width:120px;"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('base.department')">
-        <el-input v-model="formInline.department" @focus="getDept" style="width:120px;" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('base.email')">
-        <el-input v-model="formInline.email" @blur="blurFun('email')" style="width:120px;"></el-input>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon='fa-search' @click="getTableData" size="small">{{$t('base.query')}}</el-button>
       </el-form-item>
@@ -39,12 +33,6 @@
         :label="$t('base.accountNumber')"
         align="left"
         sortable="custom"
-        min-width="100">
-      </el-table-column>
-      <el-table-column v-if="columnsChecked.indexOf('department_name') >= 0"
-        prop="department_name"
-        align="left"
-        :label="$t('base.department')"
         min-width="100">
       </el-table-column>
       <el-table-column v-if="columnsChecked.indexOf('email') >= 0"
@@ -163,15 +151,9 @@ export default {
       if (this.formInline.name!="") {
         param["name"] = this.formInline.name;
       }
-      if (this.formInline.email!="") {
-        param["email"] = this.formInline.email;
-      }
-      if (this.formInline.department!="") {
-        param["department"] = this.formInline.departmentId;
-      }
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/users?"+ $.param(param)
+        url: "api/keystone/v3/users?"+ $.param(param)
       })
       this.tableData = ret.users;
       this.total = ret.total;
@@ -218,7 +200,7 @@ export default {
       this.departVisible = true;
       let ret = await this.$ajax({
         type: 'get',
-        url: "api/keystone/v3/inspur/departments"
+        url: "api/keystone/v3/departments"
       })
       var arr = ret.departments;
       arr.forEach(function(item, key) {

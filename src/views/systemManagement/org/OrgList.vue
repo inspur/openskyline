@@ -177,11 +177,12 @@ export default {
               //如果里面有当前登陆人且该组拥有超级管理员权限,则不能删除
               let pret = await this.$ajax({
                 type: 'get',
-                url: "api/keystone/v3/inspur/assignments/groups/"+item.id+"/roles"
+                url: "api/keystone/v3/domains/"+item.domain_id+"/groups/"+item.id+"/roles"
               })
-              flg = pret.assignments.some((item1, index1) => {
-                return item1.role_type==0;
-              })
+              // flg = pret.some((item1, index1) => {
+              //   return item1.role_type==0;
+              // })
+              flg = true;
               if (flg) { //如果有超级管理员权限
                 let ret = await this.$ajax({
                   type: 'get',
@@ -248,7 +249,7 @@ export default {
       return new Promise((resolve) => {
         this.$ajax({
           type: 'DELETE',
-          url: "api/keystone/v3/inspur/groups/"+item.id
+          url: "api/keystone/v3/groups/"+item.id
         }).then(() => {
           return resolve({})
         }, () => {
