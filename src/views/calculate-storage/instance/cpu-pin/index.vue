@@ -118,7 +118,7 @@ export default {
       try {
         let res = await this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/os-hypervisors-inspur/${$this.instance['OS-EXT-SRV-ATTR:hypervisor_hostname']}/get_host_numainfo`
+          url: `api/nova/v2.1/os-hypervisors/${$this.instance['OS-EXT-SRV-ATTR:hypervisor_hostname']}/get_host_numainfo`
         });
         let allPCPUs = [];
         res.numa_info.forEach((numaNode, index) => {

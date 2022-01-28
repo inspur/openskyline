@@ -152,43 +152,19 @@ export default {
       return this.roleType === '0' || this.roleType === '2';
     },
     hasISOImageTab() {
-      if (this.instances.length > 1) {
-        return false;
-      }
-      if (!this.hasBootVolume) {
-        return false;
-      }
-      return this.$archIs('x86') && (this.roleType === '0' || this.roleType === '2');
+      return false;
     },
     hasUSBDeviceTab() {
-      if (this.instances.length > 1) {
-        return false;
-      }
-      if (!this.hasBootVolume) {
-        return false;
-      }
-      return this.$archIs('x86') && this.roleType === '0';
+      return false;
     },
     hasNetUSBTab() {
-      return true;
+      return false;
     },
     hasDirectConnectDiskTab() {
-      if (this.instances.length > 1) {
-        return false;
-      }
-      if (!this.hasBootVolume) {
-        return false;
-      }
-      return this.roleType === '0';
+      return false;
     },
     hasGPUTab() {
-      if (this.instances.length > 1) {
-        return false;
-      }
-      if (!this.hasBootVolume) {
-        return false;
-      }
-      return this.$archIs('x86') && this.hasCyborg;
+      return false;
     }
   }
 }

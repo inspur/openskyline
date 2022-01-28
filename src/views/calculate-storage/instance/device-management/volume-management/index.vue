@@ -284,7 +284,7 @@ export default {
       var self = this;
       self.volume = id;
       self.volumeLabel = name;
-      if (self.hostEntity['metadata']['source_type'] === 'volume' && self.hostEntity["os-extended-volumes-inspur:volumes_attached"].findIndex(item => item.boot_disk === true) === -1) {
+      if (self.hostEntity['metadata']['source_type'] === 'volume' && self.hostEntity["os-extended-volumes:volumes_attached"].findIndex(item => item.boot_disk === true) === -1) {
         if (bootable && self.roleType === '3') {
           self.$message({
             showClose: true,
@@ -308,7 +308,7 @@ export default {
         try {
           let result = await self.$ajax({
             type: 'post',
-            url: "api/nova/v2.1/servers-inspur/" + self.hostEntity.id + "/os-inspur-volume_attachments",
+            url: "api/nova/v2.1/servers/" + self.hostEntity.id + "/os-volume_attachments",
             data: body,
             headers:{
               "Openstack-Api-Version":"compute 2.65"
@@ -375,7 +375,7 @@ export default {
           });
           return;
         }
-        let volList = self.hostEntity["os-extended-volumes-inspur:volumes_attached"];
+        let volList = self.hostEntity["os-extended-volumes:volumes_attached"];
         let isroot = false;
         for (let i=0; i<volList.length; i++) {
           if (volList[i].id == entity.volumeId) {

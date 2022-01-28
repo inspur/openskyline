@@ -209,9 +209,9 @@ export default {
       let networkId = self.getNetworkId(id); // 获取网络id
       this.$ajax({
         type: "GET",
-        url: "api/neutron/v2.0/inspur/inspur-network-ip-availabilities/" + networkId,
+        url: "api/neutron/v2.0/network-ip-availabilities/" + networkId,
         successFun: function (res) {
-          let subnets = res.inspur_network_ip_availability.subnets;
+          let subnets = res.network_ip_availability.subnets;
           for (let i = 0; i < subnets.length; i++) {
             if (id == subnets[i].id) {
               [self.addIp.ip] = subnets[i].ips;

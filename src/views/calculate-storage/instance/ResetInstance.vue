@@ -51,7 +51,7 @@ export default {
         try {
           const res = await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur/${task.id}/action`,
+            url: `api/nova/v2.1/servers/${task.id}/action`,
             data: JSON.stringify({
               'os-resetState': {
                 state: 'active'

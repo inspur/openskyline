@@ -431,7 +431,7 @@ module.exports = function() {
     icon: "fa-stop",
     name: Vue.t('calcStorLang.FORCE_SHUTDOWN'),
     multi: true,
-    showflg: true,
+    showflg: false,
     operateMore: true,
     enable(rowData) {
       if (rowData['status'] === "CRASHED") {
@@ -449,7 +449,7 @@ module.exports = function() {
       self.$sequence({
         type: 'post',
         data: body,
-        url: 'api/nova/v2.1/servers-inspur/{id}/action',
+        url: 'api/nova/v2.1/servers/{id}/action',
         params: selectRows,
         confirmMsg: Vue.t('calcStorLang.FORCE_SHUTDOWN_CONFIRM'),
         log: {
@@ -749,7 +749,7 @@ module.exports = function() {
     pId: Symbol.for('status'),
     icon: "fa-plus",
     name: Vue.t('calcStorLang.rescue'),
-    showflg: (Vue.roleType + "" !== "3"),
+    showflg: false,
     operateMore: true,
     enable(rowData) {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
@@ -802,7 +802,7 @@ module.exports = function() {
     pId: Symbol.for('status'),
     icon: "fa-plus",
     name: Vue.t('calcStorLang.instUnRescue'),
-    showflg: (Vue.roleType + "" !== "3"),
+    showflg: false,
     operateMore: true,
     enable(rowData) {
       if (rowData['OS-EXT-STS:task_state'] !== null) {
@@ -823,7 +823,7 @@ module.exports = function() {
       self.$sequence({
         type: 'post',
         data: body,
-        url: 'api/nova/v2.1/servers-inspur/{id}/action',
+        url: 'api/nova/v2.1/servers/{id}/action',
         params: selectRows,
         confirmMsg: Vue.t('calcStorLang.unRescueInstConfirm'),
         log: {
@@ -866,7 +866,7 @@ module.exports = function() {
           await $this.$ajax({
             type: 'post',
             data: JSON.stringify({ "shelve": true }),
-            url: `api/nova/v2.1/servers-inspur/${instance.id}/action`,
+            url: `api/nova/v2.1/servers/${instance.id}/action`,
             log: {
               description: {
                 en: `Shelve Instance(Instance ID: ${instance.id}, Instance Name: ${instance.name})`,
@@ -969,7 +969,7 @@ module.exports = function() {
     pId: Symbol.for('hotPlug'),
     icon: "fa-plus",
     name: Vue.t('calcStorLang.open'),
-    showflg: Vue.archIs('x86'),
+    showflg: false,
     operateMore: true,
     multi: false,
     enable(rowData) {
@@ -1001,7 +1001,7 @@ module.exports = function() {
       } else {
         $this.$ajax({
           type: 'put',
-          url: 'api/nova/v2.1/servers-inspur/' + row.id + '/tags/HOTPLUG',
+          url: 'api/nova/v2.1/servers/' + row.id + '/tags/HOTPLUG',
           data: {
             body: {}
           },
@@ -1234,7 +1234,7 @@ module.exports = function() {
   }, {
     icon: "fa-plus",
     name: Vue.t('calcStorLang.MODIFY_PASSWORD'),
-    showflg: Vue.roleType + "" !== '3',
+    showflg: false,
     multi: false,
     operateMore: true,
     enable(rowData) {
@@ -1244,7 +1244,7 @@ module.exports = function() {
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
-      if (String(Vue.roleType) !== '0' && rowData.locked === true) {
+      if (rowData.locked === true) {
         return false;
       }
       if (rowData.status === 'SHUTOFF') {
@@ -1260,7 +1260,7 @@ module.exports = function() {
   }, {
     icon: "fa-plus",
     name: Vue.t('calcStorLang.EDIT_INSTANCE'),
-    showflg: Vue.roleType + '' !== '3',
+    showflg: false,
     multi: true,
     operateMore: true,
     enable(rowData) {
@@ -1270,7 +1270,7 @@ module.exports = function() {
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
-      if (String(Vue.roleType) !== '0' && rowData['locked'] === true) {
+      if (rowData['locked'] === true) {
         return false;
       }
       if (['ACTIVE', 'SHUTOFF', 'PAUSED', 'SUSPENDED'].includes(rowData.status)) { //运行、关闭、暂停、挂起状态
@@ -1292,14 +1292,14 @@ module.exports = function() {
   }, {
     icon: "fa-plus",
     name: Vue.t('calcStorLang.RESET_INSTANCE'),
-    showflg: Vue.roleType + '' === '0',
+    showflg: true,
     multi: true,
     operateMore: true,
     enable(rowData) {
       if (rowData['metadata']['source_type'] === 'volume' && rowData['os-extended-volumes:volumes_attached'].findIndex(item => item.boot_disk === true) === -1) {
         return false;
       }
-      if (String(Vue.roleType) !== '0' && rowData.locked === true) {
+      if (rowData.locked === true) {
         return false;
       }
       return rowData.status === 'ERROR';
@@ -1318,7 +1318,7 @@ module.exports = function() {
   }, {
     icon: "fa-plus",
     name: Vue.t('calcStorLang.CPU_PIN'),
-    showflg: true,
+    showflg: false,
     multi: false,
     operateMore: true,
     enable(rowData) {

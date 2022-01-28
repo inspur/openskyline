@@ -40,7 +40,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <metadata-detail :flavorId="formData.flavorId" />
+          <metadata-detail :flavor-id="formData.flavorId" />
         </el-form-item>
         <el-form-item :label="$t('calcStorLang.REVISE_INSTANCE_REMARK')" v-if="!hotplug">
           <span v-html="$t('calcStorLang.REVISE_INSTANCE_REMARK_TIPS')"></span>
@@ -52,7 +52,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close" v-show="!loading">{{$t('lang.cancel')}}</el-button>
-      <el-button type="primary" @click="handleSubmit" :disabled="formData.flavorId === ''" :loading="loading">{{$t('lang.confirm')}}</el-button>
+      <el-button type="primary" @click="handleSubmit" :disabled="formData.name === ''" :loading="loading">{{$t('lang.confirm')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -94,6 +94,7 @@ export default {
         vcpus: 0,
         ram: 0,
         disk: 0,
+        name: '',
         flavorId: '',
         hotplug: false  // 是否已开启热扩容？
       },
@@ -101,6 +102,7 @@ export default {
         vcpus: 0,
         ram: 0,
         disk: 0,
+        name: '',
         flavorId: ''
       },
       flavors: [],
@@ -138,7 +140,7 @@ export default {
         projectId = `?project_id=${[...projectIds][0]}`;
       }
       const res = await $this.$ajax({
-        url: `api/nova/v2.1/flavors-inspur/detail${projectId}`,
+        url: `api/nova/v2.1/flavors/detail${projectId}`,
         method: 'get'
       });
       let flavors = res.flavors;
@@ -236,12 +238,15 @@ export default {
                                                             item.available === true);
         if ($this.matchedFlavors.length > 0) {
           if (!$this.init) {
-            if ($this.matchedFlavors.findIndex(item => item.id === $this.currentFlavor.flavorId) > -1) {
+            if ($this.matchedFlavors.findIndex(item => item.name === $this.currentFlavor.name) > -1) {
+              $this.formData.name = $this.currentFlavor.name;
               $this.formData.flavorId = $this.currentFlavor.flavorId;
             } else {
+              $this.formData.name = $this.matchedFlavors[0].name;
               $this.formData.flavorId = $this.matchedFlavors[0].id;
             }
           } else {
+            $this.formData.name = $this.matchedFlavors[0].name;
             $this.formData.flavorId = $this.matchedFlavors[0].id;
           }
         }
@@ -294,7 +299,7 @@ export default {
       try {
         let res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/${instance.id}/numa_count`
+          url: `api/nova/v2.1/servers/${instance.id}/numa_count`
         });
         $this.hostNumaNodeCount = res.numa_count || 1;
       } catch (e) {
@@ -307,7 +312,7 @@ export default {
       try {
         let res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/os-hypervisors-inspur/${instance['OS-EXT-SRV-ATTR:hypervisor_hostname']}/get_host_numainfo`
+          url: `api/nova/v2.1/os-hypervisors/${instance['OS-EXT-SRV-ATTR:hypervisor_hostname']}/get_host_numainfo`
         });
         $this.hostMaxCPUCount = res.cpu_count || 1024;
       } catch (e) {
@@ -318,7 +323,7 @@ export default {
       const $this = this;
       if ($this.checkQuota() === false) {
         $this.$message.error($this.$t('calcStorLang.REVISE_INSTANCE_QUOTA_NOT_ENOUGH'));
-      } else if ($this.instances.length === 1 && $this.formData.flavorId === $this.currentFlavor.flavorId) {
+      } else if ($this.instances.length === 1 && $this.formData.name === $this.currentFlavor.name) {
         $this.$message.error($this.$t('calcStorLang.REVISE_INSTANCE_FLAVOR_NOT_CHANGED'));
       } else {
         let h = $this.$createElement;
@@ -361,13 +366,13 @@ export default {
       let hasError = false;
       for (let i = 0; i < $this.instances.length; i++) {
         const instance = $this.instances[i];
-        if (instance.flavor.id === $this.formData.flavorId) {
+        if (instance.flavor.original_name === $this.formData.name) {
           continue;
         }
         try {
           let result = await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur/${instance.id}/action`,
+            url: `api/nova/v2.1/servers/${instance.id}/action`,
             data: JSON.stringify(body),
             showErrMsg: true,
             errorKey: 'badRequest',
@@ -400,7 +405,7 @@ export default {
       $this.loading = true;
       let body = {
         resize: {
-          flavorRef: $this.formData.flavorId
+          flavorRef: $this.formData.name
         }
       };
 
@@ -478,12 +483,13 @@ export default {
     }
     await this.getAllFlavors();
     this.instances.forEach(instance => {  // 循环将所有instances的vcpus、ram、disk中最大值当做基准值使用
-      const currentFlavor = this.flavors.find(flavor => flavor.id === instance.flavor.id);
+      const currentFlavor = this.flavors.find(flavor => flavor.name === instance.flavor.original_name);
       if (currentFlavor) {
         this.currentFlavor.vcpus = Math.max(currentFlavor.vcpus, this.currentFlavor.vcpus);
         this.currentFlavor.ram = Math.max(currentFlavor.ram, this.currentFlavor.ram);
         this.currentFlavor.disk = Math.max(currentFlavor.disk, this.currentFlavor.disk);
         this.currentFlavor.flavorId = currentFlavor.id;
+        this.currentFlavor.name = currentFlavor.name;
         this.minDisk = Math.max(this.currentFlavor.disk, this.minDisk);
       }
       if ('system_metadata' in instance && 'image_min_ram' in instance.system_metadata) {

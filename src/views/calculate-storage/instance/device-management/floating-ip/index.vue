@@ -86,7 +86,7 @@ export default {
       const $this = this;
       const res = await $this.$ajax({
         type: 'get',
-        url: `api/nova/v2.1/servers-inspur/${$this.instance.id}`
+        url: `api/nova/v2.1/servers/${$this.instance.id}`
       });
       const addresses = res.server.addresses;
       const netCards = [];  // 最终的网卡列表，包含fixed IP列和浮动IP列
@@ -108,7 +108,7 @@ export default {
       for (let key in addresses) {
         for (let i = 0; i < addresses[key].length; i++) {
           const address = addresses[key][i];
-          let netCard = netCards.find(item => item.id === address.network_id && item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
+          let netCard = netCards.find(item => item.mac === address['OS-EXT-IPS-MAC:mac_addr']);
           // 相同netCard，不同IP的情况，只增加IP
           if (netCard) {
             if (address['OS-EXT-IPS:type'] === 'fixed') {

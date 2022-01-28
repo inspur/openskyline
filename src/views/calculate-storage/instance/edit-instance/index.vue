@@ -177,7 +177,7 @@ export default {
       try {
         const res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-instance_qos`
+          url: `api/nova/v2.1/servers/${$this.instance.id}/os-instance_qos`
         });
         let qos = [];
         Object.keys(res).forEach(key => {
@@ -202,7 +202,7 @@ export default {
       try {
         const res = await $this.$ajax({
           type: 'get',
-          url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-block-io`
+          url: `api/nova/v2.1/servers/${$this.instance.id}/os-block-io`
         });
         if (res.blockio_priority === null) {
           $this.origin.blockIO = '';
@@ -247,7 +247,7 @@ export default {
       if ($this.$archIs('x86') && $this.panicDirty) {
         const res = await $this.$ajax({
           type: 'post',
-          url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-panic_policy`,
+          url: `api/nova/v2.1/servers/${$this.instance.id}/os-panic_policy`,
           headers: {
             'X-OpenStack-Nova-API-Version': '2.41'
           },
@@ -317,7 +317,7 @@ export default {
       });
       const res = await $this.$ajax({
         type: 'post',
-        url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-instance_qos`,
+        url: `api/nova/v2.1/servers/${$this.instance.id}/os-instance_qos`,
         headers: {
           'X-OpenStack-Nova-API-Version': '2.41'
         },
@@ -359,7 +359,7 @@ export default {
         }
         const res = await $this.$ajax({
           type: 'delete',
-          url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-instance_qos/${qos.key}`,
+          url: `api/nova/v2.1/servers/${$this.instance.id}/os-instance_qos/${qos.key}`,
           headers: {
             'X-OpenStack-Nova-API-Version': '2.41'
           },
@@ -406,7 +406,7 @@ export default {
         if ($this.formData.blockIO !== '') {
           await $this.$ajax({
             type: 'post',
-            url: `api/nova/v2.1/servers-inspur/os-block-io`,
+            url: `api/nova/v2.1/servers/os-block-io`,
             data: JSON.stringify({
               setBlockIo: {
                 block_io: $this.formData.blockIO,
@@ -424,7 +424,7 @@ export default {
         } else {
           await $this.$ajax({
             type: 'delete',
-            url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/os-block-io/block_io`,
+            url: `api/nova/v2.1/servers/${$this.instance.id}/os-block-io/block_io`,
             log: {
               'description': {
                 en: `Edit Instance: ${$this.instance.id}, Delete Block IO Priority`,
@@ -484,7 +484,7 @@ export default {
           diskBusString = 'virtio-blk';
         }
         await $this.$ajax({
-          url: `api/nova/v2.1/servers-inspur/${$this.instance.id}/action`,
+          url: `api/nova/v2.1/servers/${$this.instance.id}/action`,
           type: 'post',
           data: JSON.stringify({
             mutationDiskBus: {

@@ -39,7 +39,7 @@ export default {
   methods: {
     async getData() {
       let self = this;
-      if (self.flavorId != "") {
+      if (self.flavorId && self.flavorId !== "") {
         let flavorId = self.flavorId;
         let tableData = [];
         var url = "api/nova/v2.1/flavors/" + flavorId + "/os-extra_specs";

@@ -353,12 +353,8 @@ export default {
       self.loading = true;
       try {
         let result = await self.$ajax({
-          type: 'post',
-          url: `api/glance/v2/images/list?limit=99999&status=active`,
-          data: JSON.stringify({
-            project_id: self.instProjectId,
-            user_id: self.instUserId
-          }),
+          type: 'get',
+          url: `api/glance/v2/images?limit=99999&status=active`,
           showErrMsg: true
         });
         self.loading = false;
@@ -420,7 +416,7 @@ export default {
                 try {
                   let result = await self.$ajax({
                     type: 'post',
-                    url: "api/nova/v2.1/servers-inspur/" + self.instUuid + "/action",
+                    url: "api/nova/v2.1/servers/" + self.instUuid + "/action",
                     data: body,
                     showErrMsg: true,
                     errorKey: "badRequest",

@@ -50,7 +50,7 @@ export default {
       try {
         let result = await self.$ajax({
           type: 'get',
-          url: 'api/nova/v2.1/inspur-availability-zone/detail'
+          url: 'api/nova/v2.1/os-availability-zone/detail'
         });
         self.loading = false;
         var list = result['availabilityZoneInfo'];
@@ -97,7 +97,7 @@ export default {
         self.$sequence({
           type: 'post',
           data: body,
-          url: 'api/nova/v2.1/servers-inspur/{id}/action',
+          url: 'api/nova/v2.1/servers/{id}/action',
           params: selectRows,
           // confirmMsg: Vue.t('calcStorLang.unShelvingInstConfirm'),
           log: {

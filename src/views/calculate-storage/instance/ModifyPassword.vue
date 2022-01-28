@@ -66,7 +66,7 @@ export default {
           $this.saving = true;
           try {
             const res = await $this.$ajax({
-              url: `api/nova/v2.1/servers-inspur/${$this.instanceId}/action`,
+              url: `api/nova/v2.1/servers/${$this.instanceId}/action`,
               headers: {
                 'OpenStack-API-Version': 'compute 2.41',
                 'X-OpenStack-Nova-API-Version': 2.41
