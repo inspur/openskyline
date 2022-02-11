@@ -18,7 +18,6 @@ var S3 = require('aws-sdk/clients/s3');
     Vue.AuthList = window.menuCodeList || {};
     Vue.objectStorageType = window.objectStorageType || "S3";
     Vue.S3SuperUser = window.S3SuperUser || {};
-    Vue.showSafeDelete = window.showSafeDelete;
     Vue.showManageConnect = window.showManageConnect;
     Vue.language = window.language || "";
     Vue.userName = window.userName;

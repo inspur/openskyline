@@ -91,7 +91,6 @@ exports.middlewares = function (router) {
 
       session.objectStorageType = serviceAddr.objectStorageType || 'S3';
       session.S3SuperUser = serviceAddr.S3SuperUser || {};
-      session.showSafeDelete = serviceAddr.showSafeDelete || false;
       session.showManageConnect = serviceAddr.showManageConnect || false;
       session.forceCheckCurrentUser = 'forceCheckCurrentUser' in serviceAddr ? serviceAddr.forceCheckCurrentUser : false;
       session.forceVNCPassword = 'forceVNCPassword' in serviceAddr ? serviceAddr.forceVNCPassword : false;

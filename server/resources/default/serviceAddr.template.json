@@ -10,7 +10,6 @@
     "ak": "ak",
     "sk": "sk"
   },
-  "showSafeDelete": false,
   "encryptAlgorithm": "aes-256-cbc",
   "encryptKey": "0123456789abcdef0123456789abcdef",
   "encryptIV": "0123456789abcdef",

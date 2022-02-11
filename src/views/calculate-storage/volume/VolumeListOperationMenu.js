@@ -567,65 +567,6 @@ module.exports = function() {
             }.bind(this)
         },
         {
-            icon: "fa-times",
-            name: this.$t('storage.safeDelete'), //安全删除按钮
-            showflg: this.isUser() && Vue.showSafeDelete,
-            multi: false,
-            operateMore: true,
-            enable(rowData) {
-                // return rowData["status"] === "available" || rowData["status"] === "error";
-                return rowData["status"] === "available";
-            },
-            handler: function (selectRows) {
-                let self = this;
-                let pid = this.$cookie.get('pid');
-                let status = self.volumeStatusRender(selectRows[0]["status"], selectRows[0]);
-                let { id: volumeId = "", name: volumeName = "" } = selectRows[0];
-                if (volumeName) {
-                    volumeName = `${volumeName}(${volumeId})`;
-                } else {
-                    volumeName = volumeId;
-                }
-                this.$prompt(this.$t('lang.inputYesToContinue'), this.$t('lang.confirm'), {
-                    confirmButtonText: this.$t('lang.confirm'),
-                    cancelButtonText: this.$t('lang.cancel'),
-                    inputPattern: /^YES$|^NO$/i,
-                    inputValue: "NO",
-                    customClass: "promptConfirmDel",
-                    inputErrorMessage: this.$t('lang.onlyAcceptYesOrNo')
-                }).then(async ({ value }) => {
-                    if ("yes" == value.toLowerCase()) {
-                        //try {
-                        let result = await self.$ajax({
-                            type: "DELETE",
-                            url: `api/cinderv3/v3/${pid}/volumes/${volumeId}?clear=True`,
-                            showErrMsg: true,
-                            headers: {
-                                "OpenStack-API-Version": "volume 3.52"
-                            },
-                            log: {
-                                description: {
-                                    en: "Send Safe-Delete volume " + volumeName,
-                                    zh_cn: "发送安全删除云硬盘" + volumeName
-                                },
-                                target: Vue.logTarget.storage_volume
-                            }
-                        });
-                        self.$message(self.$t('calcStorLang.safeDeleteMsg'));
-                        self.$refs.volumeTable.clearSelection();
-                        setTimeout(function () {
-                            self.loadData(self.queryParams);
-                            self.loading = false;
-                        }, 2000);
-                        // } catch (res) {
-                        // }
-                    }
-                }).catch(() => {
-                    //取消
-                });
-            }.bind(this)
-        },
-        {
             icon: "fa-clone",
             name: this.$t("storage.transfer"), //转让
             showflg: !this.isAdmin(),
