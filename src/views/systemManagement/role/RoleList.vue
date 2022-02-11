@@ -16,7 +16,7 @@
         :element-loading-text="$t('base.loadingData')"
         highlight-current-row
         stripe
-        style="width: 100%"
+        style="width: 100%; margin-top: 16px;"
         row-key="id"
         @row-click="rowClick"
         @selection-change="handleSelectionChange"

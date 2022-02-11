@@ -20,7 +20,7 @@
       v-loading="loading"
       :element-loading-text="$t('base.loadingData')"
       highlight-current-row
-      style="width: 100%"
+      style="width: 100%; margin-top: 16px;"
       row-key="namespace"
       @row-click="rowClick"
       @selection-change="handleSelectionChange">

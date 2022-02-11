@@ -6,7 +6,6 @@
           <el-radio-group v-model="formData.networkType">
             <el-radio label="network">{{ $t('calcStorLang.NG_CREATE_INSTANCE_NETWORK_TYPE_NETWORK') }}</el-radio>
             <el-radio :disabled="!canUsePort" label="port">{{ $t('calcStorLang.NG_CREATE_INSTANCE_NETWORK_TYPE_PORT') }}</el-radio>
-            <el-radio :disabled="!canUseTemplateStrategy" label="template">{{ $t('calcStorLang.NG_CREATE_INSTANCE_NETWORK_TYPE_TEMPLATE') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="formData.networkType === 'network'">

@@ -1,6 +1,6 @@
 {
-  "keystone": "10.48.51.203/identity",
-  "bindip":"0.0.0.0",
+  "keystone": "10.49.38.52/identity",
+  "bindip": "0.0.0.0",
   "twoFactorAuth": {
     "switch": false,
     "solution": "inspur_cert_v3"
@@ -10,9 +10,6 @@
     "ak": "ak",
     "sk": "sk"
   },
-  "encryptAlgorithm": "aes-256-cbc",
-  "encryptKey": "0123456789abcdef0123456789abcdef",
-  "encryptIV": "0123456789abcdef",
   "forceCheckCurrentUser": false,
   "forceVNCPassword": false
 }

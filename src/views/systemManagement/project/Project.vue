@@ -8,7 +8,7 @@
           <div class="divider clearfix"></div>
           <operation-panel class="margin-tb5" :select-rows="multipleSelection" :operation-menus="operationMenus">
           </operation-panel>
-          <el-table ref="deTable" :data="tableData" v-loading="loading" highlight-current-row :element-loading-text="$t('base.loadingData')" stripe style="width: 100%" row-key="id" @sort-change="sortChange" @selection-change="handleSelectionChange">
+          <el-table ref="deTable" :data="tableData" v-loading="loading" highlight-current-row :element-loading-text="$t('base.loadingData')" stripe style="width: 100%; margin-top: 16px;" row-key="id" @sort-change="sortChange" @selection-change="handleSelectionChange">
             <el-table-column reserve-selection type="selection" align="center" width="55">
             </el-table-column>
             <el-table-column v-if="columnsChecked.indexOf('name') >= 0" sortable="custom" prop="name" :label="$t('base.name')" min-width="100">

@@ -2,118 +2,116 @@
   <div>
     <icos-page-header :title="$t('base.userManagement')" />
     <icos-page>
-      <el-row :gutter="10">          
-          <el-col :span="isLdap?24:19" :offset="0">
-            <el-form :inline="true" :model="formInline" class="form-inline">
-              <el-form-item :label="$t('base.accountNumber')">
-                <el-input v-model="formInline.name" @blur="blurFun('name')"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('base.email')" v-if="!infoEncrypt">
-                <el-input v-model="formInline.email" @blur="blurFun('email')"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" icon='fa-search' size="small" @click="onQuery">{{$t('base.query')}}</el-button>
-              </el-form-item>
-            </el-form>
-            <div class="divider clearfix"></div>
-            <operation-panel
-              class="margin-tb5"
-              :select-rows="multipleSelection"
-              :operation-menus="operationMenus">
-            </operation-panel>
-            <el-table
-              ref="deTable"
-              :data="tableData"
-              v-loading="tableLoading"
-              :element-loading-text="$t('base.loadingData')"
-              highlight-current-row
-              style="width: 100%"
-              row-key="id"
-              :default-sort="{prop:'name',order:'ascending'}"
-              @sort-change="sortChange"
-              @row-click="rowClick"
-              @selection-change="handleSelectionChange">
-              <el-table-column
-                reserve-selection
-                type="selection"
-                align="center"
-                width="55">
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('name') >= 0"
-                prop="name"
-                :label="$t('base.accountNumber')"
-                :sortable="sortValue"
-                min-width="100">
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('status') >= 0"
-                prop="enabled"
-                align="left"
-                :label="$t('base.status')"
-                min-width="100">
-                <template slot-scope="scope">
-                  <span>{{scope.row.enabled==1?$t('base.enable'):$t('base.disable')}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('locked') >= 0"
-                prop="lock"
-                align="left"
-                :label="$t('base.locking')"
-                min-width="100">
-                <template slot-scope="scope">
-                  <span>{{scope.row.lock?$t('base.yes'):$t('base.no')}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('email') >= 0"
-                prop="email"
-                :label="$t('base.email')"
-                min-width="100">
-              </el-table-column>S
-              <el-table-column v-if="columnsChecked.indexOf('desc') >= 0"
-                prop="description"
-                :label="$t('base.desc')"
-                min-width="160">
-              </el-table-column>
-              <el-table-column v-if="columnsChecked.indexOf('expired_date') >= 0"
-                :label="$t('base.EXPIRED_DATE')"
-                min-width="100">
-                <template slot-scope="scope">
-                  {{ scope.row.expired_date }}
-                </template>
-              </el-table-column>
-            </el-table>
-            <div style="margin: 10px 0; position: relative">
-              <el-row>
-                <el-col :span="5">
-                  <el-button type="text" icon="fa-refresh" @click="getTableData">
-                  </el-button>
-                    <span>{{$t('lang.currentSelected')}} {{multipleSelection.length}}{{$tc('lang.item', multipleSelection.length)}}</span>
-                    <el-popover
-                      placement="right"
-                      trigger="click">
-                      <el-checkbox-group class="vertical"
-                        v-model="columnsChecked">
-                        <el-checkbox class="item" v-for="(item, index) in columns" :label="item.prop" :key="item.prop">{{item.label}}
-                        </el-checkbox>
-                      </el-checkbox-group>
-                      <div slot="reference" style="display: inline-block;">
-                        <el-tag>{{$t('lang.selectCloumn')}}</el-tag>
-                      </div>
-                    </el-popover>
-                </el-col>
-                <el-col :span="19">
-                  <el-pagination
-                    class="right"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
-                  </el-pagination>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
+      <el-row :gutter="10">
+        <el-col :span="24" :offset="0">
+          <el-form :inline="true" :model="formInline" class="form-inline">
+            <el-form-item :label="$t('base.accountNumber')">
+              <el-input v-model="formInline.name" @blur="blurFun('name')"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('base.email')" v-if="!infoEncrypt">
+              <el-input v-model="formInline.email" @blur="blurFun('email')"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" icon='fa-search' size="small" @click="onQuery">{{$t('base.query')}}</el-button>
+            </el-form-item>
+          </el-form>
+          <div class="divider clearfix"></div>
+          <operation-panel
+            class="margin-tb5"
+            :select-rows="multipleSelection"
+            :operation-menus="operationMenus">
+          </operation-panel>
+          <el-table
+            ref="deTable"
+            :data="tableData"
+            v-loading="tableLoading"
+            :element-loading-text="$t('base.loadingData')"
+            highlight-current-row
+            style="width: 100%; margin-top: 16px;"
+            row-key="id"
+            :default-sort="{prop:'name',order:'ascending'}"
+            @sort-change="sortChange"
+            @row-click="rowClick"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              reserve-selection
+              type="selection"
+              align="center"
+              width="55">
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('name') >= 0"
+              prop="name"
+              :label="$t('base.accountNumber')"
+              :sortable="sortValue"
+              width="100">
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('status') >= 0"
+              prop="enabled"
+              align="left"
+              :label="$t('base.status')"
+              width="100">
+              <template slot-scope="scope">
+                <span>{{scope.row.enabled==1?$t('base.enable'):$t('base.disable')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('locked') >= 0"
+              prop="lock"
+              align="left"
+              :label="$t('base.locking')"
+              width="100">
+              <template slot-scope="scope">
+                <span>{{scope.row.lock?$t('base.yes'):$t('base.no')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('email') >= 0"
+              prop="email"
+              :label="$t('base.email')">
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('desc') >= 0"
+              prop="description"
+              :label="$t('base.desc')">
+            </el-table-column>
+            <el-table-column v-if="columnsChecked.indexOf('expired_date') >= 0"
+              :label="$t('base.EXPIRED_DATE')"
+              width="100">
+              <template slot-scope="scope">
+                {{ scope.row.expired_date }}
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="margin: 10px 0; position: relative">
+            <el-row>
+              <el-col :span="5">
+                <el-button type="text" icon="fa-refresh" @click="getTableData">
+                </el-button>
+                  <span>{{$t('lang.currentSelected')}} {{multipleSelection.length}}{{$tc('lang.item', multipleSelection.length)}}</span>
+                  <el-popover
+                    placement="right"
+                    trigger="click">
+                    <el-checkbox-group class="vertical"
+                      v-model="columnsChecked">
+                      <el-checkbox class="item" v-for="(item, index) in columns" :label="item.prop" :key="item.prop">{{item.label}}
+                      </el-checkbox>
+                    </el-checkbox-group>
+                    <div slot="reference" style="display: inline-block;">
+                      <el-tag>{{$t('lang.selectCloumn')}}</el-tag>
+                    </div>
+                  </el-popover>
+              </el-col>
+              <el-col :span="19">
+                <el-pagination
+                  class="right"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="total">
+                </el-pagination>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
       </el-row>
 
       <edit-user ref="editUser" v-if="editUserFlg" :id="editId" @refreshData="getTableData">

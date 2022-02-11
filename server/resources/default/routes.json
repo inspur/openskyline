@@ -130,10 +130,5 @@
     "class": "webSocket",
     "mapping": "/webSocket",
     "upstream": "webSocket-proxy"
-  },
-  {
-    "name": "pim",
-    "class": "node-api/pim",
-    "mapping": "/node-api/pim"
   }
 ]

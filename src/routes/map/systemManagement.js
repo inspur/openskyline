@@ -166,64 +166,10 @@ const parameterSetting = resolve => {
   }, 'parameterSetting');
 }
 
-const systemSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/systemSetting/SystemSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/systemSetting/SystemSetting.vue'));
-  }, 'systemSetting');
-}
-
-const recordSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/recordSetting/recordSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/recordSetting/recordSetting.vue'));
-  }, 'recordSetting');
-}
-
-const passwordStrategy = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/passwordStrategy/PasswordStrategy.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/passwordStrategy/PasswordStrategy.vue'));
-  }, 'passwordStrategy');
-}
-
-const moduleSwitch = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/moduleSwitch/ModuleSwitch.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/moduleSwitch/ModuleSwitch.vue'));
-  }, 'moduleSwitch');
-}
-
-const leaseParameterSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/leaseParameterSetting/LeaseParameterSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/leaseParameterSetting/LeaseParameterSetting.vue'));
-  }, 'leaseParameterSetting');
-}
-
 const metaData = resolve => {
   require.ensure(['views/systemManagement/parameterSetting/metaData/MetaData.vue'], () => {
     resolve(require('views/systemManagement/parameterSetting/metaData/MetaData.vue'));
   }, 'metaData');
-}
-
-const templateSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/templateSetting/TemplateSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/templateSetting/TemplateSetting.vue'));
-  }, 'templateSetting');
-}
-
-const copyRightSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/copyRightSetting/CopyRightSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/copyRightSetting/CopyRightSetting.vue'));
-  }, 'copyRightSetting');
-}
-
-const pimSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/pimSetting/pimSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/pimSetting/pimSetting.vue'));
-  }, 'pimSetting');
-}
-
-const opslogSetting = resolve => {
-  require.ensure(['views/systemManagement/parameterSetting/opslogSetting/opslogSetting.vue'], () => {
-    resolve(require('views/systemManagement/parameterSetting/opslogSetting/opslogSetting.vue'));
-  }, 'opslogSetting');
 }
 
 const projectManage = resolve => {
