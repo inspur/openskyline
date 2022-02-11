@@ -1,21 +1,14 @@
 {
-  "name": "@icos/skyline",
+  "name": "OpenSkyline",
   "version": "1.0.0",
-  "description": "UI Project of ICOS",
+  "description": "An OpenStack dashboard project.",
   "author": "InCloud OpenStack UI Team",
-  "license": "COMMERCIAL",
+  "license": "MulanPSL2",
   "private": true,
   "scripts": {
-    "install": "cd server && npm install",
-    "dev-server": "node build/dev-server-only.js",
     "dev": "node --max_old_space_size=4096 build/dev.js",
-    "dev-spdy": "node --max_old_space_size=4096 build/dev-spdy.js",
-    "dev-https": "node --max_old_space_size=4096 build/dev-server-https.js",
-    "build": "node --max_old_space_size=4096 build/build.js",
-    "unit": "karma start test/unit/karma.conf.js --single-run",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "dev-server": "node build/dev-server-only.js",
+    "build": "node --max_old_space_size=4096 build/build.js"
   },
   "dependencies": {
     "async-validator": "1.6.9",

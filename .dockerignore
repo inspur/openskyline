@@ -1,8 +1,0 @@
-.DS_Store
-node_modules/
-mock-server/
-dev/
-sessions/
-npm-debug.log
-test/
-selenium-debug.log
