@@ -12,11 +12,9 @@
       <el-table ref="acTable" :data="tableData" v-loading="loading" highlight-current-row stripe border style="width: 100%" row-key="id" :default-sort="{prop: 'name', order: 'ascending'}" @selection-change="handleSelectionChange"  @sort-change="sortChange">
         <el-table-column type="expand" align="center" width="55">
           <template slot-slot-scope="props" slot-scope="scope">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item>
-                <metadata-detail :flavorId="scope.row.id"></metadata-detail>
-              </el-form-item>
-            </el-form>
+            <div style="width: 80%;">
+              <metadata-detail :flavorId="scope.row.id"></metadata-detail>
+            </div>
           </template>
         </el-table-column>
         <el-table-column reserve-selection type="selection" width="55" align="center">
