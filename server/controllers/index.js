@@ -127,18 +127,22 @@ exports.middlewares = function (router) {
       let { body: tokenBody, response: tokenResponse } = await getScopedToken(endpoint, unscopedToken, projectId);
       let scopedToken = tokenResponse.headers['x-subject-token'];
       let roles = tokenBody.token.roles;
-      let catalog = tokenBody.token.catalog;
+      let catalogs = tokenBody.token.catalog;
       let services = {};
-      for (let catalogItem of catalog) {
-        let endpointItem = catalogItem.endpoints.find(item => item.region_id === activeRegion && item.interface === 'public');
-        if (!endpointItem) {
-          endpointItem = catalogItem.endpoints.find(item => item.interface === 'public');
+      let regionServices = {};
+      for (let catalog of catalogs) {
+        let publicEndpoints = catalog.endpoints.filter(item => item.interface === 'public');
+        for (let region of regions) {
+          if (!(region.id in regionServices)) {
+            regionServices[region.id] = {};
+          }
+          let endpointItem = publicEndpoints.find(item => item.region_id === region.id);
+          if (endpointItem) {
+            regionServices[region.id][catalog.name] = cutEndpointUrl(endpointItem.url);
+          }
         }
-        if (!endpointItem) {
-          endpointItem = catalogItem.endpoints[0];
-        }
-        services[catalogItem['name']] = cutEndpointUrl(endpointItem.url);
       }
+      services = regionServices[activeRegion];
       let roleType = '';
       let roleId = '';
       let adminRole = roles.find(item => item.name === 'admin');
@@ -166,7 +170,7 @@ exports.middlewares = function (router) {
       // 获取菜单
       req.session[Consts.KEY_MENUCODE_LIST] = await getMenus();
       req.session[Consts.KEY_SERVICES] = services;
-      req.session[Consts.KEY_REGION_SERVICES] = [];
+      req.session[Consts.KEY_REGION_SERVICES] = regionServices;
       req.session[Consts.KEY_REGIONS] = regions;
       next();
     }
