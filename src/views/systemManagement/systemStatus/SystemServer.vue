@@ -177,7 +177,7 @@ export default {
       //过滤region
       let regionId = this.$cookie.get("region_id");
       data = data.filter((item) => {
-        return item.region_id == regionId;
+        return item.id == regionId;
       })
       //排序
       data.sort(this.$sortFormatter(this.sortObj.sortField, this.sortObj.sortOrder))

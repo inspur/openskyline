@@ -160,7 +160,7 @@ export default {
       let reqList = [];
       let regionName = '';
       Vue.regionList.forEach((item) => {
-        if (item.region_id == me.activeRegionId) {
+        if (item.id == me.activeRegionId) {
           regionName = item.region;
         }
       })

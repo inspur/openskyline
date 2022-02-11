@@ -1521,8 +1521,8 @@ export default {
         }
         if (!flag&&Vue.regionList.length>1) { //如果是新增，且是多个region，需要保存多个region下的配额
           Vue.regionList.forEach(async (region) => {
-            if (Vue.regionServices[region.region_id]['nova']) {
-              option.regionId = region.region_id;
+            if (Vue.regionServices[region.id]['nova']) {
+              option.regionId = region.id;
             }
             await me.$ajax(option);
           })
@@ -1541,8 +1541,8 @@ export default {
         }
         if (!flag&&Vue.regionList.length>1) { //如果是新增，且是多个region，需要保存多个region下的配额
           Vue.regionList.forEach(async (region) => {
-            if (Vue.regionServices[region.region_id]['neutron']) {
-              option.regionId = region.region_id;
+            if (Vue.regionServices[region.id]['neutron']) {
+              option.regionId = region.id;
             }
             await me.$ajax(option);
           })
@@ -1562,8 +1562,8 @@ export default {
         }
         if (!flag&&Vue.regionList.length>1) { //如果是新增，且是多个region，需要保存多个region下的配额
           Vue.regionList.forEach(async (region) => {
-            option.regionId = region.region_id;
-            if (Vue.regionServices[region.region_id]["cinderv2"]) {
+            option.regionId = region.id;
+            if (Vue.regionServices[region.id]["cinderv2"]) {
               await me.$ajax(option);
             }
           })
@@ -1583,8 +1583,8 @@ export default {
         }
         if (!flag&&Vue.regionList.length>1) { //如果是新增，且是多个region，需要保存多个region下的配额
           Vue.regionList.forEach(async (region) => {
-            if (Vue.regionServices[region.region_id]["manila"]) {
-              option.regionId = region.region_id;
+            if (Vue.regionServices[region.id]["manila"]) {
+              option.regionId = region.id;
               await me.$ajax(option);
             }
           })
@@ -1790,8 +1790,8 @@ export default {
         }
       }
       Vue.regionList.forEach(async (region) => {
-        if (Vue.regionServices[region.region_id]["S3"]) {
-          option.regionId = region.region_id;
+        if (Vue.regionServices[region.id]["S3"]) {
+          option.regionId = region.id;
           await me.$ajax(option);
         }
       })

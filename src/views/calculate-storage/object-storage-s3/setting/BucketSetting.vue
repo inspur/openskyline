@@ -280,8 +280,8 @@ export default {
             }
           }
           Vue.regionList.forEach(async (region) => {
-            if (Vue.regionServices[region.region_id]["S3"]) {
-              option.regionId = region.region_id;
+            if (Vue.regionServices[region.id]["S3"]) {
+              option.regionId = region.id;
               await self.$ajax(option);
             }
           })

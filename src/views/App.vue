@@ -10,7 +10,7 @@
       <div style="display: flex; flex-direction: row; height: 50px; justify-content: flex-end;">
         <div class="layout-header-selects" v-if="true">
           <el-select size="small" v-model="regionValue" @change="regionChange" style="width:120px;" v-if="regions.length>1">
-            <el-option v-for="item in regions" :key="item.region_id" :label="item.region" :value="item.region_id">
+            <el-option v-for="item in regions" :key="item.id" :label="item.id" :value="item.id">
             </el-option>
           </el-select>
           <el-select v-model="commandSelected" filterable size="small" @change="handleChange" style="width:120px;">
@@ -102,12 +102,12 @@
         iconSize: "icon-size-14",
         commands: Vue.projectList,
         commandSelected: this.$cookie.get('pid'),
-        regions:Vue.regionList,
-        regionValue:(function() {
-          var value = '';
+        regions: Vue.regionList,
+        regionValue: (function() {
+          var value = Vue.regionList[0]['id'];
           Vue.regionList.forEach((item, key) => {
-            if (item.active) {
-              value = item.region_id;
+            if (item.id === Vue.cookie.get('region_id')) {
+              value = item.id;
               Vue.region = value;
             }
           });

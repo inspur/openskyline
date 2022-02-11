@@ -68,8 +68,25 @@ async function getMenus() {
   return { "m.systemmanage": true, "m.systemmanage.departmentmanage": true, "m.systemmanage.groupmanage": true, "m.systemmanage.ipsetting": true, "m.systemmanage.opreatelog": true, "m.systemmanage.paramsetting": true, "m.systemmanage.paramsetting.businesstemplate": true, "m.systemmanage.paramsetting.copyRightSetting": true, "m.systemmanage.paramsetting.logsetting": true, "m.systemmanage.paramsetting.metadata": true, "m.systemmanage.paramsetting.moduleswitch": true, "m.systemmanage.paramsetting.systemsetting": true, "m.systemmanage.projectmanage": true, "m.systemmanage.rolemanage": true, "m.systemmanage.serialnumber": true, "m.systemmanage.systemstatus": true, "m.systemmanage.usermanage": true, "m.network": true, "m.network.balance": true, "m.network.firewall": true, "m.network.flaotingip": true, "m.network.network": true, "m.network.router": true, "m.network.securitygroup": true, "m.network.topo": true, "m.network.vpn": true, "m.docker_server": true, "m.docker_server.clusters": true, "m.docker_server.images": true, "m.docker_server.instances": true, "m.docker_server.volume": true, "m.heat": true, "m.heat.stack": true, "m.heat.template": true, "m.calculate": true, "m.calculate.disk": true, "m.calculate.host": true, "m.calculate.instance": true, "m.calculate.keypair": true, "m.calculate.media": true, "m.calculate.resourcespec": true, "m.calculate.snapshot": true, "m.senlin": true, "m.workflow": true, "m.workflow.task": true, "m.operationmanage": true, "m.operationmanage.fault": true, "m.operationmanage.flowmanage": true, "m.operationmanage.orderapprove": true, "m.operationmanage.orderlist": true, "m.calculate.fileStorage": true, "m.calculate.physical": true, "m.database": true, "m.calculate.baremetal": true, "m.systemmanage.usermanage.add": true, "m.systemmanage.usermanage.assignrole": true, "m.systemmanage.usermanage.delete": true, "m.systemmanage.usermanage.disable": true, "m.systemmanage.usermanage.edit": true, "m.systemmanage.usermanage.enable": true, "m.systemmanage.usermanage.resetpassword": true, "m.systemmanage.usermanage.unlock": true, "m.systemmanage.usermanage.userroledetail": true, "m.systemmanage.rolemanage.add": true, "m.systemmanage.rolemanage.delete": true, "m.systemmanage.rolemanage.detail": true, "m.systemmanage.rolemanage.edit": true, "m.systemmanage.groupmanage.add": true, "m.systemmanage.groupmanage.assignrole": true, "m.systemmanage.groupmanage.delete": true, "m.systemmanage.groupmanage.edit": true, "m.systemmanage.groupmanage.personmanage": true, "m.systemmanage.ipsetting.add": true, "m.systemmanage.ipsetting.delete": true, "m.systemmanage.ipsetting.edit": true, "m.systemmanage.projectmanage.create": true, "m.systemmanage.projectmanage.delete": true, "m.systemmanage.projectmanage.edit": true, "m.systemmanage.projectmanage.roledetail": true, "m.systemmanage.projectmanage.updategroup": true, "m.systemmanage.projectmanage.updateperson": true, "m.systemmanage.projectmanage.updatequota": true, "m.systemmanage.projectmanage.usage": true, "m.startpage": true, "m.operationmanage.cost": true, "m.operationmanage.pricesetting": true, "m.operationmanage.report": true, "m.network.qos": true, "m.calculate.logictopo": true, "m.monitor": true, "m.monitor.AlertMange": true, "m.monitor.monitorset": true, "m.monitor.resourcemonitor": true, "m.systemmanage.paramsetting.pimsetting": true, "m.operationAnalysis": true, "m.operationAnalysis.TrendPredict": true, "m.monitor.CustomGraph": true, "m.operationAnalysis.HealthStatus": true, "m.operationAnalysis.logSearch": true, "m.operationAnalysis.logAnalysis": true, "m.operationAnalysis.logError": true, "m.docker_server.kbclusters": true, "m.calculate.recycleBin": true, "m.monitor.EventMonitor": true, "m.operationAnalysis.noThresholdAnomalyDetection": true, "m.systemmanage.certManage": true, "m.operationAnalysis.CLUSTER_RESOURCE_PREDICTION": true, "m.sahara": true, "m.sahara.cluster": true, "m.sahara.clustertemplate": true, "m.sahara.image": true, "m.sahara.nodegroup": true };
 }
 
-async function getRegions() {
-  return [{ "region": "RegionOne", "region_id": "RegionOne", "active": true }];
+async function getRegions(endpoint, unscopedToken) {
+  let options = {
+    url: endpoint + '/v3/regions',
+    method: 'GET',
+    json: true,
+    body: {},
+    headers: {
+      'X-Auth-Token': unscopedToken
+    }
+  };
+  return new Promise((resolve, reject) => {
+    request(options, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
 }
 
 function cutEndpointUrl(url) {
@@ -82,7 +99,6 @@ function cutEndpointUrl(url) {
 }
 
 exports.middlewares = function (router) {
-  const __DEV__ = process.env.NODE_ENV === 'development';
   const serviceAddr = context.getResource('serviceAddr.json');
   const endpoint = `http://${serviceAddr.keystone}`;
   return [
@@ -103,6 +119,10 @@ exports.middlewares = function (router) {
       if (projects.length > 0) {
         projectId = req.cookies['pid'] ? req.cookies['pid'] : projects[0].id;
       }
+
+      let regions = (await getRegions(endpoint, unscopedToken)).regions;
+      let activeRegion = req.cookies['region_id'] ? req.cookies['region_id'] : regions[0].id;
+
       // 通过项目获取pToken，并且获取roleId和roleType
       let { body: tokenBody, response: tokenResponse } = await getScopedToken(endpoint, unscopedToken, projectId);
       let scopedToken = tokenResponse.headers['x-subject-token'];
@@ -110,11 +130,15 @@ exports.middlewares = function (router) {
       let catalog = tokenBody.token.catalog;
       let services = {};
       for (let catalogItem of catalog) {
-        let endpointItem = catalogItem.endpoints[0];
+        let endpointItem = catalogItem.endpoints.find(item => item.region_id === activeRegion && item.interface === 'public');
+        if (!endpointItem) {
+          endpointItem = catalogItem.endpoints.find(item => item.interface === 'public');
+        }
+        if (!endpointItem) {
+          endpointItem = catalogItem.endpoints[0];
+        }
         services[catalogItem['name']] = cutEndpointUrl(endpointItem.url);
       }
-      let regions = await getRegions();
-      let activeRegion = regions[0]['region_id'];
       let roleType = '';
       let roleId = '';
       let adminRole = roles.find(item => item.name === 'admin');
@@ -143,7 +167,7 @@ exports.middlewares = function (router) {
       req.session[Consts.KEY_MENUCODE_LIST] = await getMenus();
       req.session[Consts.KEY_SERVICES] = services;
       req.session[Consts.KEY_REGION_SERVICES] = [];
-      req.session[Consts.KEY_REGIONS] = await getRegions();
+      req.session[Consts.KEY_REGIONS] = regions;
       next();
     }
   ];
