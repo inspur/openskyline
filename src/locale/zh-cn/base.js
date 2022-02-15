@@ -1,7 +1,7 @@
 export default {
   base: {
-    mainTitle: "skyline",
-    mainTitleAK: 'skyline',
+    mainTitle: "OpenSkyline",
+    mainTitleAK: 'OpenSkyline',
     companyAddress: "",
     logining: "正在登录，请稍等...",
     loadingPage: "正在加载页面，请稍等...",

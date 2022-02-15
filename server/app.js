@@ -228,7 +228,7 @@ app.use(helmet.contentSecurityPolicy({
 // frame options
 app.use(helmet.frameguard({ action: 'sameorigin' }));
 // hide X-Powered-By
-app.use(helmet.hidePoweredBy({ setTo: 'skyline' }));
+app.use(helmet.hidePoweredBy({ setTo: 'openskyline' }));
 // 安全测试添加响应头设置安全字段
 app.use('/', function (req, res, next) {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');

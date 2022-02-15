@@ -24,7 +24,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <el-row type="flex" justify="space-between" align="center">
       <div>
         <icos-column-selector @refresh="loadVolumes" @column-checked="handleColumnChecked" :selected-length="selectedVolumeId === '' ? 0 : 1" :columns="[{
@@ -109,7 +109,6 @@ export default {
         try {
           $this.currentPage = page;
           let params = {
-            metadata: '{\'store_image_data\':\'False\'}',
             limit: $this.pageSize,
             offset: (page - 1) * $this.pageSize,
             with_count: 'True',
@@ -128,7 +127,7 @@ export default {
           }).join('&');
           const res = await $this.$ajax({
             type: 'get',
-            url: `api/cinderv3/v3/${$this.$cookie.get('pid')}/inspur-volumes/detail?${queryString}`,
+            url: `api/cinderv3/v3/${$this.$cookie.get('pid')}/volumes/detail?${queryString}`,
             headers: {
               'OpenStack-API-Version': 'volume 3.45'
             }

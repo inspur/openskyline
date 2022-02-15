@@ -842,16 +842,9 @@ export default {
           inspur_virtual_size: "",
           min_disk: ""
         };
-        let body ={
-          project_id : selectProjectId
-        };
-        if ("0" == roleType) {
-          body.user_id = Vue.userId
-       }
         let ret = await this.$ajax({
-          type: 'post',
-          url: 'api/glance/v2/images/list?limit=99999&status=active',
-          data: JSON.stringify(body)
+          type: 'get',
+          url: 'api/glance/v2/images'
         });
         let images = ret.images;
         for (let i = 0; i < images.length; i++) {

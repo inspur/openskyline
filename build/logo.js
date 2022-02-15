@@ -1,7 +1,7 @@
 const figlet = require('figlet');
 
 function logo(callback) {
-  figlet('skyline', {
+  figlet('openskyline', {
     font: 'Big'
   }, function (err, data) {
     if (err) {
