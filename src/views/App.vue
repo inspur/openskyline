@@ -72,8 +72,8 @@
   </div>
 </template>
 <script>
-  import logoImageBig from 'assets/img/logo-big.png';
-  import logoSmall from 'assets/img/logo-small.png';
+  import logoImageBig from 'assets/img/OpenStack-Logo-Horizontal.svg';
+  import logoSmall from 'assets/img/OpenStack-Logo-Mark.svg';
   import menus from './menus/index.js';
   import { mapGetters, mapMutations } from 'vuex';
   import UserMessage from './topDialog/UserMessage'
