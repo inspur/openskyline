@@ -1032,20 +1032,33 @@ export default {
       }
     },
     async vmConsolePage(row) {
-      var self = this;
-      var body = { "os-getVNCConsole": { "type": "novnc" } };
-      body = JSON.stringify(body);
-      try {
-        let result = await self.$ajax({
-          type: 'post',
-          data: body,
-          url: 'api/nova/v2.1/servers/' + row['id'] + '/action',
-          showErrMsg: true
-        });
-        var data = result.console.url;
-        window.open(data + "&title=" + encodeURIComponent(row['name']), '_blank');
-      } catch (res) {
-        self.loading = false;
+      const consoles = [{
+        protocol: 'vnc',
+        type: 'novnc'
+      }, {
+        protocol: 'spice',
+        type: 'spice-html5'
+      }]
+      for (let console of consoles) {
+        try {
+          let result = await this.$ajax({
+            type: 'post',
+            data: JSON.stringify({
+              remote_console: console
+            }),
+            headers: {
+              'OpenStack-API-Version': 'compute 2.41',
+              'X-OpenStack-Nova-API-Version': 2.41
+            },
+            url: `api/nova/v2.1/servers/${row.id}/remote-consoles`,
+            showErrMsg: false
+          });
+          const url = result.remote_console.url;
+          window.open(`${url}&title=${encodeURIComponent(row['name'])}`, '_blank');
+          break;
+        } catch (res) {
+          // continue;
+        }
       }
     },
     vmDetail(row) {
