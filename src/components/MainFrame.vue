@@ -82,7 +82,7 @@
       }
     },
     mounted () {
-      this.copyright = Vue.oemSwitch ? Vue.oemCopyright: '© 2017-2019 Inspur.com. All rights reserved.';
+      this.copyright = Vue.oemSwitch ? Vue.oemCopyright: '© 2022 OpenSkyline';
     },
     watch: {
       // 切换页面
