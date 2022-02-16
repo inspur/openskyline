@@ -9,7 +9,7 @@ let SparkMD5 = require('spark-md5');
 let uuidv4 = require('uuid/v4');
 const logger = require('log4js').getLogger('default');
 
-const IMAGE_UPLOAD_DIR = path.join(__dirname, 'tmp');
+const IMAGE_UPLOAD_DIR = os.tmpdir();
 const IMAGE_UPLOAD_FILE_DATA = path.join(IMAGE_UPLOAD_DIR, 'file-data');
 const IMAGE_UPLOAD_PART_DATA = path.join(IMAGE_UPLOAD_DIR, 'part-data');
 
