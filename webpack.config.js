@@ -1,6 +1,7 @@
-var path = require('path');
-var config = require('./config');
-var webpack = require('webpack');
+const path = require('path');
+const config = require('./config');
+const webpack = require('webpack');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -66,27 +67,11 @@ module.exports = {
             esModule: false
           }
         }]
-      },
-      {
-        enforce: 'pre',
-        test: /\.(vue|(j|t)sx?)$/,
-        use: [{
-          loader: 'eslint-loader',
-          options: {
-            extensions: [
-              '.js',
-              '.jsx',
-              '.vue'
-            ],
-            quiet: true,
-            emitWarning: true,
-            emitError: true
-          }
-        }]
       }
     ]
   },
   plugins: [
+    new ESLintPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jquery: 'jquery',

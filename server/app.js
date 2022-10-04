@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
-const logger = require('log4js');
+const log4js = require('log4js');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
@@ -29,14 +29,13 @@ const DEFAULT_SESSION_TIMEOUT_SECOND = 60 * 60;
 // const easyMonitor = require('easy-monitor');
 
 // const server = function (serverApp) {
-logger.configure({
-  replaceConsole: true,
-  levels: {
-    "[all]": "WARN"  //ERROR
+log4js.configure({
+  appenders: {
+    console: { type: 'console' }
   },
-  appenders: [
-    { type: "console" }
-  ]
+  categories: {
+    default: { appenders: ['console'], level: 'warn' },
+  },
 });
 
 // easyMonitor('icm');
@@ -63,9 +62,8 @@ if (__DEV__) {
 app.locals.ENV = ENV;
 context.setEnv(ENV);
 
-logger.configure(context.getResource('log4js.json'));
 process.on('uncaughtException', function (err) {
-  logger.getLogger("Global").error(err.stack || err);
+  log4js.getLogger("Global").error(err.stack || err);
   setTimeout(function () {
     process.exit(1);
   }, 100);
@@ -100,8 +98,7 @@ nunjucksEnv.addFilter('safeJson', function (obj) {
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../static', 'favicon.ico')));
-// app.use(morganLogger('dev'));
-let httpLogger = logger.connectLogger(logger.getLogger("http"), {
+let httpLogger = log4js.connectLogger(log4js.getLogger("http"), {
   level: 'auto',
   format: (req, res, format) => {
     return format(`:remote-addr - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"`);
@@ -141,7 +138,7 @@ app.use(loginStateFilter);
 var proxyServer = httpProxy.createProxyServer();
 context.setResource('proxy', proxyServer);
 proxyServer.on("error", function (e) {
-  logger.getLogger("proxy").error(e.message);
+  log4js.getLogger("proxy").error(e.message);
 });
 
 app.use('/', function (req, res, next) {
