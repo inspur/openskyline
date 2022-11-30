@@ -1,7 +1,7 @@
-module.exports = function() {
+module.exports = function () {
   //登录拦截器
   // create an auth filter
-  var filter = require('express-authfilter').create({
+  const filter = require('express-authfilter').create({
     // private zone, true for white list mode
     deny: [
       '/',
@@ -44,13 +44,13 @@ module.exports = function() {
 
     ],
     // check user login state
-    check: function(req, res) {
+    check: function (req, res) {
       return Boolean(req.session.token);
     },
     // login method
-    login: function(req, res) {
+    login: function (req, res) {
       let loginUrl = req.baseUrl ? (req.baseUrl + '/login.html') : '/login.html';
-      res.redirect(loginUrl+"?__="+new Date().getTime());
+      res.redirect(loginUrl + "?__=" + new Date().getTime());
     }
   });
 

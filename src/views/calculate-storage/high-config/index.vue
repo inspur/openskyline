@@ -6,7 +6,7 @@
         <el-tab-pane name="key-pair" :label="$t('calcStorLang.keypair')" />
         <el-tab-pane name="server-group" v-if="roleType !== '3'" :label="$t('calcStorLang.serverGroup')" />
         <el-tab-pane name="gpu" v-if="$archIs('x86') && roleType === '0' && hasCyborg" :label="$t('calcStorLang.GPU')" />
-        <el-tab-pane name="net-usb" v-if="$archIs('x86') && roleType === '0' && hasCyborg" :label="$t('calcStorLang.NET_USB')" />
+        <!-- <el-tab-pane name="net-usb" v-if="$archIs('x86') && roleType === '0' && hasCyborg" :label="$t('calcStorLang.NET_USB')" /> -->
       </el-tabs>
       <icos-page>
         <keep-alive>

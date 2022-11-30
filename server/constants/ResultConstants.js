@@ -7,4 +7,4 @@ module.exports = {
   KEY_RESDATA: 'resData',
   RESULT_SUCCESS: 'success',
   RESULT_FAILED: 'failed'
-}
+};

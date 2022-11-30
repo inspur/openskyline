@@ -1,5 +1,5 @@
-var fs = require('fs'),
-  logger = require('log4js').getLogger('Global');
+const fs = require('fs');
+const logger = require('log4js').getLogger('Global');
 
 var currentContext = {
   _resource: {},

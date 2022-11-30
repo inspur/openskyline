@@ -1,7 +1,7 @@
 module.exports = {
-   /**
-   * REST API地址和方法.
-   */
+  /**
+  * REST API地址和方法.
+  */
   REST_URL: 'restUrl',
   METHOD: 'method',
   TIME_OUT_CONTROL: 'timeoutControl',

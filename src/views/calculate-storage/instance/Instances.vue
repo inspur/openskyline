@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column v-if="columnsChecked.indexOf('id') >= 0" label="ID" prop="id" align="left" min-width="80">
         </el-table-column>
-        <el-table-column v-if="columnsChecked.indexOf('mirrorName') >= 0" :show-overflow-tooltip="isShowTip" prop="mirrorName" :label="$t('calcStorLang.source')" align="left" min-width="120">
+        <el-table-column v-if="columnsChecked.indexOf('mirrorName') >= 0" :show-overflow-tooltip="isShowTip" prop="mirrorName" :label="$t('calcStorLang.source')" align="left" width="380">
           <template slot-scope="scope">
             <el-popover ref="sourceDetailPop" placement="top" trigger="click">
               <div class="table_panel" style="width:410px">

@@ -5,10 +5,10 @@ const RestConstants = require('./RestConstants');
 const SecurityConstants = require('./SecurityConstants');
 module.exports =
   Object.assign(
-      {},
-      LoginConstants,
-      ResultConstants,
-      SessionConstants,
-      RestConstants,
-      SecurityConstants
+    {},
+    LoginConstants,
+    ResultConstants,
+    SessionConstants,
+    RestConstants,
+    SecurityConstants
   );

@@ -14,13 +14,13 @@ const logger = require('log4js').getLogger('http');
 process.env.NODE_ENV = 'production';
 
 /**************************server启动*********************************/
-const app = require('../app')
+const app = require('../app');
 const context = require('../lib/Context').getCurrentContext();
 let serverAddr = context.getResource('serviceAddr.json');
 let bindip = serverAddr.bindip;
 
 logger.warn("bindip:" + bindip);
-var httpPort = 80;
+const httpPort = 80;
 const httpServer = http.createServer(app);
 httpServer.listen(httpPort, bindip, function(err) {
 });
@@ -28,14 +28,14 @@ httpServer.listen(httpPort, bindip, function(err) {
 const spdy = require('spdy');
 const fs = require('fs');
 const path = require('path');
-const consts = require('constants');
-var sdpyOptions = {
+const consts = require('./constants');
+const sdpyOptions = {
   key: fs.readFileSync(path.join(__dirname, '..', 'ssl/server-key.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', 'ssl/server-cert.pem')),
   secureOptions: consts.SSL_OP_NO_TLSv1,
   ciphers: 'ECDHE-RSA-AES128-GCM-SHA256',
   spdy: {
-    protocols: [ 'h2', 'http/1.1' ],
+    protocols: ['h2', 'http/1.1'],
     plain: false,
     'x-forwarded-for': true,
     connection: {

@@ -20,9 +20,9 @@ module.exports = {
   KEY_WARN_DAYS: 'warnDays',
   KEY_PROJECT_LIST: 'projectList',
   KEY_MENUCODE_LIST: 'menuCodeList',
-  KEY_SERVICES:'services',
-  KEY_REGIONS:"regions",
-  KEY_REGION_SERVICES:"regionServices",
-  KEY_SESSION_TIMEOUT:'sessionTimeout',
-  KEY_IP:"ip"
+  KEY_SERVICES: 'services',
+  KEY_REGIONS: 'regions',
+  KEY_REGION_SERVICES: 'regionServices',
+  KEY_SESSION_TIMEOUT: 'sessionTimeout',
+  KEY_IP: 'ip'
 };

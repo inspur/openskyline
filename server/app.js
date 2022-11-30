@@ -15,7 +15,7 @@ const uuid = require('uuid');
 const session = require('express-session');
 // const Redis = require('ioredis');
 // const RedisStore = require('connect-redis')(session);
-var FileStore = require('session-file-store')(session);
+const FileStore = require('session-file-store')(session);
 
 //constants
 const Consts = require('../constants');
@@ -34,8 +34,8 @@ log4js.configure({
     console: { type: 'console' }
   },
   categories: {
-    default: { appenders: ['console'], level: 'warn' },
-  },
+    default: { appenders: ['console'], level: 'warn' }
+  }
 });
 
 // easyMonitor('icm');
@@ -53,7 +53,7 @@ let app = express();
 global.DIR_NAME = __dirname;
 global.context = context;
 let __DEV__ = process.env.NODE_ENV === 'development';
-var ENV = 'dev';
+let ENV = 'dev';
 if (__DEV__) {
   ENV = 'dev';
 } else {
@@ -135,7 +135,7 @@ app.use(loginStateFilter);
 /**
  *  initialize proxy
  */
-var proxyServer = httpProxy.createProxyServer();
+const proxyServer = httpProxy.createProxyServer();
 context.setResource('proxy', proxyServer);
 proxyServer.on("error", function (e) {
   log4js.getLogger("proxy").error(e.message);
@@ -300,7 +300,7 @@ defaultRouter.get('/', function (req, res) {
 app.use('/', defaultRouter);
 
 //路由挂载
-var routerFactory = require('./RouterFactory');
+const routerFactory = require('./RouterFactory');
 routerFactory.mount(context.getResource('routes.json'), app, context);
 //未匹配的路由重定向到首页
 // app.use('/', function (req, res) {

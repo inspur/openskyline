@@ -577,6 +577,8 @@ function saveImageGlanceVirtualSize(req, resp) {
       cmd = 'exec /usr/bin/qemu-img';
     } else if (platform === 'win32') {
       cmd = path.resolve(__dirname, '..\\..\\lib\\qemu-img\\win32\\qemu-img.exe');
+    } else if (platform === 'darwin') {
+      cmd = 'qemu-img';
     }
     cmd = `${cmd} info ${filePath}`;
     exec(cmd, function (error, stdout, stderr) {
@@ -624,7 +626,7 @@ async function saveToGlance(req, resp) {
   const Consts = require('../../constants');
   const request = require('request');
   const session = req.session;
-  // await saveImageGlanceVirtualSize(req);  // 获取并保存virtual size
+  await saveImageGlanceVirtualSize(req);  // 获取并保存virtual size
   const id = req.params.id;
   const uploadId = req.body.uploadId;
   const bucketName = req.body.bucketName;
