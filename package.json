@@ -1,6 +1,6 @@
 {
   "name": "openskyline",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An OpenStack dashboard project.",
   "author": "InCloud OpenStack UI Team",
   "license": "MulanPSL2",
@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node --trace-warnings --max_old_space_size=4096 build/dev.js",
     "dev-server": "node build/dev-server-only.js",
-    "build": "node --max_old_space_size=4096 build/build.js"
+    "build": "node --max_old_space_size=4096 build/build.js",
+    "package": "npm run build && node build/package.js"
   },
   "dependencies": {
     "async-validator": "1.6.9",
