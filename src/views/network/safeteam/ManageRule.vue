@@ -1,109 +1,109 @@
 <template>
-<el-card class="box-card">
-  <div>
-    <div class="operation-panel margin-tb5">
-      <operation-panel
-        :select-rows="multipleSelection"
-        :operation-menus="operationMenus">
-      </operation-panel>
+  <icos-page>
+    <div>
+      <div class="operation-panel margin-tb5">
+        <operation-panel
+          :select-rows="multipleSelection"
+          :operation-menus="operationMenus">
+        </operation-panel>
+      </div>
+      <div class="divider clearfix"></div>
+      <el-table
+        ref="ruleTable"
+        :data="ruleTableData"
+        highlight-current-row
+        stripe
+        border
+        style="width: 100%"
+        row-key="id"
+        v-loading="loading"
+        :element-loading-text="$t('lang.loading')"
+        @row-click="rowClick"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          reserve-selection
+          type="selection"
+          width="55"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('direction') >= 0"
+          :label="$t('network.direction')"
+          prop="direction"
+          min-width="100">
+          <template slot-scope="scope">
+            <span v-html="directionRender(scope.row.direction)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('ethertype') >= 0"
+          prop="ethertype"
+          :label="$t('network.ethertype')"
+          min-width="100">
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('protocol') >= 0"
+          prop="protocol"
+          :label="$t('network.ipprotocol')"
+          min-width="100">
+          <template slot-scope="scope">
+            <span v-html="protocolRender(scope.row.protocol)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('port_range_min') >= 0"
+          prop="port_range_min"
+          :label="$t('network.portRange')"
+          min-width="100">
+          <template slot-scope="scope">
+            <span v-html="portrangeRender(scope.row)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('remote_ip_prefix') >= 0"
+          prop="remote_ip_prefix"
+          :label="$t('network.removeipprefix')"
+          min-width="50">
+          <template slot-scope="scope">
+            <span v-html="getRemoveipprefix(scope.row)"></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="columnsChecked.indexOf('security_group_id') >= 0"
+          prop="security_group_id"
+          :label="$t('network.securityGroup')"
+          min-width="100">
+          <template slot-scope="scope">
+            <span v-html="getSecurityGroupName(scope.row)"></span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="margin: 10px 0; position: relative">
+        <el-row>
+          <el-col :span="5">
+            <el-button type="text" icon="fa-refresh" @click="onRefresh"></el-button>
+            <span>{{$t("lang.currentSelected")}} {{multipleSelection.length}}{{$tc('lang.item', multipleSelection.length)}}</span>
+            <el-popover
+              placement="right"
+              trigger="click">
+              <el-checkbox-group class="vertical"
+                v-model="columnsChecked">
+                <el-checkbox class="item" v-for="(item, index) in columns" :label="item.prop" :key="item.prop">{{item.label}}
+                </el-checkbox>
+              </el-checkbox-group>
+              <div slot="reference" class="name-wrapper">
+                <el-tag>{{$t('network.columnSelected')}}</el-tag>
+              </div>
+            </el-popover>
+          </el-col>
+          <el-col :span="19">
+            <page :totalData="totalData" @getCurrentData="getCurrentData"></page>
+          </el-col>
+        </el-row>
+      </div>
+      <add-rule ref="addrule" v-if="addFlag" @handleAddShow="handleAddShow" :editId="edit_id" :editprojectId="edit_projectid" :editName="edit_name"></add-rule>
     </div>
-    <div class="divider clearfix"></div>
-    <el-table
-      ref="ruleTable"
-      :data="ruleTableData"
-      highlight-current-row
-      stripe
-      border
-      style="width: 100%"
-      row-key="id"
-      v-loading="loading"
-      :element-loading-text="$t('lang.loading')"
-      @row-click="rowClick"
-      @selection-change="handleSelectionChange">
-      <el-table-column
-        reserve-selection
-        type="selection"
-        width="55"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('direction') >= 0"
-        :label="$t('network.direction')"
-        prop="direction"
-        min-width="100">
-        <template slot-scope="scope">
-          <span v-html="directionRender(scope.row.direction)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('ethertype') >= 0"
-        prop="ethertype"
-        :label="$t('network.ethertype')"
-        min-width="100">
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('protocol') >= 0"
-        prop="protocol"
-        :label="$t('network.ipprotocol')"
-        min-width="100">
-        <template slot-scope="scope">
-          <span v-html="protocolRender(scope.row.protocol)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('port_range_min') >= 0"
-        prop="port_range_min"
-        :label="$t('network.portRange')"
-        min-width="100">
-        <template slot-scope="scope">
-          <span v-html="portrangeRender(scope.row)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('remote_ip_prefix') >= 0"
-        prop="remote_ip_prefix"
-        :label="$t('network.removeipprefix')"
-        min-width="50">
-        <template slot-scope="scope">
-          <span v-html="getRemoveipprefix(scope.row)"></span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="columnsChecked.indexOf('security_group_id') >= 0"
-        prop="security_group_id"
-        :label="$t('network.securityGroup')"
-        min-width="100">
-        <template slot-scope="scope">
-          <span v-html="getSecurityGroupName(scope.row)"></span>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="margin: 10px 0; position: relative">
-      <el-row>
-        <el-col :span="5">
-          <el-button type="text" icon="fa-refresh" @click="onRefresh"></el-button>
-          <span>{{$t("lang.currentSelected")}} {{multipleSelection.length}}{{$tc('lang.item', multipleSelection.length)}}</span>
-          <el-popover
-            placement="right"
-            trigger="click">
-            <el-checkbox-group class="vertical"
-              v-model="columnsChecked">
-              <el-checkbox class="item" v-for="(item, index) in columns" :label="item.prop" :key="item.prop">{{item.label}}
-              </el-checkbox>
-            </el-checkbox-group>
-            <div slot="reference" class="name-wrapper">
-              <el-tag>{{$t('network.columnSelected')}}</el-tag>
-            </div>
-          </el-popover>
-        </el-col>
-        <el-col :span="19">
-          <page :totalData="totalData" @getCurrentData="getCurrentData"></page>
-        </el-col>
-      </el-row>
-    </div>
-    <add-rule ref="addrule" v-if="addFlag" @handleAddShow="handleAddShow" :editId="edit_id" :editprojectId="edit_projectid" :editName="edit_name"></add-rule>
-  </div>
-</el-card>
+  </icos-page>
 </template>
 <script type="text/javascript">
 import AddRule from './AddRule';
