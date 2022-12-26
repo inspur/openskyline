@@ -59,8 +59,8 @@ const detailrouterNet = resolve => {
   }, 'detailrouterNet');
 };
 const overviewrouterNet = resolve => {
-  require.ensure(['views/network/router/RouterReview.vue'], () => {
-    resolve(require('views/network/router/RouterReview.vue'));
+  require.ensure(['views/network/router/RouterDetallOverview.vue'], () => {
+    resolve(require('views/network/router/RouterDetallOverview.vue'));
   }, 'overviewrouterNet');
 };
 const interfacerouterNet = resolve => {
