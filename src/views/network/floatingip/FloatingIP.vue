@@ -32,11 +32,11 @@
           <span v-html="networkRender(scope.row.floating_network_id)"></span>
         </template>
       </el-table-column>
-      <el-table-column v-if="columnsChecked.indexOf('qos_policy_id') >= 0" prop="qos_policy_id" :label="$t('calcStorLang.netConfigQosPloy')" min-width="100">
+      <!-- <el-table-column v-if="columnsChecked.indexOf('qos_policy_id') >= 0" prop="qos_policy_id" :label="$t('calcStorLang.netConfigQosPloy')" min-width="100">
         <template slot-scope="scope">
           <span v-html="qosRender(scope.row.qos_policy_id)"></span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column v-if="columnsChecked.indexOf('status') >= 0" prop="status" align="left" :label="$t('lang.status')" min-width="50">
       </el-table-column>
     </el-table>
@@ -468,14 +468,14 @@ export default {
       let self = this;
       let roleType = Vue.roleType + "";
       if (roleType == "0") {
-        Promise.all([self.getProjectList(), self.getExterNetworkList(), this.getSubnetList(), this.getQosList()]).then(function (result) {
+        Promise.all([self.getProjectList(), self.getExterNetworkList(), this.getSubnetList()]).then(function (result) {
           self.getData();
           // setTimeout( function() {
           //   self.getData();
           // }, 3000);
         });
       } else {
-        Promise.all([self.getProjectInUser(), self.getExterNetworkList(), this.getSubnetList(), this.getQosList()]).then(function (result) {
+        Promise.all([self.getProjectInUser(), self.getExterNetworkList(), this.getSubnetList()]).then(function (result) {
           self.getData();
           // setTimeout( function() {
           //   self.getData();

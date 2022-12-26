@@ -7,7 +7,7 @@
       <el-form-item :label="$t('lang.project')" class="is-required" prop="projectName" v-if="roleType == '0'">
         <el-input auto-complete="off" class="col-10" :icon="close" :on-icon-click="onIconClick" :readonly="true" @focus="selectProject" v-model="form.projectName"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('network.externalNet')" class="is-required" prop="externalnet_id">
+      <el-form-item :label="$t('network.externalNet')" class="is-required" prop="externalnet_id">  
         <el-select class="col-10" v-model="form.externalnet_id" filterable clearable @change="getIPAvailabilities">
           <el-option v-for="item in externalnetOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
@@ -31,7 +31,7 @@
           <el-option label="5" value="5"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="IP1" prop="floatingip1">
+      <el-form-item label="IP1" prop="floatingip1" class="is-required">
         <el-input class="col-10 ipclass" id="floatingip1" v-model="form.floatingip1"></el-input>
         <span class="ip-waring" v-if="!checkIPRange[0]" v-html="$t('network.IPCheck')"></span>
         <span class="ip-waring" v-if="typeof(form.floatingip1) === 'undefined'"  v-html="$t('network.noIP')"></span>
@@ -214,22 +214,32 @@ export default {
       let self = this;
       this.checkIP.fill(false);
       this.checkIPRange.fill(true);
-      let networkId = self.getNetworkId(id);
+      let networkId = self.getNetworkId(id);  //子网对应的网络信息
       this.$ajax({
         type: "GET",
-        url: "api/neutron/v2.0/inspur/inspur-network-ip-availabilities/" + networkId + '?ip_version=4',
-        successFun: function (res) {
-          let subnets = res.inspur_network_ip_availability.subnets;
+        url: "api/neutron/v2.0/network-ip-availabilities/" + networkId,
+        successFun: async function (res) {
+          let subnets = res.network_ip_availability.subnet_ip_availability;
           for (let i = 0; i < subnets.length; i++) {
-            if (id == subnets[i].id) {
-              [self.form.floatingip1, self.form.floatingip2, self.form.floatingip3, self.form.floatingip4,
-                self.form.floatingip5 ] = subnets[i].ips;
-              self.allocation_pools = subnets[i].allocation_pools;
+            if (id == subnets[i].subnet_id) {
+              let subNetList = await self.getSubNetList(subnets[i].subnet_id);
+              if (subnets[i].ips) {
+                [self.form.floatingip1, self.form.floatingip2, self.form.floatingip3, self.form.floatingip4,
+                  self.form.floatingip5 ] = subnets[i].ips;
+              }
+              self.allocation_pools = subNetList.allocation_pools;
             }
           }
         },
         errorKey: "NeutronError"
         });
+    },
+    async getSubNetList(subNetId) {
+      let {subnet} = await this.$ajax({
+        type: 'get',
+        url: "api/neutron/v2.0/subnets/" + subNetId,
+      })
+      return subnet;
     },
     isIP(ipstr) {
       if (ipstr) {
@@ -294,21 +304,21 @@ export default {
 
       this.$ajax({
         type: "GET",
-        url: "api/neutron/v2.0/inspur/inspur-network-ip-availabilities?router:external=true&ip_version=4",
-        successFun: function (res) {
-          let availability = res.inspur_network_ip_availabilities;
+        url: "api/neutron/v2.0/network-ip-availabilities?ip_version=4",
+        successFun: async function (res) {
+          let networkList = await self.getExternalNet();
+          let availability = res.network_ip_availabilities;
           let externalnetOptionsArr = [];
           for (let i = 0; i < availability.length; i++) {
-            if (availability[i].subnets.length) {
-              const subnets = availability[i].subnets;
+            let externalFlg = networkList.find(item => item.id === availability[i].network_id);
+            if (externalFlg && availability[i].subnet_ip_availability.length) {
+              const subnets = availability[i].subnet_ip_availability;
               for (let j = 0; j < subnets.length; j++) {
-                if (subnets[j].ips.length) {
-                  externalnetOptionsArr.push({
-                    id: subnets[j].id,
-                    networkId: availability[i].network_id,
-                    name: availability[i].network_name + "("+ subnets[j].cidr+")"
-                  })
-                }
+                externalnetOptionsArr.push({
+                  id: subnets[j].subnet_id,
+                  networkId: availability[i].network_id,
+                  name: availability[i].network_name + "("+ subnets[j].cidr+")"
+                })
               }
             }
           }
@@ -316,6 +326,13 @@ export default {
         },
         errorKey: "NeutronError"
       });
+    },
+    async getExternalNet() {
+      let {networks} = await this.$ajax({
+        type: 'get',
+        url: "api/neutron/v2.0/networks?router:external=true"
+      });
+      return networks;
     },
     // 获取networkid
     getNetworkId (subnetId) {
