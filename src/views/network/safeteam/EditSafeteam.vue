@@ -54,11 +54,11 @@ export default {
       console.log("ID:"+this.edit_id);
     },
     handleClose(done) {
-      this.$emit("handleEditShow", {});
+      this.$emit("handleEditShow", { flag: false });
       done();
     },
     cancel() {
-      this.$emit("handleEditShow", {});
+      this.$emit("handleEditShow", { flag: false });
     },
     confirmEdit() {
       var self = this;
@@ -75,7 +75,7 @@ export default {
               data: JSON.stringify(reqdata),
               success: function(result) {
                 self.$message.success(Vue.t('network.saveSuccess'));
-                self.cancel();
+                self.$emit("handleEditShow", { flag: true });
               },
               errorKey: "NeutronError",
               log:{

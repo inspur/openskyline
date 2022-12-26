@@ -333,9 +333,11 @@ export default {
       this.addFlag = false;
       this.getData();
     },
-    handleEditShow() {
+    handleEditShow({ flag }) {
       this.editFlag = false;
-      this.getData();
+      if (flag) {
+        this.getData();
+      }
     },
     handleSelectionChange(val) {
       // val.forEach((row, index) => {
