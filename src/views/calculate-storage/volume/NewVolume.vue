@@ -38,7 +38,7 @@
              <el-input-number v-model="newVolume.count" :min="1" :max="100" size="small" ></el-input-number>
           </el-col>
           <el-col :span="15">
-            <el-progress :text-inside="true" :stroke-width="18" :percentage="countpercentage"  v-bind:style="{top:'10px'}"></el-progress>
+            <el-progress :text-inside="true" :stroke-width="18" :percentage="countpercentage"></el-progress>
           </el-col>
           <el-tooltip placement="top" trigger="hover" :content="$t('storage.maxSizevolNumOnceCreate')">
             <i class="el-icon-fa-question-circle"></i>
@@ -57,7 +57,7 @@
              <el-input-number v-model="newVolume.size" :min="1" :max="oneMaxCap" size="small" @change="numberToInt" :disabled="entranceCode === 'CloneVolume'"></el-input-number>
           </el-col>
           <el-col :span="15">
-            <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="proStatus" v-bind:style="{top:'10px'}"></el-progress>
+            <el-progress :text-inside="true" :stroke-width="18" :percentage="percentage" :status="proStatus"></el-progress>
           </el-col>
           <el-tooltip placement="top" trigger="hover" :content="$t('storage.maxSizeOnevolCapa')">
             <i class="el-icon-fa-question-circle"></i>
@@ -224,7 +224,9 @@ export default {
         {value:'2', label:this.$t('storage.volSnapshot')}
       ],
       widthStyle:{
-        width:"85%"
+        width:"85%",
+        display: 'flex',
+        'align-items': 'center'
       },
       rules: {
         name: [
