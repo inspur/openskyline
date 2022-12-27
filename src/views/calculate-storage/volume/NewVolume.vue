@@ -1,6 +1,6 @@
 <template>
-<div>
-  <el-dialog :title="dialogTitle" :visible.sync="visible" :before-close="hide" v-dialogDrag>
+ <div>
+  <el-dialog :title="dialogTitle" :visible.sync="visible" :before-close="hide" v-dialogDrag class="dialog-800">
     <el-form ref="newVolumeForm" class="me-required-form" :model="newVolume" label-width="100px" :rules="rules" v-loading="loading"  label-position="left">
       <!-- 项目 -->
       <el-form-item :label="$t('lang.project')" prop="project" class="is-required">
@@ -128,10 +128,6 @@
         <el-input class="col-8" v-model="newVolume.description" auto-complete="off" type="textarea" v-bind:style="widthStyle" ></el-input>
       </el-form-item>
     </el-form>
-     <!-- </el-col>
-   <el-col :span="12">
-
-    </el-col> -->
     <div slot="footer" class="dialog-footer">
       <el-button @click="hide" :disabled="isDisabled">{{$t('lang.cancel')}}</el-button>
       <el-button type="primary" @click="beforeComfirmFun" :loading="isDisabled">{{$t('lang.confirm')}}</el-button>
@@ -1437,3 +1433,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.dialog-800 >>> .el-dialog {
+  width: 800px;
+}
+</style>
