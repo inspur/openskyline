@@ -153,11 +153,11 @@ export default {
       let roleType = Vue.roleType + "";
       let url = "";
       if ("2" == roleType) {
-        url = "api/nova/v2.1/servers-inspur/detail?project_id=" + self.$cookie.get("pid") + "&not-tags=" + encodeURIComponent('@');
+        url = "api/nova/v2.1/servers/detail?project_id=" + self.$cookie.get("pid") + "&not-tags=" + encodeURIComponent('@');
       } else if ("3" == roleType) {
-        url = "api/nova/v2.1/servers-inspur/detail?project_id=" + self.$cookie.get("pid") + "&user_id=" + Vue.userId+ "&not-tags=" + encodeURIComponent('@');
+        url = "api/nova/v2.1/servers/detail?project_id=" + self.$cookie.get("pid") + "&user_id=" + Vue.userId+ "&not-tags=" + encodeURIComponent('@');
       } else {
-        url = "api/nova/v2.1/servers-inspur/detail?all_tenants=1&project_id=" + projectId+ "&not-tags=" + encodeURIComponent('@');
+        url = "api/nova/v2.1/servers/detail?all_tenants=1&project_id=" + projectId+ "&not-tags=" + encodeURIComponent('@');
       }
       try {
         return await self.$ajax({
@@ -177,11 +177,11 @@ export default {
       let roleType = Vue.roleType + "";
       let urlPhy = "";
       if ("2" == roleType) {
-        urlPhy = "api/nova/v2.1/servers-inspur/detail?project_id=" + self.$cookie.get("pid") + "&tags=" + encodeURIComponent('@');
+        urlPhy = "api/nova/v2.1/servers/detail?project_id=" + self.$cookie.get("pid") + "&tags=" + encodeURIComponent('@');
       } else if ("3" == roleType) {
-        urlPhy = "api/nova/v2.1/servers-inspur/detail?project_id=" + self.$cookie.get("pid") + "&user_id=" + Vue.userId+ "&tags=" + encodeURIComponent('@');
+        urlPhy = "api/nova/v2.1/servers/detail?project_id=" + self.$cookie.get("pid") + "&user_id=" + Vue.userId+ "&tags=" + encodeURIComponent('@');
       } else {
-        urlPhy = "api/nova/v2.1/servers-inspur/detail?all_tenants=1&project_id=" + projectId+ "&tags=" + encodeURIComponent('@');
+        urlPhy = "api/nova/v2.1/servers/detail?all_tenants=1&project_id=" + projectId+ "&tags=" + encodeURIComponent('@');
       }
       try {
         return await self.$ajax({
@@ -200,206 +200,216 @@ export default {
       let self = this;
       self.loading = true;
       try {
-        let response = await this.$ajax({
-          type: "get",
-          url: "api/neutron/v2.0/inspur/networkextension/network_topology/"+projectId,
-          success: (response) => {
-            let node = [];
-            let link = [];
-            let linkVisable = [];
-            let networks = response["networks"];
-            let ports = response["ports"];
-            let routers = response["routers"];
-            let subnets = [];
-            let vmLinks = [];
-            self.vmList.forEach(function(item, index) {
-              node.push({
-                id: item.id,
-                name: item.name,
-                type: "OS::Nova::VM",
-                status: item.status,
-                locked:item.locked,
-                taskStatus:item['OS-EXT-STS:task_state'],
-                ipaddress: item.addresses,
-                linked: false,
-                phyFlag: (item.isPhy ? 'true' : '')
-              });
+        let networks = await this.$ajax({
+          type: 'get',
+          url: 'api/neutron/v2.0/networks'
+        });
+        let ports = await this.$ajax({
+          type: 'get',
+          url: 'api/neutron/v2.0/ports'
+        });
+        let routers = await this.$ajax({
+          type: 'get',
+          url: 'api/neutron/v2.0/routers'
+        });
+        let node = [];
+        let link = [];
+        let linkVisable = [];
+        let subnets = [];
+        let vmLinks = [];
+        networks = networks.networks;
+        ports = ports.ports;
+        routers = routers.routers;
+        self.vmList.forEach(function(item, index) {
+          node.push({
+            id: item.id,
+            name: item.name,
+            type: "OS::Nova::VM",
+            status: item.status,
+            locked:item.locked,
+            taskStatus:item['OS-EXT-STS:task_state'],
+            ipaddress: item.addresses,
+            linked: false,
+            phyFlag: (item.isPhy ? 'true' : '')
+          });
+        });
+        networks.forEach(function(item, index) {
+          if (item["router:external"] == false) {
+            node.push({
+              id: item.id,
+              name: item.name,
+              type: "OS::Neutron::Netinside",
+              external:item['router:external'],
+              status: item.status,
+              linked: false,
+              neutronType : true
             });
-            networks.forEach(function(item, index) {
-              if (item["router:external"] == false) {
-                node.push({
-                  id: item.id,
-                  name: item.name,
-                  type: "OS::Neutron::Netinside",
-                  external:item['router:external'],
-                  status: item.status,
-                  linked: false,
-                  neutronType : true
-                });
-              } else {
-                node.push({
-                  id: item.id,
-                  name: item.name,
-                  type: "OS::Neutron::Net",
-                  status: item.status,
-                  external:item['router:external'],
-                  linked: false,
-                  neutronType : true
-                });
-              }
+          } else {
+            node.push({
+              id: item.id,
+              name: item.name,
+              type: "OS::Neutron::Net",
+              status: item.status,
+              external:item['router:external'],
+              linked: false,
+              neutronType : true
             });
-            ports.forEach(function(item, index) {
-              let havenet = false;
-              for (let a = 0; a < networks.length; a++) {
-                if (item["network_id"] == networks[a].id) {
-                  havenet = true;
-                }
-              }
-              if (havenet) {
-                for (let i = 0; i < self.vmList.length; i++) {
-                  let vm = self.vmList[i];
-                  if (vm.id === item["device_id"]) {
-                    link.push({
-                      source: vm.id,
-                      target: item["network_id"],
-                      type : "VM", // 用来识别虚拟机
-                      name : vm.name // 虚机名称
-                    });
-                    for (let j = 0; j < node.length; j++) {
-                      if (node[j].id == vm.id || node[j].id == item["network_id"]) {
-                        // 给一个虚机两个以上网络的link做记录
-                        if (node[j].linked && node[j].id == vm.id) {
-                          for (let m = 0; m < link.length; m++) {
-                            if (link[m].source == node[j].id) {
-                              link[m].linkMore = true;
-                            }
-                          }
-                          node[j].linkMore = true;
-                        }
-                        // 添加网络所连接的虚机数量
-                        if (node[j].id == item["network_id"]) {
-                          if (node[j].vmLink) {
-                            node[j].vmLink+=1;
-                          } else {
-                            node[j].vmLink = 1;
-                          }
-                        }
-                        node[j].linked = true;
-                      }
-                    }
-                  }
-                }
-              }
-            });
-            routers.forEach(function(item, index) {
-              node.push({
-                id: item.id,
-                name: item.name,
-                type: "OS::Neutron::Router",
-                status: item.status,
-                linked: false
-              });
-              let networkList = item["all_nets"];
-              if (networkList.length > 0) {
-                for (let j = 0; j < networkList.length; j++) {
-                  for (let k = 0; k < networks.length; k++) {
-                    if (networks[k].id == networkList[j]) {
-                      link.push({
-                        source: networkList[j],
-                        target: item.id
-                      });
-                      for (let i = 0; i < node.length; i++) {
-                        if (node[i].id == item.id || node[i].id == networkList[j]) {
-                          node[i].linked = true;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            });
-            for (let i = 0; i < node.length; i++) {
-              // 网络节点并且网络节点上VM数大于5
-              if (node[i].neutronType && (self.maxLink < node[i].vmLink)) {
-                // 过滤link查找vm targe为以上网络并且类型为vm并且不连接多个网络
-                let tmpLinks = link.filter(item => {
-                  if (item.target == node[i].id && item.type && !item.linkMore) {
-                    return item;
-                  }
-                });
-                vmLinks = vmLinks.concat(tmpLinks);
-              }
-              // 以下代码与拓扑图以更多展示优化无关
-              if (node[i].linked == false && i!=0) {
-                linkVisable.push({
-                  source: node[0].id,
-                  target: node[i].id
-                });
-              }
-            }
-            let map = new Map();
-            let tableMap = new Map();
-            let tmpArr = [];
-            let tmpTable = {};
-            vmLinks.forEach(item => {
-              // 获取Id
-              if (map.has(item.target)) {
-                map.get(item.target).push(item.source);
-              } else {
-                map.set(item.target, [item.source]);
-              }
-              // 获取表格数据
-              if (tableMap.has(item.target)) {
-                tableMap.get(item.target).push({name:item.name, id:item.source});
-              } else {
-                tableMap.set(item.target, [{name:item.name, id:item.source}]);
-              }
-            });
-            for (let [key, value] of map) {
-              tmpArr.push({networkId:key, vmIds:value});
-            }
-            for (let [key, value] of tableMap) {
-              tmpTable[key] = value;
-            }
-            self.vmSelectMoreList = tmpTable;
-            // 过滤node和link
-            tmpArr.forEach(item => {
-              if (item.vmIds.length > self.maxLink) {
-                for (let a = 0; a < item.vmIds.length; a++) {
-                  if (a > (self.maxLink-1)) {
-                    // 过滤node
-                    let indexVm = node.findIndex(itemNode => {
-                      return itemNode.id == item.vmIds[a];
-                    });
-                    node.splice(indexVm, 1); // 删除node中第五项开始的vm
-                    // 过滤link
-                    let indexLink = link.findIndex(itemLink => {
-                      return itemLink.source == item.vmIds[a];
-                    });
-                    link.splice(indexLink, 1);// 删除多余的节点
-                  }
-                }
-                // 添加"更多"节点
-                const vmId = "more" + item.networkId;
-                node.push(
-                  {
-                    id: vmId,
-                    name: "More",
-                    type: "vmMore",
-                    linked: true,
-                    vmSelectId: item.networkId
-                  }
-                );
-                link.push({
-                  source: vmId,
-                  target: item.networkId
-                });
-              }
-            });
-            self.loading = false;
-            self.initTopo(node, link, linkVisable);
           }
         });
+        ports.forEach(function(item, index) {
+          let havenet = false;
+          for (let a = 0; a < networks.length; a++) {
+            if (item["network_id"] == networks[a].id) {
+              havenet = true;
+            }
+          }
+          if (havenet) {
+            for (let i = 0; i < self.vmList.length; i++) {
+              let vm = self.vmList[i];
+              if (vm.id === item["device_id"]) {
+                link.push({
+                  source: vm.id,
+                  target: item["network_id"],
+                  type : "VM", // 用来识别虚拟机
+                  name : vm.name // 虚机名称
+                });
+                for (let j = 0; j < node.length; j++) {
+                  if (node[j].id == vm.id || node[j].id == item["network_id"]) {
+                    // 给一个虚机两个以上网络的link做记录
+                    if (node[j].linked && node[j].id == vm.id) {
+                      for (let m = 0; m < link.length; m++) {
+                        if (link[m].source == node[j].id) {
+                          link[m].linkMore = true;
+                        }
+                      }
+                      node[j].linkMore = true;
+                    }
+                    // 添加网络所连接的虚机数量
+                    if (node[j].id == item["network_id"]) {
+                      if (node[j].vmLink) {
+                        node[j].vmLink+=1;
+                      } else {
+                        node[j].vmLink = 1;
+                      }
+                    }
+                    node[j].linked = true;
+                  }
+                }
+              }
+            }
+          }
+        });
+        routers.forEach(function(item, index) {
+          node.push({
+            id: item.id,
+            name: item.name,
+            type: "OS::Neutron::Router",
+            status: item.status,
+            linked: false
+          });
+          let networkList = item["external_gateway_info"].network_id || '';
+          link.push({
+            source: networkList,
+            target: item.id
+          });
+          // if (networkList.length > 0) {
+          //   for (let j = 0; j < networkList.length; j++) {
+          //     for (let k = 0; k < networks.length; k++) {
+          //       if (networks[k].id == networkList[j]) {
+          //         link.push({
+          //           source: networkList[j],
+          //           target: item.id
+          //         });
+          //         for (let i = 0; i < node.length; i++) {
+          //           if (node[i].id == item.id || node[i].id == networkList[j]) {
+          //             node[i].linked = true;
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // }
+        });
+        for (let i = 0; i < node.length; i++) {
+          // 网络节点并且网络节点上VM数大于5
+          if (node[i].neutronType && (self.maxLink < node[i].vmLink)) {
+            // 过滤link查找vm targe为以上网络并且类型为vm并且不连接多个网络
+            let tmpLinks = link.filter(item => {
+              if (item.target == node[i].id && item.type && !item.linkMore) {
+                return item;
+              }
+            });
+            vmLinks = vmLinks.concat(tmpLinks);
+          }
+          // 以下代码与拓扑图以更多展示优化无关
+          if (node[i].linked == false && i!=0) {
+            linkVisable.push({
+              source: node[0].id,
+              target: node[i].id
+            });
+          }
+        }
+        let map = new Map();
+        let tableMap = new Map();
+        let tmpArr = [];
+        let tmpTable = {};
+        vmLinks.forEach(item => {
+          // 获取Id
+          if (map.has(item.target)) {
+            map.get(item.target).push(item.source);
+          } else {
+            map.set(item.target, [item.source]);
+          }
+          // 获取表格数据
+          if (tableMap.has(item.target)) {
+            tableMap.get(item.target).push({name:item.name, id:item.source});
+          } else {
+            tableMap.set(item.target, [{name:item.name, id:item.source}]);
+          }
+        });
+        for (let [key, value] of map) {
+          tmpArr.push({networkId:key, vmIds:value});
+        }
+        for (let [key, value] of tableMap) {
+          tmpTable[key] = value;
+        }
+        self.vmSelectMoreList = tmpTable;
+        // 过滤node和link
+        tmpArr.forEach(item => {
+          if (item.vmIds.length > self.maxLink) {
+            for (let a = 0; a < item.vmIds.length; a++) {
+              if (a > (self.maxLink-1)) {
+                // 过滤node
+                let indexVm = node.findIndex(itemNode => {
+                  return itemNode.id == item.vmIds[a];
+                });
+                node.splice(indexVm, 1); // 删除node中第五项开始的vm
+                // 过滤link
+                let indexLink = link.findIndex(itemLink => {
+                  return itemLink.source == item.vmIds[a];
+                });
+                link.splice(indexLink, 1);// 删除多余的节点
+              }
+            }
+            // 添加"更多"节点
+            const vmId = "more" + item.networkId;
+            node.push(
+              {
+                id: vmId,
+                name: "More",
+                type: "vmMore",
+                linked: true,
+                vmSelectId: item.networkId
+              }
+            );
+            link.push({
+              source: vmId,
+              target: item.networkId
+            });
+          }
+        });
+        self.loading = false;
+        self.initTopo(node, link, linkVisable);
       } catch (e) {
         console.log(e);
       }
@@ -546,7 +556,7 @@ export default {
       } else if (node["type"] == "OS::Nova::VM") {
         self.$ajax({
           type: 'get',
-          url: "api/nova/v2.1/servers-inspur/"+node.id,
+          url: "api/nova/v2.1/servers/"+node.id,
           headers: {
             'X-OpenStack-Nova-API-Version': 2.41
           },
@@ -572,7 +582,7 @@ export default {
       let self = this;
       this.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/" + id,
+        url: "api/nova/v2.1/servers/" + id,
         headers: {
           'X-OpenStack-Nova-API-Version': 2.41
         },
