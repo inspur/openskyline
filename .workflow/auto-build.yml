@@ -1,0 +1,40 @@
+version: '1.0'
+name: auto-build
+displayName: auto-build
+triggers:
+  trigger: manual
+  push:
+    branches:
+      prefix:
+        - ''
+  pr:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: package
+    displayName: package
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@nodejs
+        name: build_nodejs
+        displayName: Nodejs 构建
+        nodeVersion: 14.16.0
+        commands:
+          - '# 设置NPM源，提升安装速度'
+          - npm config set registry https://registry.npmmirror.com
+          - ''
+          - '# 执行编译命令'
+          - npm install && npm run package
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./dist
+        caches:
+          - ~/.npm
+          - ~/.yarn
+        notify: []
+        strategy:
+          retry: '0'
