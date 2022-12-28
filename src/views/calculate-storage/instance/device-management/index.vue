@@ -143,13 +143,7 @@ export default {
       return this.roleType === '0' || this.roleType === '2';
     },
     hasFloatingIPTab() {
-      if (this.instances.length > 1) {
-        return false;
-      }
-      if (!this.hasBootVolume) {
-        return false;
-      }
-      return this.roleType === '0' || this.roleType === '2';
+      return true;
     },
     hasISOImageTab() {
       return false;

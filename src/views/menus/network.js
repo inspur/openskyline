@@ -54,12 +54,6 @@ module.exports = function () {
       iconType: "el-icon-fa-dedent",
       name: "QoS"
     }, {
-      flg: true,
-      key: "strategy",
-      path: "strategy",
-      iconType: "el-icon-fa-lightbulb-o",
-      name: Vue.t("network.NETWORK_STRATEGY")
-    }, {
       flg: Vue.AuthList["m.network.topo"],
       key: "netTopo",
       path: "netTopo",

@@ -61,17 +61,24 @@ export default {
     },
     async getPorts() {
       var self = this;
-      let body = {
-        "project_id":self.project_id,
-        "floating_network_id": self.floating_network_id
-      };
       self.loading = true;
-      try {
-        let res = await self.$ajax({
-          type: 'post',
-          data:JSON.stringify(body),
-          url: "api/neutron/v2.0/inspur/networkextension/get_ports_for_floating_ip_to_bind"
+      try {        
+        let result = await self.$ajax({
+          type: 'get',
+          url: "api/neutron/v2.0/networks?router:external=false"
         });
+        let nets = result["networks"];
+        debugger
+        let res=[];
+        for (var j = 0; j < nets.length; j++) {          
+          let result1 = await self.$ajax({
+            type: 'GET',
+            url: "api/neutron/v2.0/ports?network_id="+ nets[j].id
+          });
+          result1.ports.forEach(i => {
+            res.push(i);
+          })
+        };
         self.loading = false;
         this.portoptions = res;
       } catch (res) {

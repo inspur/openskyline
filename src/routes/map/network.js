@@ -232,11 +232,6 @@ const ruleList = resolve => {
     resolve(require('views/network/qos/RuleList.vue'));
   }, 'ruleList');
 };
-const strategyView = resolve => {
-  require.ensure(['views/network/strategy/StrategyList.vue'], () => {
-    resolve(require('views/network/strategy/StrategyList.vue'));
-  }, 'strategyView');
-};
 const routes = [{
   name: 'net',
   path: '/net',
@@ -530,14 +525,6 @@ const routes = [{
         component: ruleList
       }]
     }]
-  }, {
-    name: 'strategy',
-    path: 'strategy',
-    alias: '/',
-    component: strategyView,
-    meta: {
-      des: Vue.t("network.NETWORK_STRATEGY")
-    }
   }, {
     name: 'netTopo',
     path: 'netTopo',

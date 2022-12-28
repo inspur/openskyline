@@ -267,7 +267,7 @@ export default {
         name: [
           { type: "requiredNet" },
           { type: "maxSize", value: 40 },
-          { type: "onlyLetterNumber_Chinese" }
+          { type: "onlyLetter_NumberChinese" }
         ],
         description: [{ type: "maxSize", value: 255 }],
         provider_physical_network: [{ type: "required" }],

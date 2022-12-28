@@ -269,7 +269,7 @@ export default {
         self.totalFloatingIPs = [];
         for (let i =0; i< tempArr.length; i++) {
           let floatingip = tempArr[i];
-          if (floatingip.fixed_ip_address ===null && !(floatingip.port_forwardings.length)) {
+          if (floatingip.fixed_ip_address ===null) {
             floatingip.status = statusTransfer[floatingip.status];
             self.totalFloatingIPs.push(floatingip);
           } else {
@@ -433,7 +433,7 @@ export default {
       self.saving = true;
       self.$ajax({
         type: 'get',
-        url: "api/nova/v2.1/servers-inspur/" + self.instUuid,
+        url: "api/nova/v2.1/servers/" + self.instUuid,
         headers: {
           'X-OpenStack-Nova-API-Version': 2.41
         },
