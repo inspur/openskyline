@@ -322,18 +322,6 @@ export default {
           });
         }.bind(this)
       }, {
-        icon: "fa-cogs",
-        name: Vue.t('calcStorLang.netConfigQosConfig'),
-        showflg: true,
-        multi: false,
-        enable(rowData) {
-          return true;
-        },
-        handler: function (selectRows) {
-          this.selectData = selectRows[0];
-          this.qosConfigFlag = true;
-        }.bind(this)
-      }, {
         icon: "fa-exchange",
         name: Vue.t('network.portTransfer'),
         showflg: true,
