@@ -18,3 +18,4 @@ selenium-debug.log
 server/resources/default/serviceAddr.json
 test/unit/coverage
 test/e2e/reports
+output/

@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 
 const packageJson = require(path.join(__dirname, '../', 'package.json'));
 
-exec(`tar -cvzf openskyline-${packageJson.version}.tar.gz server/ dist/ static/ constants.js`, function(error, stdout, stderr){
+exec(`mkdir -p output && tar -cvzf output/openskyline-${packageJson.version}.tar.gz server/ dist/ static/ constants.js`, function(error, stdout, stderr){
   if(error) {
       console.error('error: ' + error);
       return;
