@@ -6,8 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
 const httpProxy = require('http-proxy');
-const _ = require('underscore');
-const crypto = require('crypto');
 const helmet = require('helmet');
 const uuid = require('uuid');
 
@@ -69,7 +67,7 @@ process.on('uncaughtException', function (err) {
   }, 100);
 });
 
-let VIEW_PATH = __DEV__ ? Consts.DEV_VIEWS : Consts.DIST_VIEWS;
+let VIEW_PATH = __DEV__ ? Consts.DEV_VIEWS : path.join(__dirname, '../dist/views');
 //sever only
 // VIEW_PATH = path.join(Consts.SERVER, 'views');
 // if (__DEV__) {

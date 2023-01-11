@@ -6,7 +6,6 @@ module.exports = function () {
     deny: [
       '/',
       '/index.html',
-      // '/physical-resource.html',
       'virtual-resource.html',
       'digitalVisualizationScreen.html',
       '/forceModifyPassword.html'

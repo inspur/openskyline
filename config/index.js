@@ -7,8 +7,8 @@ module.exports = {
       NODE_ENV: '"production"'
     },
     port: 4001,
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    index: path.resolve(__dirname, '../dist/dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: false,

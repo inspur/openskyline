@@ -7,8 +7,8 @@ const DIR_NAME = __dirname;
 
 exports.DEV = path.join(DIR_NAME, 'dev');
 exports.DEV_VIEWS = path.join(DIR_NAME, 'dev/views/');
-exports.DIST = path.join(DIR_NAME, 'dist');
-exports.DIST_VIEWS = path.join(DIR_NAME, 'dist/views/');
+exports.DIST = path.join(DIR_NAME, 'dist/dist/');
+exports.DIST_VIEWS = path.join(DIR_NAME, 'dist/dist/views/');
 /*
  视图目录
  */
