@@ -1,4 +1,4 @@
-[![svg](https://lbworks-oss.oss-cn-qingdao.aliyuncs.com/Mulan-incubating-blue-small.png)](http://mulanos.cn)
+[![svg](./Mulan-incubating-blue.svg)](http://mulanos.cn)
 
 # OpenSkyline
 
